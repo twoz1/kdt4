@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>** Loop & Object(객체) **</title>
+<script>
+//** Object(객체)
+//=> 속성과 동작을 가짐
+//=> Type이 다른 여러 자료형을 한번에 정의
+//=> 이때 정의되는 자료를 속성(=요소, property)
+//   속성의 값은 기본자료형(문자,정수,실수,boolean) 또는 function 이 가능하다.
+
+//=> 객체의 속성의 값이 기본자료형인 경우에는 객체의 속성(property) 이라하고, 
+//   function으로 정의된 경우에는 객체의 메서드(method)라 함.  
+//=> 객체의 속성(property)의 값으로 function 을 정의할때에는 익명으로함 (익명함수)
+
+//* 단어비교 -> ingredient:재료,성분  / component:구성요소
+// 1) 정의 (리터럴표기법)	
+	let myObject={   //속성만 있고 메소드는 없는 객체 , 객체를 정의하기 위해서 {}을 사용.
+		name:'건조망고',
+		size:500,
+		ingre:'망고,설탕,색소,방부제',
+		calory:123.456
+	}
+
+// 2) 간편출력
+// => 간편출력 for 구문 : of, in
+// => in : 배열(index Return), 객체(속성명 Return)
+	document.write('** myObject for_IN Test **<br>');
+	for (let my in myObject) {
+		document.write('** myObject => '+my+':'+myObject[my]+'<br>'); 
+	}
+	
+// => of 는 객체에 적용안됨 : 오류발생 (개발자모드로 확인가능)
+//    Uncaught TypeError: myObject is not iterable
+//	for (var my of myObject) {
+//		document.write('** myObject_of => '+my+'<br>');
+//	}
+
+// => 속성명으로 접근 : name, size 출력
+	document.write("** myObject name, size => "+myObject.name+", "+myObject.size+"<br>");
+
+// 3) 객체의 메서드 활용
+// => function (익명함수) , this
+	document.write('** 객체의 메서드 활용 **<br>');
+	let student= {
+			name:'홍길동',
+			age:20,
+			score:100,
+			eat:function(menu) { 
+				// ver01 -> document.write(' 점심으로 '+menu+' 를 맛있게 먹었습니다.<br>'); 
+				// ver02 -> 객체내에서 자신의 속성값 접근 (student.name, this.name 모두가능 ) 
+				//document.write(this.name+' 학생은 점심으로 '+menu+' 를 맛있게 먹었습니다.<br>'); 
+				document.write(`${this.name} 학생은 점심으로 ${menu}를 맛있게 먹었습니다.<br>`); 
+				},
+			study:function(kind) { 
+				// ver01 -> document.write('그리고 '+kind+' 를 열심히 공부합니다.<br>'); 
+				// ver02
+				document.write('그리고 '+kind+' 를 열심히 공부합니다.<br>');
+				document.write("그래서 "+this.score+' 점을 맞았습니다.<br>');
+				},
+			all:function(menu, kind) { // ver03
+				this.eat(menu);
+				student.study(kind);
+				},	
+			info:function(){
+				return`${this.name} 는 풀스택 개발자를 희망 합니다.`;
+			}
+	} //student
+
+// => 객체사용 ver01
+//	document.write(student.name+' 학생은 <br>');
+//	student.eat("돈까스");
+//	student.study("JavaScript");
+//	document.write("그래서 "+student.score+' 점을 맞았습니다.<br>');
+
+// => 객체사용 ver02
+//	student.eat("돈까스");
+//	student.study("JavaScript");
+
+// => 객체사용 ver03
+	student.all("짜장면", "Spring");
+	
+</script>
+</head>
+<body>
+<hr align="center">
+<h3><pre>
+** Object(객체) 선언, 출력, this **
+=> Object(객체): 속성과 동작을 가짐
+
+1) 객체의 정의 (리터럴표기법)
+2) 객체출력
+	=> 간편출력 for 구문 : of, in
+	=> in : 배열(index Return), 객체(속성명 Return)
+	=> of 는 객체에 적용안됨
+3) 객체의 다양한 특성  (function, this..)	
+	=> 객체의 속성(property)의 값으로 function을 정의할수 있고 이때에는 익명으로함 (익명함수) 
+    => 객체의 속성의 값이 기본자료형인 경우에는 객체의 속성 이라하고, 
+       function으로 정의된 경우에는 객체의 메서드(method)라 함.  
+</pre></h3>
+</body>
+</html>

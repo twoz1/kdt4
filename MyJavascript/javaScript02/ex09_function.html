@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>** function **</title>
+<script>
+// 1. 선언적 function 의 정의, return, 사용
+// => 선언적 function : 이름을 정의하는 함수
+	function first(x) { return x*x; } //first
+	document.write('** Function Call => '+first(5)+'<br>');
+
+// 2. 익명함수	
+// => 이름이 없는 함수, 이름없이 변수의 값으로 정의됨 
+// => Object의 속성의 값으로 정의되는 함수 (메서드 정의)
+	var noName=function(a) {document.write('** 익명함수 a => '+a+'<br>'); }
+// => 익명함수 사용 :  해당하는 변수를 함수처럼 호출
+	noName('익명함수 Call Test');
+
+// *** typeof : Type을 return 해주는 내장함수
+// => 위 두 함수의 typeof의 결과와 함수명만 사용했을때 (소스출력) 의 결과비교
+//    모두 Type 은 function 임.
+	document.write('** typeof(선언적함수) => '+typeof(first)+' , '+first+'<br>');
+	document.write('** typeof(익명함수) => '+typeof(noName)+' , '+noName+'<br>');
+
+// 3. 함수간 우선순위
+// => 이름이 동일한 경우에 해당
+// 3.1) 익명함수간의 우선순위
+// => 변수처럼 작동 (뒤에 활당된 값 우선)
+	document.write("** 익명함수간의 우선순위 Test **<br>");
+	var noName1=function() { document.write('** 익명함수1 : AAAAA **<br>'); } 
+	noName1(); // AAAAA
+	var noName1=function() { document.write('** 익명함수2 : BBBBB **<br>'); } 
+	noName1(); // BBBBB
+
+// 3.2) 익명함수와 선언적함수 간의 우선순위
+// => 익명함수 우선
+// => 자바스크립트는 모든 코드를 읽기(실행)전에 선언적 함수를 먼저 읽음.
+//    그러므로 나중에 읽은 함수(즉, 익명함수)를 실행...
+	document.write("** 익명함수와 선언적함수 간의 우선순위 Test **<br>");
+	function noName1() { document.write('** 선언함수3 : CCCCC **<br>'); }
+	noName1();
+	document.write('** typeof(우선순위) => '+typeof(noName)+' , '+noName+'<br>');
+	
+// 4. CallBack 함수
+// => 매개변수로 함수를 사용할 수 있음
+//    이때 매개변수로 사용되는 함수를 CallBack 함수 라함.
+	document.write("** CallBack 함수 Test **<br>");	
+
+	function callTenTimes(banana, apple) {
+		for (var i=0; i<3; i++) {
+			document.write('** for i :'+i+' => ');
+			banana(); // CallBack 함수 호출 
+			apple();
+		} //for
+	} //callTenTimes
+	
+// 4.1) 선언적 CallBack 함수 정의 
+	function back() { document.write("** 선언적 CallBack 함수 **<br>");	 }
+	
+	back(); // 일반 함수로 사용됨
+	//callTenTimes(back); // CallBack 함수로 사용됨
+	// => 하나의 함수로써 직접 호출 가능, 
+	// => 매개변수로 사용되어졌을때 CallBack 함수라함. 	
+	// => CallBack 함수 사용 방법 : 이름만 사용해야함
+	//	  callTenTimes(myBack()) -> 매개변수 위치에서 myBack() 이 실행해버림
+	    
+// 4.2) 익명 CallBack 함수	
+// => 익명 함수도 CallBack 함수로 사용가능
+	var myBack=function() { document.write("** 익명 CallBack 함수1 **<br>"); }
+	// => Test 1)	
+	myBack(); // 일반 함수로 사용됨
+	callTenTimes(back, myBack); // CallBack 함수로 사용됨  이름만 넣어줘야 함. 
+	
+	// => Test 2)
+	//    호출시에 매개변수 위치에 함수를 직접 작성 가능함. 
+	//    주로 CallBack 함수가 1회적으로 사용될 때 많이 이용됨
+	// 	  callTenTimes(function(){....}, function(){.....});
+	callTenTimes(function() { 
+		document.write("** 익명 CallBack 함수AAA **<br>"); 
+		}, function() { 
+		document.write("** 익명 CallBack 함수BBB **<br>"); 
+		});
+	
+</script>
+
+</head>
+<body>
+<hr>
+<pre><h3>
+** function **
+1. 선언적 function 의 정의, return, 사용
+2. 익명함수
+3. 함수간 우선순위
+4. CallBack 함수
+</h3></pre>
+</body>
+</html>

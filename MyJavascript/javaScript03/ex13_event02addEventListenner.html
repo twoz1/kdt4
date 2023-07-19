@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> addEventListener()를 이용한 핸들러 등록 </title>
+    <script>
+        onload=function(){
+            let p = document.getElementById('p');
+            //Test1. 이벤트핸들러를 익명함수
+            p.addEventListener('mouseover',function(){this.style.color='pink';});
+            p.addEventListener('mouseout',function(){this.style.color='skyblue';});
+            
+            //Test2. 함수를 만들어놓고 call
+            //CallBack 함수 호출시에는 이름만 사용
+            p.addEventListener('mouseover',over);
+            p.addEventListener('mouseover',out);
+
+        }//onload
+
+        function over(){this.style.color='mint';}
+        function out(){this.style.color='hotpink';}
+
+    </script>
+</head>
+<body>
+    <h3><pre>
+        ** addEventListener()를 이용한 핸들러 등록 **
+        => addEventListener('이벤트Type', 이벤트핸들러)
+        => addEventListener 메서드에 이벤트타입 과 이벤트핸들러 등록
+        => 이떄 등록되는 이벤트핸들러는 CallBack함수(매개변수로 전달되는함수)이므로 함수의 이름만 등록
+    </pre></h3>
+    <hr>
+    <p id="p">마우스를 올리면 colorChange 됩니다.</p>
+</body>
+</html>
+

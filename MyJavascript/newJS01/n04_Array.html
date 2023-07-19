@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>** Array Test **</title>
+
+<script type="text/javascript">
+ 	
+	let names=new Array(); 
+	// => name 예약어(변수 선언시 주의)
+	names[0]="김부자";
+	names[1]="정현철";
+	names[2]="정주영";
+	names[3]="김민경";
+	names[4]="장영주";
+	document.write(names[3]+"<br>"); //3번 인덱스에 저장된 데이터를 출력
+	
+	// => 생성과 초기화
+	let days=new Array("일","월","화","수","목","금","토");
+	document.write("** days => "+days+"<br>");
+	
+	let money=[100,100,200,50];
+	let total=0;
+	for(let i=0; i<money.length; i++){
+		total=total+money[i];
+	}
+	document.write("** total => "+total+"<br>");
+	
+	// *** 배열 메서드
+	//1. reverse()-배열 데이터 역순 정렬
+	let theFood=["짜장면","냉면","갈비탕","돈까스","삼겹살"];
+	theFood.reverse();
+	console.log(theFood)
+	
+	//2. sort()-배열 데이터 이름또는숫자 정렬
+	let theSubway=["2호선","9호선","7호선","4호선","3호선"];
+	theSubway.sort();
+	console.log(theSubway);
+
+	//3. concat()-배열들에 데이터를 결합
+	let Mountain1=["남산","도봉산","관악산","청계산","북한산"];
+	let Mountain2=["설악산","지리산","한라산","속리산"];
+	let joinResult=Mountain1.concat(Mountain2);
+	console.log(joinResult);
+
+	//4. slice(시작인덱스,마지막인덱스전)-원하는 데이터만 선택
+	let theName=["최준호","이성은","기오정","김민경","정예선"];
+	let result=theName.slice(2,4);
+	console.log(result);
+
+	//5. join("구분자")-구분자 기준으로 데이터를 합칩니다.
+	let theProduct=["냉장고","컴퓨터","선풍기","밥솥","핸드폰"];
+	joinResult=theProduct.join("-");
+	console.log(theProduct);
+	console.log(joinResult);
+	
+	theSubway=["2호선","9호선","7호선","4호선","3호선"];
+	let newLine1="1호선";
+	let newLine2="분당선";
+	
+	//6. shift  : 배열의 첫 인덱스[0] 데이터 삭제
+	//   unshift: 배열의 첫 인덱스[0]에 새데이터를 중첩하여 추가
+	theSubway.shift();    
+	console.log(theSubway)
+	theSubway.unshift(newLine1);
+	console.log(theSubway)
+	
+	//7. pop : 배열의 마지막 인덱스에 저장된 데이터 삭제
+	//   push: 배열의 마지막 인덱스에 새데이터를 중첩하여 추가
+	theSubway.pop();
+	console.log(theSubway)
+	theSubway.push(newLine2);
+	console.log(theSubway)
+	
+	//8. map()
+	//=> 주어진 배열의 값을 재정의 할 때 사용하는 방법
+	//=> ECMA에는 "주어진 배열의 값들을 오름차순으로 접근해 callbackfn을 통해
+	//   새로운 값을 정의하고 신규 배열을 만들어 반환한다"라고 정의됨.
+	const numbers1 = [1, 2, 3, 4, 5];
+	const result1 = numbers1.map(number => number * number);
+	console.log(numbers1); // [1, 2, 3, 4, 5];
+	console.log(result1);   // [1, 4, 9, 16, 25]
+	
+	//=> 활용
+	const numbers2 = [1];
+	numbers2.map((number, index, source) => {
+	    // number: 요소값
+	    // index: source에서 요소의 index
+	    // source: 순회하는 대상
+	    console.log(number); // 1
+	    console.log(index);  // 0
+	    console.log(source); // [1]
+	    return number * number;
+	});
+	
+	//=> map 사용시 주의 사항
+	//   map 의 callBack 함수내에서 추가된 data 에는 접근하지않음
+	const numbers3 = [1, 2, 3, 4, 5];
+	const result3 = numbers3.map(number => {
+	    numbers3.push(number); 
+	  	//=> array 요소가 추가되는 경우 : 접근하지않음
+	    return number * number;
+	});
+	console.log(result3);
+	// [1, 4, 9, 16, 25];
+	
+	const numbers4 = [1, 2, 3, 4, 5];
+	const result4 = numbers4.map(number => {
+	    numbers4.pop();
+	 	// array 요소가 삭제되는 경우
+	    return number * number;
+	});
+	console.log(result4);
+	// [1, 4, 9, empty × 2];
+	
+	//=> 단어 길이 구하기
+	const words = ["javascript", "java", "c#", "c++", "c"];
+	const lengthOfwords = words.map(word => word.length);
+	const lengthOfwords2 = words.map(function(word) {word.length});
+	console.log(lengthOfwords); // [10, 4, 2, 3, 1];
+	
+	//9. reduce()
+	//=> 배열의 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고,
+	//   하나의 결과값을 반환
+	// 9.1) 예시1
+	const numbers5 = [1, 2, 3, 4];
+	const initialValue = 10; // 0 부터 start 
+	const sumWithInitial = numbers5.reduce(
+	  (accumulator, currentValue) => accumulator + currentValue, initialValue );
+	console.log('** reduce Test1 => '+sumWithInitial); // 10 + 1 + 2 + 3 + 4 = 10
+	
+	const sum = numbers5.reduce((accumulator,currentValue) => accumulator+currentValue);
+	console.log('** reduce Test2 => '+sum); // 1 + 2 + 3 + 4 = 10
+	
+	// 9.2) 예시2
+	// => 객체 배열에서의 값 합산 
+	let sumObj = [{x:1}, {x:2,ㅛ:20}, {x:3,ㅛ:30}].
+				  reduce( (acc,curr) => acc+curr.x+curr.y , 10 ); //reduce
+	console.log('** reduce Test3 => '+sumObj) // 10+11+22+33 = 76
+	
+</script>
+</head>
+
+<body>
+	<h2>** Array Test **</h2>
+</body>
+</html>

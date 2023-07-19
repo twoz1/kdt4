@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>object constructor 와 인스턴스</title>
+    <script>
+
+        //프로토타입
+        // 생성자 함수
+        // function으로 정의하고, 이름은 대문자로 시작함.
+        //이러한 함수를 생성자 함수라함.
+        //생성자 함수 내부 this 는 생성자 함수가 생서안 인스턴스를 가리킨다.     
+
+        function Student(name, age) {
+            this.name = name;
+            this.age = age;
+            this.infoPrint = function () {
+                return `${name}님의 나이는 ${age}살 입니다.`;
+            };
+        }
+
+        
+        // 인스턴스의 생성
+
+        const a1 = new Student('연제승', 27);
+        const a2 = new Student('신혜진', 28);
+        const a3 = new Student('남우리', 30);
+        const a4 = new Student('설수현', 27);
+
+        // console.log(a1.infoPrint());
+        // console.log(a2.infoPrint());
+        // console.log(a3.infoPrint());
+        // console.log(a4.infoPrint());
+
+        // 인스턴스를 배열에 담고 출력
+        let aa = new Array(5);
+        aa[0] = a1;
+        aa[1] = a2;
+        aa[2] = a3;
+        aa[3] = a4;
+        aa[4] = new Student('김진휘', 27);
+
+        // 출력(반복문)
+        
+        let c = 0;
+        for (let i = 0; i < aa.length; i++) {
+            console.log(aa[i].infoPrint());
+            c += aa[i].age;
+        }
+        console.log(`합은${c}, 평균은${c / aa.length}`)
+
+        for (let a of aa) {
+        console.log(`of Test${a.infoPrint()}`)
+        }
+        </script>
+</head>
+
+<body>
+    <h2>object constructor 와 인스턴스</h2>
+    <pre>
+        => ex11_ 에서 생성한것과 같은 student 객체를 프로토타입으로
+            생성하고 조원들의 인스턴스를 생성해서 console로 출력
+    </pre>
+    <table>
+
+    </table>
+</body>
+
+</html>

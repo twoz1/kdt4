@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>** Join Form **</title>
+  <script src="ex14_inCheck.js"></script>
+  <script>
+  // ** 화살표 함수
+  // => 익명함수를 간단하게 표기
+  //    function(){....}  
+  //    () => {....}  
+
+  // ** 입력값의 무결성 점검
+  // 1) 모든항목  focusout 이벤트핸들러
+  //    => 개별항목 점검확인하는 boolean Type 변수 (스위치변수) 
+  //    => 개별항목 점검 function() 작성
+  // 2) submit 진행전에 점검확인
+  //    => 모든항목의 점검이 완료된 경우에만  submit 진행
+  //    => function inCheck() 로 확인
+  //    => submit 버튼의 onclick 리스너에 등록
+  //       ( submit 의 default 이벤트 고려 )
+  // ----------------------------------------------------
+  // ** 실습
+
+  // * 전역변수 정의 : 개별항목 점검확인하는 boolean Type 변수  
+  /* Test code    */
+  // let iCheck=true; 
+  // let pCheck=true;
+  // let p2Check=true;
+  // let nCheck=true;
+  // let aCheck=true;
+  // let bCheck=true;
+  // let oCheck=true; 
+
+  let iCheck=false; 
+  let pCheck=false;
+  let p2Check=false;
+  let nCheck=false;
+  let aCheck=false;
+  let bCheck=false;
+  let oCheck=false; 
+ 
+  // 1) 모든항목  focusout
+  onload=function() {
+    // 1.1) id
+    // => Enter_Key 눌렀을때 Tab 처럼 focus 이동하기
+    //  -> keydown 이벤트리스너, 이벤트객체를 이용해서 입력된 key 값 인식
+    //  -> key 값 확인 : 모든 문자의 Ascii 코드값 참조 (EnterKey=13, esc=27, Space_Bar=32)
+    //  -> https://ko.wikipedia.org/wiki/ASCII
+    document.getElementById('id').addEventListener('keydown'
+        , (e)=>{   
+          if (e.which==13) {
+            e.preventDefault();
+            // => form 에 submit 이 있는경우
+                // => enter 누르면 자동 submit 발생되므로 이를 제거함
+            document.getElementById('password').focus();
+          }    
+        }); //keydown
+
+    document.getElementById('id').addEventListener('focusout'
+        , ()=>{ iCheck=idCheck(); }) ;
+
+    // 1.2) password
+    document.getElementById('password').addEventListener('focusout'
+        , ()=>{ pCheck=pwCheck(); }) ;   
+    // 1.3) password2
+    document.getElementById('password2').addEventListener('focusout'
+        , ()=>{ p2Check=pw2Check(); }) ; 
+    // 1.4) name
+    document.getElementById('name').addEventListener('focusout'
+        , ()=>{ nCheck=nmCheck(); }) ;  
+        
+    // 1.5) age
+    document.getElementById('age').addEventListener('focusout'
+        , ()=>{ aCheck=agCheck(); }) ; 
+    // 1.6) birthday
+    document.getElementById('birthday').addEventListener('focusout'
+        , ()=>{ bCheck=bdCheck(); }) ; 
+    // 1.7) point
+    document.getElementById('point').addEventListener('focusout'
+      , ()=>{ oCheck=poCheck(); }) ;  
+  } //onload
+
+// 2) submit 진행전에 점검확인
+  function inCheck() {
+    if (iCheck==false) { document.getElementById('iMessage').innerHTML='필수입력, id 는 4~10 글자 입니다.' ; }
+    if (pCheck==false) { document.getElementById('pMessage').innerHTML='필수입력, Password 입력 하세요.'; }
+    if (p2Check==false) { document.getElementById('p2Message').innerHTML='필수입력, Password 확인' ; }
+    if (nCheck==false) { document.getElementById('nMessage').innerHTML='필수입력, Name 입력 하세요.' ; }
+    if (aCheck==false) { document.getElementById('aMessage').innerHTML='필수입력, Age 입력 하세요.' ; }
+    if (bCheck==false) { document.getElementById('bMessage').innerHTML='필수입력, Brthday 입력 하세요.' ; }
+    if (oCheck==false) { document.getElementById('oMessage').innerHTML='필수입력, Point 입력 하세요.' ; }
+
+    if (iCheck && pCheck && p2Check && nCheck 
+               && aCheck && bCheck && oCheck ) {
+            // => submit 진행
+
+            //return confirm('정말 가입하십니까 ? (Yes:확인 / No:취소)');
+            // => 아래코드와 비교
+            // => 확인: true return,  취소: false return   
+
+            if (confirm('정말 가입하십니까 ? (Yes:확인 / No:취소)')) {
+              return true; 
+            }else {
+              alert('가입이 취소 되었습니다.');
+              return false;
+            }
+    }else { // => submit 진행불가
+            return false;
+    }
+  } //inCheck 
+
+  </script>
+  <style>
+    .eMessage {
+      color:red;
+      font-size: x-small;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h2>** Student Join Form **</h2> 
+  <form action="green/join" method="post">
+  <table width="80%">
+    <tr height="40"><th bgcolor="aqua">I D</th>
+      <td><input type="text" id="id" name="id" placeholder="영문, 숫자 10자 이내"><br>
+          <span id="iMessage" class="eMessage"></span></td></tr>
+    <tr height="40"><th bgcolor="aqua">Password</th>
+      <td><input type="password" id="password" name="password" placeholder="특수문자 반드시포함"><br>
+          <span id="pMessage" class="eMessage"></span></td></tr>
+    <tr height="40"><th bgcolor="aqua">Pw 확인</th>
+      <td><input type="password" id="password2" placeholder="재입력 확인"><br>
+          <span id="p2Message" class="eMessage"></span></td></tr>  
+    <tr height="40"><th bgcolor="aqua">Name</th>
+        <td><input type="text" id="name"><br>
+          <span id="nMessage" class="eMessage"></span></td></tr>
+    <tr height="40"><th bgcolor="aqua">Age</th>
+      <td><input type="text" id="age"><br>
+          <span id="aMessage" class="eMessage"></span></td></tr>
+    <tr height="40"><th bgcolor="aqua">Birthday</th>
+        <td><input type="date" id="birthday"><br>
+          <span id="bMessage" class="eMessage"></span></td></tr>  
+    <tr height="40"><th bgcolor="aqua">Jo</th>
+      <td><select id="jo">
+          <option value="1">1조: 119조</option>
+          <option value="2">2조: 여우조</option>
+          <option value="3">3조: i4조</option>
+          <option value="4">4조: 최고조</option>
+          <option value="5">5조: 오조</option>
+      </select></td>
+    </tr>
+    <tr height="40"><th bgcolor="aqua">Point</th>
+      <td><input type="text" id="point"><br>
+        <span id="oMessage" class="eMessage"></span></td></tr>      
+    <tr height="40"><th bgcolor="aqua">Info</th>
+      <td><input type="text" id="info" placeholder="팀 프로젝트 소개"></td></tr>
+     
+    <tr height="40"><td colspan="2" align="center">
+        <input type="submit" value="가입" onclick="return inCheck()"> &nbsp;&nbsp;
+        <!-- => 기본이벤트 제거 : return false   -->
+        <input type="reset" value="취소"></td></tr>  
+  </table>
+</form>
+
+
+
+
+  
+</body>
+</html>

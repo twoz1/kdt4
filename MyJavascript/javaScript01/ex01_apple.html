@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>** JavaScript Start **</title>
+<script type="text/javascript">
+	function imageChange() {                                          
+		// 현재 src값이 apple 이면 banana
+		// 현재 src값이 banana 면 apple 을 표시하도록 작성
+		// => 현재 img Tag 의 src 값을 전달받아야 함
+		
+		//alert('Test1 var => ' + name); // 오류가 나지 않음 : 호이스팅(Hoisting)
+		//alert('Test2 let => '+ i);     // 오류가 남 : 호이스팅X
+
+		//var name = "홍길동";
+
+		let i = document.getElementById("image");                           // let과 var의 차이 
+																			// 변수를 정의하면 또 정의할 수 없어야함. 그래서 let이 생김. 모든 프로그래밍 언어들은 위에서부터 아래로 실행. 호이스팅은 선언하기 전에 먼저 끌어와도 괜찮은 것. 오류가 일어나지 않음 var는 호이스팅이 됨.  
+		//var name = "그린컴";
+		
+		// ** src 속성값은 == 으로 비교안됨 
+		// => src 속성값을 비교하는 match 를 이용
+		/* 
+		if (i.src=='../image/apple.png')  i.src='../image/banana.png';
+		else i.src='../image/apple.png'; 
+		*/
+		if (i.src.match('../images/apple.png'))  i.src='../images/banana.png';
+		else i.src='../images/apple.png';
+	}	// 자바스크립트가 i라는 태그를 인식 / i 태그의 scr라는 속성 / match = 메소드(해결해주는 기능) 
+</script>
+
+</head>
+<body>
+<h3><pre>
+** JavaScript Start **
+=> 이벤트 리스너 속성에 자바스크립트 코드 작성하기
+
+1) Apple Click 하기
+<img src="../images/apple.png" onclick="this.src='../images/banana.png'">
+
+2) Apple 에 Mouse 올려보기 
+<img src="../images/apple.png" onmouseover="this.src='../images/banana.png'"
+	 width="100" height="130" onmouseout="this.src='../images/apple.png'">   
+	 <!-- 태그  태그의 attibute  태그의 이벤트 핸들러/리스너(이벤트를 인지해줌)                    -->
+
+3) Toggle 방식 : function 적용
+<img src="../images/apple.png" onclick="imageChange()" id="image" >
+
+4) ex01_output 로 이동
+<a href="ex01_output.html" >ex01_output</a>
+<!-- 기본적인 이벤트를 내장하고 있는 아이가 a 태그임. a태그가 온클릭이라는 이벤트핸들러를 내장하고 있음. -->
+
+</pre></h3>
+</body>
+</html>  

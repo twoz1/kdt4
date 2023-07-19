@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>** Loop & Array **</title>
+<script>
+// 1. Array 
+// 1.1) 배열정의 3가지 방법
+// a) 묵시적 정의 (초기값 지정)
+	var arr = ["가","나","다","라","마"]; // 배열은 []를 사용
+	var num1 = [1,2,3,4,5];             
+
+// b) 명시적 정의 & 동시에 초기화 
+	var num2 = new Array(10,20,30,40,50);   //일관된 처리 가능 / 자바스크립트는 실행시 값이 할당되는 구조 
+	
+// c) 명시적 정의
+//	=> 크기(length) 지정 (안해도 가능)
+//	=> 그러나 크기가 고정값이 아니고 데이터를 추가하면 자동으로 늘어남
+ 	var week = new Array(7);   // 데이터를 7개 담을 수 있는 공간만 만듦 / 자바스크립트는 데이터를 추가하면 자동으로 늘어남
+
+//	d) 빈배열 생성 : 원소 갯수를 모를때  
+//	=> 입력되는 원소의 갯수에 따라 자동으로 크기 정해짐
+//	=> 값을 할당하지 않은 index 1,2,4 : undefined 값을 가짐 	
+	var member = new Array(); 
+	member[0] = "banana" ;
+	member[3] = "apple" ;
+	member[5] = "green" ;
+	document.write('** 변경전 member length => '+member.length+'<br>');
+	for (var i=0; i<member.length; i++) {
+		document.write('** member1 '+i+' => '+member[i]+'<br>');
+	}
+// 	e) 배열 크기 (length) -> 변경가능
+	member.length = 3;
+	document.write('** 변경후 member length => '+member.length+'<br>');
+	for (var i=0; i<member.length; i++) {
+		document.write('** member2 '+i+' => '+member[i]+'<br>');
+	}
+
+// 1.2) set  
+// a) 다 채우고 건너뜀
+	num1[10]=100; // num1은 0~4 까지 채워져 있음
+
+// b) 다 안채우고 건너뜀 
+	week[0]='일'; week[1]='월'; week[3]='수';
+	week[10]='index10';
+
+// c) 다양한 타입의 데이터 섞여 저장 가능
+	num2[0] = 0;
+	num2[1] = "Zero";
+	num2[2] = "안녕 하세요";  // 문자열
+	num2[3] = 123.45;
+	num2[4] = new Date();  // 객체
+	num2[5] = test 		   // function test() 의 코드
+
+function test() {
+		document.write('~~~~ Array Test 중 ~~~');
+}
+	
+// 1.3) get
+// a) 순차적인 for
+// => index, length (가장큰 인덱스값에 의해 결정)
+// => 순차 출력하면 값이 없는 undefined 까지 모두 출력됨
+	for (var i=0; i<num1.length; i++){
+		document.write('** num1 '+i+' => '+num1[i]+'<br>');
+	}
+	for (var i=0; i<num2.length; i++){
+		document.write('** num2 '+i+' => '+num2[i]+'<br>');
+	}
+	
+// b) eachFor (간편한_for) : of
+//	=> of : value 를 return, undifined 까지 모두 출력 (순차출력과 동일)
+	document.write('** eachFor (간편한_for) : of  **<br>');
+	for (var i of num1 ){ document.write('  '+i ); }
+	document.write('<br>');
+	for (var i of week ){ document.write('  '+i ); }
+	document.write('<br>');
+
+// c) eachFor (간편한_for) : in
+//	=> in:  undifined 는 통과하고 index 를 return
+	document.write('** eachFor (간편한_for) : in  **<br>');
+	for (var i in num1 ){ document.write('  '+i ); }
+	document.write('<br>');
+	for (var i in week ){ document.write('  '+i ); }
+	document.write('<br>');
+// => in 을 이용해서 값을 출력하기
+	for (var i in num1 ){ document.write('  '+num1[i]); }
+	document.write('<br>');
+
+// => 확인
+// 	for (var i : num1 ){ ....} -> 오류 
+
+// 2. Loop_for Test
+// => 1~100 까지의 합을 for 를 이용해서 계산결과 출력하기
+	var sum=0;
+	for (var i=1; i<=100; i++) { sum+=i; }
+	document.write('** For : 1~ 100 까지 합 => '+sum +'<br>');
+
+// => <span> Tag 에 	font크기를 10px ~ 35px 까지 5px씩 증가시키면서
+//    font 크기 출력하기
+//	  <span style='color:blue;font-size:10px;'>글꼴크기</span>	
+//    <span style='color:blue;font-size: + ? + px;'> + ? + </span> 
+	document.write("** font Size 출력하기 **<br>");
+	for (var s=10; s<=35; s+=5) {
+		document.write("<span style='color:blue;font-size:"+s+"px;'>"+s+"</span>") ;
+	}
+	document.write("<br>");
+	
+// 3. Loop_while 
+// => 1~100 까지의 합을 while 구문으로 계산하고 출력하기
+	var i=1;
+	sum=0;
+	while(i<=100) { sum+=i; i++; }
+	document.write('** While : 1~ 100 까지 합 => '+sum +'<br>');
+// => 1~100 까지의 합을 DO ~ while 구문으로 계산하고 출력하기
+	i=1; sum=0;
+	do {
+		sum+=i;
+		i++;
+	}while(i<=100);
+	document.write('** do_While : 1~ 100 까지 합 => '+sum +'<br>');
+
+// 4. continue, break Test
+// 4.1) 1~100 까지 에서 5의 배수들의 합을 구하세요 ~~~ 
+// => 단, 45의 배수가 나오면 (합산 하지않고) 바로 종료하기 
+// => for 구문으로
+	document.write('** continue, break Test **<br>');
+	sum=0;
+	for (var i=1; i<=100; i++) {
+		if (i%45==0) break;  // 45의 배수가 나오면 (합산 하지않고) 바로 종료
+		if (i%5==0) sum+=i;  // 5의 배수들의 합
+	}
+	document.write('** For_break : 5의 배수 합 => '+sum +'<br>');
+	
+// => 단, 45의 배수가 나오면 합산 하지않고 건너뛰기 
+	sum=0;
+	for (var i=1; i<=100; i++) {
+		if (i%45==0) continue;  // 45의 배수가 나오면 (합산 하지않고) 건너뛰기
+		if (i%5==0) sum+=i;     // 5의 배수들의 합
+	}
+	document.write('** For_continue : 5의 배수 합 => '+sum +'<br>');
+
+// 4.2) 1초 동안 while_Loop 의  반복횟수 Count 
+// => 4.2.1) 무한루프 , break
+// => Date 의 시간값에서 1초 는 1000	
+	var count=1;
+	var start = new Date().getTime();
+	while(true) {
+		// 1초 경과후 종료
+		if (new Date().getTime() > (start+1000)) break;
+		count++;
+	}
+	document.write('** 1초동안 while(true) 반복횟수 => '+count+'<br>');
+	
+// => 4.2.2) 1초동안 while_Loop 시행 (조건문 으로 Test)
+ 	var count=1;
+	var start = new Date().getTime();
+	while(new Date().getTime() <= (start+1000)) {
+		count++;
+	}
+	document.write('** 1초동안 while(조건문) 반복횟수 => '+count+'<br>');
+
+</script>
+</head>
+<body>
+<hr>
+<pre><h3>
+**  Loop & Array **
+1. Array
+2. Loop_for
+	=> for1 : for (var i=0; i<10; i++) { ..... } 
+	=> for2 (java) : for ( String c:country ) { ... }
+	        (JS) : for ( var c in country ) { .... }
+	        (JS) : for ( var c of country ) { .... } 
+3. Loop_while, do_while
+4. continue, break
+5. Object(객체) 선언, 출력, this => ex08_02loopObject.html
+</h3></pre>
+
+</body>
+</html>

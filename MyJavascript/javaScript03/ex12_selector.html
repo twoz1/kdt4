@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector</title>
+</head>
+<script>
+    onload=function(){
+        // 1, id
+        document.getElementById('header').style.color='pink';
+
+        //2.tag
+        // => 첫번째 Tag 1개만 인식
+        // => css의 선택자 적용가능
+        let t = document.querySelector('h2');
+        t = document.querySelector('h2:nth-child(3)');
+        t.style.color='orange';
+        t.style.background='black';
+        //3.tag all
+        //=> 모두 선택해서 배열로 리턴
+        let a = document.querySelectorAll('h4');
+        //a라는 애는 배열이므로 a.style.color이렇게 안됨.
+        for(let i=0; i < a.length; i++){
+            a[i].style.color='blue';
+            a[i].style.background='yellow';   
+        }
+
+        //4. body중에서 짝수번째 child만 color를 green으로 표시
+        let arr=document.querySelectorAll('body>*:nth-child(2n)'); //띄어쓰기 하지 말기.
+        for(let i=0; i < arr.length; i++){
+            arr[i].style.color='Green';
+            arr[i].style.background='Pink'; 
+            //컨텐츠 변경하기 : 기울임꼴, colorChange i=0
+            arr[i].innerHTML='<i>colorChange i='+i+'</i>';
+            // arr[i].innerText='<i>colorChange i='+i+'</i>';
+            // -> innerHTML: 컨텐츠에 Html Tag 가 적용됨
+            // -> innerText : 컨텐츠에 Html Tag 가 적용 안됨
+    }
+}
+    
+</script>
+<body>
+    <pre>
+    <h3>
+        Selector : id, tag, tag all
+        1. id
+        => document.getElementById('id')
+        <span id="header">getElementById</span>
+
+        2. tag
+        => document.querySelector
+        => 첫번째 Tag 1개만 인식
+
+        3. tag all
+        => document.querySelectorAll
+        => 모두 선택해서 배열로 리턴
+    </h3>
+    </pre>
+
+    <h2>tag 선택자1 : child2</h2>
+    <h2>tag 선택자2 : child3</h2>
+    <h2>tag 선택자3 : child4</h2>
+    <h4>tagAll 선택자1 : child5</h4>
+    <h4>tagAll 선택자2 : child6</h4>
+    <h4>tagAll 선택자3 : child7, LastChild</h4>
+
+</body>
+</html>

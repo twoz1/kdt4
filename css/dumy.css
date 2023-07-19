@@ -1,0 +1,100 @@
+.box1 {
+    background-color: rgb(244, 206, 206);
+}
+
+.box2 {
+    background-color: rgb(230, 208, 251);
+}
+
+.box3 {
+    background-color: rgb(164, 164, 218);
+}
+
+.box4 {
+    background-color: rgb(230, 173, 173);
+}
+
+.box5 {
+    background-color: rgb(204, 247, 204);
+}
+
+.box6 {
+    background-color: rgb(211, 227, 179);
+}
+
+.box7 {
+    background-color: rgb(171, 235, 208);
+}
+
+.box8 {
+    background-color: rgb(242, 212, 202);
+}
+
+.box9 {
+    background-color: rgb(184, 246, 248);
+}
+
+
+.grid_container div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid_container {
+    display: grid;
+    height: 300px;
+    background-color: rgb(236, 236, 192);
+    grid-template-columns: repeat(3, 100px);
+    grid-auto-rows: 50px;
+}
+
+/* ================================================================================= */
+
+/* 행 방향 전체 요소들에 대한 정렬 */
+.grid_container {
+    justify-content:start;
+    /* justify-content:end; */
+    /* justify-content:center; */
+    /* justify-content:space-between; */
+    /* justify-content:space-around; */
+    /* justify-content:space-evenly; */
+}
+
+/* 행 방향 개별 열그룹에 대한 정렬 */
+.grid_container {
+    /* justify-items: stretch; */
+    /* justify-items: start; */
+    /* justify-items: end; */
+    /* justify-items: center; */
+}
+
+/* 열 방향 전체 요소들에 대한 정렬 */
+.grid_container {
+    /* align-content: start; */
+    /* align-content: end; */
+    /* align-content: center; */
+    /* align-content: space-between; */
+    /* align-content: space-around; */
+    /* align-content: space-evenly; */
+}
+
+/* 열 방향의 개별 행그룹에 대한 정렬 */
+.grid_container {
+    /* align-items:stretch; */
+    /* align-items:start; */
+    /* align-items:end; */
+    /* align-items:center; */
+}
+
+/* 행 방향 개별 열 요소들에 대한 개별 정렬 */
+.box7,
+.box9 {
+    /* justify-self: end; */
+}
+
+/* 열 방향 개별 행 요소들에 대한 개별 정렬 */
+.box1,
+.box3 {
+    /* align-self: start; */
+}

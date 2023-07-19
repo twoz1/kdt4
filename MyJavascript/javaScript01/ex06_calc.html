@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>** 내장함수 eval 을 이용한 계산기 **</title>
+<style>
+	button { width:50px; }
+</style>
+<script>
+	let expression = '' ;
+	let result = 0;  // 전역(Global)변수 -> 모든 function 에서 사용가능
+
+	// ** JS 에서 숫자인지 확인하기 
+	// => Number.isNan(n) 
+	//    n 이 숫자가 아니면 true, 숫자면 false 
+	// => Number.isInteger(n) 
+	//    n 이 정수이면 true, 아니면 false 
+	function input(n) {
+		// 결과 출력후 이어서 연산자가 입력되면 계속 연산하는 경우이고,
+		// 결과 출력후 이어서 숫자가 입력되면 새로운 연산으로 취급 -> 변수 클리어가 필요
+		// => 주의 : n -> '7'
+		if ( expression === result && Number.isInteger(parseInt(n))) {
+			expression = '' ;
+			result = 0;
+		}
+		
+		expression +=n; // 3+5*7...
+		document.getElementById("display").value = expression;
+	}
+	
+	function compute() {
+		result = eval(expression);
+		document.getElementById("display").value = result;
+		expression = result; // 결과를 출력했음을 표시하기위함
+	}
+	
+	function clearExpression() {
+		expression =''; result=0;
+		document.getElementById("display").value = '0';
+	}
+	
+	function backSpace() {
+		// => document.getElementById("display").value
+		// => 1234567 -> 123456 
+		// => substr(startIndex , 원하는길이) 
+		let s = document.getElementById("display").value; //지역(로컬)변수
+		expression = s.substr(0,(s.length-1));
+		document.getElementById("display").value = expression;
+	}
+
+</script>
+
+
+</head>
+<body>
+<h3>** 내장함수 eval 을 이용한 계산기 **</h3>
+=> eval : 문자열(3+5*2)을 수식으로 바꾸어서 계산을 해줌<br>
+=> eval("3+5*2") -> 연산결과 13 제공<br>
+<hr>
+* display : <br>
+<input id="display" value="0" size="25">
+<br>
+<button onclick="input('7')" >7</button>  
+<!-- 괄호안에 있는 애를 매개변수라고 함.  -->
+<button onclick="input('8')" >8</button>
+<button onclick="input('9')" >9</button>
+<button onclick="input('/')" >/</button>
+<br>
+<button onclick="input('4')" >4</button>
+<button onclick="input('5')" >5</button>
+<button onclick="input('6')" >6</button>
+<button onclick="input('*')" >*</button>
+<br>
+<button onclick="input('1')" >1</button>
+<button onclick="input('2')" >2</button>
+<button onclick="input('3')" >3</button>
+<button onclick="input('-')" >-</button>
+<br>
+<button onclick="input('0')" >0</button>
+<button onclick="input('+')" >+</button>
+<button onclick="input('(')" >(</button>
+<button onclick="input(')')" >)</button>
+<br>
+<button onclick="clearExpression()" >Clear</button>
+<button onclick="compute()" >Enter</button>
+<button onclick="backSpace()" style="width:105px;">BackSpace</button>
+
+// ** eval 함수
+// => 문자로 표현 된 JavaScript 코드를 실행하는 함수
+// => return(반환) 값 : 매개변수로 전달된 코드(수식)를 평가한 결과값. (값이 없으면 undefined 반환)
+// => 위험성 : https://velog.io/@modolee/javascript-eval-is-evil
+//    .eval()은 인자로 받은 코드를 caller의 권한으로 수행하는 위험한 함수
+//    .악의적인 영향을 받았을 수 있는 악의적인 코드를 수행하는 결과를 초래할 수 있음.
+//    . 제3자 코드가 eval()이 호출된 위치의 스코프를 볼 수 있으므로 악의적인 공격이 가능
+//    . 최신 JS 엔진에서 여러 코드 구조를 최적화하는 것과 달리,
+//       eval()은 JS 인터프리터를 사용하기 때문에 느림
+//    ( 최신 자바스크립트 인터프리터는 코드를 기계 코드로 변환함. 즉, 변수명의 개념이 완전히 사라짐
+//       eval()을 사용하면 브라우저는 기계 코드에 해당 변수가 있는지 확인하고 값을 대입하기 위해,
+//      길고 무거운 변수명 검색을 수행해야 함
+//      eval()을 통해 자료형 변경 등 변수에 변화가 일어날 수 있으며, 
+//      브라우저는 이에 대응하기 위해 기계 코드를 재작성해야 함 )
+</body>
+</html>

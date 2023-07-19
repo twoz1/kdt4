@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>object destructuring</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script type="text/babel">
+        // ** babel, 바벨 
+        // => java script의 최신문법을 구형 브라우저에서도 쓸 수 있도록해줌.
+        // => 브라우저에서 코드를 실행하기전에 더 호환성이 높은 코드로 변환하는것을
+        //    컴파일링(compiling) 이라하고, 대표적인 JS 컴파일링도구가 바벨 이다.
+        // => 단, 이것은 코드를 바이너리로 변환하는 전통적인 컴파일링언어 와는 다르게
+        //    JS 코드를 더많은 브라우저가 이해할수있는 다른 버전의 JS구문으로 변환해준다.
+
+        // ** 객체 구조분해 사례 1
+        // => 아래 코드는 sandwich 객체를 분해해서 bread, meat의 값을 같은 이름의 변수에 넣어줌.
+        // => 그러나 두변수의 값을 변경해도 sandwich의 값에 영향을 주지는 않는다. 
+
+        let sandwich = {
+            bread: "더치 크런치",
+            meat: "참치",
+            cheese: "스위스",
+            toppings: ["상추", "토마토", "머스타드"]
+        };
+
+        let { bread, meat } = sandwich;
+
+        console.log(bread, meat);
+
+        bread = "마늘";
+        meat = "칠면조";
+
+        console.log(bread, meat);
+        console.log(sandwich.bread, sandwich.meat);
+
+        // <object 축약표현>
+
+        // 1. property 축약
+        // ES5
+
+        var x = 1, y = 2;
+        var oldObj = {
+            x: x,
+            y: y,
+            sayHi: function () {
+                console.log(`sayHi_old => x = ${this.x} y = ${oldObj.y}`);
+            }
+        };
+
+        console.log(`oldObj => x = ${oldObj.x} y = ${oldObj.y}`);
+
+        // ES6 : 프로퍼티 축약표현 적용
+        // 객제의 속성명과 동일한 이름의 변수의 값이 할당
+
+        let xx = 10, yy = 20;
+        let newObj = {
+            xx,
+            yy,
+            sayHi() {
+                console.log(`sayHi_new => xx = ${this.xx} yy = ${newObj.yy}`);
+            }
+        };
+
+        console.log(`newObj => xx = ${newObj.xx} yy = ${newObj.yy}`);
+
+        // 2. 메서드 축약
+        // ES5: 익명함수 형식으로 정의
+        // ES6: function 키워드 생략한 선언함수형식으로 정의
+        // ES6 부터 정의된 메서드 정의 규정 
+
+        oldObj.sayHi();
+        newObj.sayHi();
+
+    </script>
+</head>
+
+<body>
+    <h2>1. object destructuring(구조분해)</h2>
+    <h2>2. object 축약표현</h2>
+    2.1 property 축약
+    <br>
+    2.2 메서드 축약
+    <hr>
+    console 에서 확인하세요
+    <br>
+</body>
+
+</html>

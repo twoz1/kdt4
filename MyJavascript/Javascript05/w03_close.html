@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window Close Test</title>
+    <script>
+        //윈도우를 처리하기 위한 변수 선언
+        let newWindow=null;
+        //window Open
+        function load(url){
+            newWindow=window.open(url,'mywin','left=30, top=30, width=500, height=500');
+        }
+        //window Close
+        function unload(){
+            // => newWindow 의 open 확인 후 close
+            if(newWindow == null || newWindow.closed) return;//==true 생략 가능
+            //return을 단독으로 사용하면 현재 위치에서 함수 종료 
+            //newWindow.closed 닫혀있는데 또 닫으라고 하면 에러남 그래서 newWindow.closed을 써줘야 함
+            else newWindow.close()        
+        }
+
+    </script>
+</head>
+<body>
+    <h3>** Window Close Test **</h3>
+    => 윈도우를 스스로 닫는 경우와 자신이 생성한 윈도우를 닫는 사례<br>
+    <hr>
+    <a href="javascript:load('w03_closeChild.html')">newWindow_Open</a><br>
+    <a href="javascript:unload()">newWindow_Close</a><br>
+    <a href="javascript:window.close()">thisWindow_Close</a>
+</body>
+</html>

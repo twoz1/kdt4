@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+          // 과제1 : 
+    // p Tag 의 color:blue; background:yellow  이 값이 적용되어 출력 되도록 script 구문을 완성 하세요 ~~
+
+    // 과제2 :
+    //colorChange() 함수를 완성해서 클릭하면 p Tag 의 글꼴색상이 변경되도록 해보세요 ~~
+    //window.onload=function(){  window는 생략 가능.
+
+//  }
+        onload=function() {  //onload는 속성이다. 값을 넣는 것 = 속성 / alert('dfsdf') -> 동작을 실행 = 메소드 실행흐름을 컨트롤 하기 위해 onload라는 이벤트 리스너를 사용.
+            document.getElementById('firstP').style.color="darkorange";
+            //객체나 메소드에 접근할때는 .을 사용하여 document에 소속된 getElementById(선택자).
+            //getElementById는 return 값이 있는 함수 p태그를 return. 다시 객체가 됨 그래서 .을 찍고 firstP가 제공해주는 것들을 불러올 수 있음.
+            //style도 객체 style 이 갖고 있는 여러가지 것들 중 color를 불러옴.
+            //이 방식을 체이닝방식의 코드라고 함.
+            document.getElementById('firstP').style.background="blue";
+            //getElementById(선택자) - 태그를 셀렉팅함.
+            //css에서 선택자(class,id 등)를 잘 다룰 줄 알면 좋은 코딩. 자바스크립트도 똑같음.
+        } 
+
+        function colorChange(){           //식별자와 리터럴
+            document.getElementById('firstP').style.color="black"
+        }
+        
+    //과제 2.2 
+    //위의 함수를 id를 매개변수로 전달 받아 전달 받은 id에 해당하는 Tag 의 글꼴색상이 변경되도록 해보세요.
+
+    function colorChange2(id, color){
+        document.getElementById(id).style.color=color;
+    }
+    //과제 3 
+    //버튼을 누를 때마다 ★의 개수가 1개씩 늘어나도록 function을 완성하세요.
+    function start(){
+        document.getElementById("test3").innerHTML+='<b>★</b>';
+        // document.getElementById("test3").innerText+='<b>★</b>';
+        //a = a+'⭐' -> +=
+        }
+    function minus(){
+        let s = document.getElementById('test3').innerHTML;
+        
+        if(s.length > 4){
+            // document.getElementById("test3").innerHTML=s.substr(0,(s.length-1));
+            s=s.substr(0,(length-1));  // 프로그래밍 언어에서 =라는 애는 같다가 아님 우측이 갖고 있는 값을 왼쪽에 전달한다는 의미. 메모리에 공간을 
+            //확보한다는 의미 - 얘로 하면 값을 넣는 다는 것밖에 안됨. 그래서 화면에 아무 표시가 뜨지 않음.
+        }
+    }
+    
+   // ** 2. Document 객체의 주요 프로퍼티 **
+      let text1 = '** 문서로딩중일때 : document.readyState => '+document.readyState+'\n'; 
+   
+   // 문서가 완전히 로드(출력)되었을 때, 현재 document의 프로퍼티 출력 
+      function printProperties() {
+      
+      document.getElementById('input').focus(); // 포커스 부여  document는 dom트리에서 최상위 객체이므로 화면상에 보여지는 것이 아님.. 이러한 속성이 있다는 것을 알기 위해 .. 배움...
+      
+      text1+="1. location = "+document.location+"\n";
+      text1+="2. URL = "+document.URL+"\n";
+      text1+="3. title = "+document.title+"\n";
+      text1+="4. head.id = "+document.head.id+"\n";
+      text1+="5. domain = "+document.domain+"\n";
+      text1+="6. lastModified = "+document.lastModified+"\n";
+      text1+="7. defaultView = "+document.defaultView+"\n";
+      text1+="8. 문서로딩 완료후: readyState = "+document.readyState+"\n";
+      text1+="9. body color = "+document.body.style.color+"\n";
+      text1+="10. referrer: 이전 페이지 url = "+document.referrer+"\n";
+      text1+="11. activeElement = "+document.activeElement.value+"\n";
+      text1+="12. documentElement의 태그명 (요소에 호출된 Tag명) = "+document.documentElement.tagName+"\n";
+      alert(text1);   
+    } 
+
+        </script>
+   
+</head>
+<body onload="printProperties()">
+    <h2>1. DOM 객체 p의 프로퍼티, 스타일, 이벤트 리스너 **</h2>
+    <p id="firstP" onclick="colorChange()">
+        이것은<span style="color: pink;"> 문장입니다.</span>
+    </p>
+
+    <h3 id="test1" onclick="colorChange2('test1' , 'pink')">colorChange Test1</h3>
+    <p id="test2" onclick="colorChange2('test2' , 'orange')">colorChange Test2</p>
+    <!-- 문자열을 표기할 때 "" or ''을 사용하지만 (자바는 무조건 ""을 사용함. html태그에 어떤 속성값을 주면 ''/ /""  다 사용 가능 ) -->
+    <!-- 자바스크립트는 밖에 ""로 묶으면 안에는 '' 묶어야 함. 바뀌어도 상관 없음. 둘다 같은 것을 쓰면 오류남. 보통은 밖을 "" 안을 ''을 사용 -->
+    <button  id="test3" onclick='start()' onmouseleave="minus()">Star</button>
+
+    <h3>** 복습: this_17p, star()에 innerText 적용 **</h3>
+    <p>=> this: 객체 자신을 가리키는 자바스크립트 키워드 </p>
+    <h3 id="this1" onclick="colorChange2(this.id, 'pink')">colorChange : this 적용</h3>
+
+    <!-- //     <pre>
+       => offset
+         - 요소가 화면에서 width, height, padding, scrollbar, border를 합친 전체 크기를 뜻함 (마진 제외)
+       => offsetWidth, offsetHeight
+         - 가장 바깥 부분부터 차지하는 너비와 높이를 제공
+         - 쉽게 말해 border를 포함한 박스의 width, height
+       => https://blog.naver.com/minhyupp/222632543245   
+     </pre> -->
+
+    <h2>** 2. Document 객체의 주요 프로퍼티 **</h2>
+    <hr>
+    ** direction:rtl ( right to left ) <br>
+    <a href="http://www.naver.com" >Naver</a>
+    <div>여기는 DIV 입니다.</div>
+    <input id="input" type="text" value="여기에 포커스가 있습니다.">
+
+</body>
+</html>

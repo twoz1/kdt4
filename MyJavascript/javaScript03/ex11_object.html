@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myobject 만들기</title>
+    <script>
+
+        function send() {
+            let student = {
+                name : document.getElementById("name").value,
+                age : document.getElementById("age").value,
+                team : document.getElementById("team").value,
+                career : document.getElementById("career").value,
+                info1 : document.getElementById("info1").value,
+                info2 : document.getElementById("info2").value,
+
+                infoPrint : function(){
+                    return  `저는 ${this.name}이고 ${this.age}세입니다.
+                            ${this.team}의 조원입니다.
+                            과거에는 ${this.career}를 했습니다.
+                            희망사항은 ${this.info1}이고,
+                            건의사항은 ${this.info2}입니다.`;
+                }
+                
+            };
+
+            document.getElementById('content').innerHTML=student.infoPrint();
+        }
+
+        
+
+    </script>
+
+    <style>  
+        tr{
+            height: 40px;
+        }
+        th{
+            background-color: pink;
+            border: 1px solid;
+        }
+    
+
+    </style>
+
+</head>
+<body>
+    <h2>Student 객체 만들기</h2>
+    <table width="80%">
+
+        <tr>
+            <th>Name</th>
+            <td><input type="text" id="name"></td>
+        </tr>
+
+        <tr>
+            <th>Age</th>
+            <td><input type="text" id="age"></td>
+        </tr>
+
+        <tr>
+            <th>Team</th>
+           <td><input type="text" id="team"></td>
+        </tr>
+        
+        <tr>
+            <th>경력</th>
+            <td><input type="text" id="career"></td>
+        </tr>
+
+        <tr>
+            <th>희망사항</th>
+            <td><input type="text" id="info1"></td>
+        </tr>    
+
+        <tr>
+            <th>건의사항</th>
+            <td><input type="text" id="info2"></td>
+        </tr>    
+        
+        <tr> 
+            <td colspan="2"><button onclick="send()">전송</button>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <h3>info</h3>
+    <div id='content'>
+    </div>
+   
+</body>
+</html>
