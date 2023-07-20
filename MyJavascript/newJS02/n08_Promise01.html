@@ -7,10 +7,44 @@
     <script>
         //Test1 ) 예전방식
         //JS는 기본적으로 비동기적으로 실행중 
-        let count1 = 0;
-        setTimeout(()=>{count1++;}, 1000); // 지연시간 단위 1 / 1000초
-        console.log(`test1)${count1}`);
+        // let count1 = 0;
+        // setTimeout(()=>{count1++;}, 1000); // 지연시간 단위 1 / 1000초
+        // console.log(`test1)${count1}`);
 
+        //연습 1
+        //1초 후에 1~100까지 더한 값을 출력하는 코드를 작성해보세요(비동기식)
+
+        // let tot = 0;
+        // setTimeout(() => { 
+        // for (let i = 1; i < 101; i++) {
+        // tot += i
+        // }}, 1000); 
+        // console.log(`tot => ${tot}`); //결과값이 0 이 나옴.
+
+       
+       //위의 for 구문을 Promise 적용 동기식으로 구현
+       //1~100까지 더한 값이 100보다 작으면 오류로
+       //이행성공시에 합계(결과) 출력 -> 출력 후에는 -> 평균 출력하기
+
+        // tot = 0;
+        // let test = new Promise(function(resolve,reject){
+        //     setTimeout(() => { 
+        //     for (let i = 1; i < 101; i++) {
+        //     tot += i
+        //     }
+        //     if(tot >100){
+        //         resolve(tot);
+        //     }else{
+        //         reject('오류');
+        //     }
+        //  }, 1000);
+        // }).then((result) => {console.log(`합계=${result}`);
+        // return result;
+        // }).then((result)=>{console.log(` 평균 = ${result/100}`);
+        // }).catch((error)=>{console.log(`에러 ${error}`);});
+
+
+        // promise.then((result) => {console.log(`test) 이행결정 결과 result=${result}`);});
         //Test2) Promise 적용
         // => Test2) Promise 적용
         // => promise 객체 생성 : Pending(대기) 상태
@@ -18,28 +52,50 @@
         //   - 매개변수인 resolve, reject 를 전달받음
         // => 익명함수 내에 실행코드 작성
         // CallBack 함수 내에 실행코드 작성
-        let count2 = 0;
-        let promise = new Promise(function(resolve,reject){
-            setTimeout(()=>{
-                count2++;
-                //conut2의 값이 짝수면 이행결정, 홀수면 이행거절로 처리
-                if(count2%2==0){
-                    resolve(count2); // 이행결정에 해당하는 callBack 함수 호출, 매개변수를 이용해 결과값 전달
-                }else{
-                    reject('**faild**'); // 이행 거절에 해당하는 callBack함수 호출, 매개변수를 이용해 에러
-                                         // Message 전달
-                }},1000); //setTimeout
-            });
-        //2.1) 결과 1 (개별적으로 메서드 작성)    
-        promise.then((result) => {console.log(`test2) 이행결정 결과 result=${result}`);});
-        promise.catch((error) => {console.log(`test2) 이행거절 message error=${error}`);});
+        //  이 CallBack 함수의 매개변수 resolve, reject 들도 Callback함수임.
+        //  Promise 생성자 함수 : Promise(callback(),)
 
-        //2.2) 메서드 체인
-        promise.then((result) => {console.log(`test2.2) 이행결정 결과 result=${result}`);});
-        promise.catch((error) => {console.log(`test2.2) 이행거절 message error=${error}`);});
-        promise.catch(() => {console.log(`test2.2) finally`);});
+        // let count2 = 0;
+        // let promise = new Promise(function(resolve,reject){
+        //     setTimeout(()=>{
+        //         count2++;
+        //         //conut2의 값이 짝수면 이행결정, 홀수면 이행거절로 처리
+        //         if(count2%2==0){
+        //             resolve(count2); // 이행결정에 해당하는 callBack 함수 호출, 매개변수를 이용해 결과값 전달
+        //         }else{
+        //             reject('**faild**'); // 이행 거절에 해당하는 callBack함수 호출, 매개변수를 이용해 에러
+        //                                  // Message 전달
+        //         }},1000); //setTimeout
+        //     });
+        // //2.1) 결과 1 (개별적으로 메서드 작성)    
+        // promise.then((result) => {console.log(`test2) 이행결정 결과 result=${result}`);});
+        // promise.catch((error) => {console.log(`test2) 이행거절 message error=${error}`);});
 
-        
+        // //2.2) 메서드 체인
+        // promise.then((result) => {console.log(`test2.2) 이행결정 결과 result=${result}`);});
+        // promise.catch((error) => {console.log(`test2.2) 이행거절 message error=${error}`);});
+        // promise.catch(() => {console.log(`test2.2) finally`);});
+
+        // => jQuery 구문과 비교해보세요 ~~
+/*
+$.ajax({
+           type:'Get',  // Get/Post
+           url:'ax03_parameterResult.jsp',
+           data: {
+              id:document.getElementById('id').value,
+              password:$('#password').val(),
+              name:$('#name').val()
+           },
+           success:function(result) {
+              alert('** Ajax jQuery Test 성공 **');
+              $('#resultArea').html('** 서버의 Response_JQuery => <br>'+result);
+           },
+           error:function() {
+              alert('** Ajax jQuery Test 실패 **');
+              $('#resultArea').html('** 서버의 Response_JQuery => Error !!!<br>');
+           }
+          }); //ajax
+*/
 
 
     </script>

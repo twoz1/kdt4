@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch & Axios</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // 1) Fetch
+        // => response 를 2번에 나누어 받음
+
+        // -> then 1단계 
+        // response 의 header 먼저 인지함.
+        // status 확인 후 성공/실패에 따른 처리             
+        // 성공 : body에 담긴 결과를 받아서 다시 전달
+        // 실패 : 오류를 발생시켜 오류코드 전달 
+
+        // -> then 2단계 : 1단계에서 전달받은 Data 처리
+
+        //-------------------------------------------------------------------
+        
+       let url1='../Javascript05/snowVillage.html';
+        function feTest() {
+            fetch(url1, {method: 'Get',})    //method:Get은 default값이라 없애도 됨.
+            .then((response) => {
+                // => status 확인 후 성공/실패에 따른 처리
+                if (!response.ok) throw new Error(response.status)
+                // => catch블럭으로 전달
+                return response.text();
+
+            }).then((responsePage) => {
+                document.getElementById('resultArea').innerHTML='서버 response => <br>' + responsePage
+            }).catch((error) => {
+                document.getElementById('resultArea').innerHTML=`서버 response => status ${error}`
+            });
+        }
+    
+   
+        
+        //-------------------------------------------------------------------
+
+
+        // 2) Axios
+        let url2 = 'n09_03parameterResult.html';
+        function axTest() {
+        //    axios({url:url2,
+        //           method:'Get'
+        // => Method 형식 요청
+        //get(url,data......,)
+             axios.get(url2
+            ).then((response)=>{
+                document.getElementById('resultArea').innerHTML=
+                '서버 Response 성공 => <br>' + response.data;
+
+            }).catch((error)=>{
+                document.getElementById('resultArea').innerHTML=
+                `서버 Response 실패 => <br>
+                error.respnose=${error.response}<br>
+                error.respnose.status=${error.response.status}<br>
+                error.respnose.headers=${error.response.headers}`;
+
+            });
+        }
+
+
+
+
+
+    </script>
+</head>
+
+<body>
+    <h2>Fetch & Axios</h2>
+    <button id="ftest" onclick="feTest()">FetchTest</button><br>
+    <button id="atest" onclick="axTest()">AxiosTest</button>
+    <hr>
+    <div id="resultArea"></div>
+</body>
+
+</html>

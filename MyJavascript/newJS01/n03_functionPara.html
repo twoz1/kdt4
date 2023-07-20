@@ -9,15 +9,15 @@
         function test(name, activity) {
             console.log(`${name} 씨는 ${activity} 를 좋아합니다.`);
         }
-        test('홍길동', '태권도');
+        test('홍길동', '태권도');//홍길동 씨는 태권도 를 좋아합니다.
         test(); //undefined 씨는 undefined 를 좋아합니다.
 
 
         function testDefault(name = '김길동', activity = '수영') {
-            console.log(`${name} 씨는 ${activity} 를 좋아합니다.`);
+            console.log(`${name} 씨는 ${activity} 를 좋아합니다.`);//김진휘 씨는 디제잉 를 좋아합니다.
         }
         testDefault(name = '김진휘', activity = '디제잉');
-        testDefault();
+        testDefault(); //김길동 씨는 수영 를 좋아합니다.
 
 
         //Test2. 화살표 함수와 this
