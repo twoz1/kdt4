@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module과 scope Test</title>
+</head>
+<body>
+    <h2>Module과 Scope Test</h2>
+    <pre>
+        * m01_bar.js : let 사용
+        =>window.menu : undefined : (즉, 윈도우의 객체 아님)
+        => menu :  출력 잘됨
+        
+        *m01_foo.js : 이전코드의 영향을 받음
+        => window.menu : Uncaught SyntaxError : Identifier 'window.menu' has already...
+        => menu : Uncaught SyntaxError Identifier 'menu' has already been declared
+        
+        * 결론 : JS는 기본적으로 Scope 구분 없이 전역으로 인식함
+        1) let 사용시
+            전역변수로 사용되므로 scope 적용 안되지만, 윈도우의 객체로 인식되지 않음.
+            
+        2)var와 비교
+           전역변수로 사용되므로 scope 적용 안되고, 윈도우의 개체로 인식됨.
+           bar, foo 모두 출력됨 (foo에서 값이 변경되는 것임)
+        
+        => 여러 외부 문서를 사용하는 경우 전역변수로 인식되지 않으며, scope 적용 안됨.
+
+        **Scope 구별 적용 : 모듈화 
+        => 확장자 : ~.mjs
+        => script Tag 에서 type ='module'
+    </pre>
+    
+    <script src="m01_bar.js"></script> 
+    <script src="m01_foo.js"></script>
+
+    => Test2 <br>
+    => 두 문서의 menu는  scope가 다른 변수이다.
+    <script type="module" src="m02_bar.mjs"></script>
+    <script type="module" src="m02_foo.mjs"></script>
+</body>
+</html>
