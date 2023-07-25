@@ -17,7 +17,8 @@
      // ex02_bakedSalmon.html을 참고
      const dish = React.createElement('section',{id : 'baked-salmon'},
                    React.createElement('h1','null','구운 연어'),
-                   React.createElement('ul',{'className' :'ingredients'},
+                   React.createElement('ul',
+                   {'className' :'ingredients'},
                     React.createElement('li', null, '연어 500그램'), 
                     React.createElement('li', null, '잣 1 컵'), //ul
                     React.createElement('li', null, '버터 상추 2 컵'), 
@@ -25,7 +26,8 @@
                     React.createElement('li', null, '올리브 오일 1/2컵'), 
                     React.createElement('li', null, '마늘 3 쪽') //
                    ),//ul
-                   React.createElement('section',{'className' : 'instructions'},
+                   React.createElement('section',
+                   {'className' : 'instructions'},
                     React.createElement('h2','null','조리절차'),
                     React.createElement('p',null,'오븐을 350도로 예열한다.'),
                     React.createElement('p',null,'유리 베이킹 그릇에 올리브 오일을 두른다.'),
@@ -42,6 +44,7 @@
      ReactDOM.render(dish, document.getElementById('react-container'));
      console.log(`**dish =${dish}`);
      // html을 리액트가 취급할 수 있는 element로 만들어줌
+
     </script>
 
 </body>

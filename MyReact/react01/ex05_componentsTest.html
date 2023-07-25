@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Component02 : function 연습</title>
+</head>
+
+<body>
+    <h2>eact Component02 : function 연습</h2>
+    <button onclick="ingredients()">재료</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="instruction()">조리절차</button>
+    <hr>
+    <div id="react_container"></div>
+    <hr>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <script>
+        
+        // 과제
+        // 배열로 Data 를 전달받아 ul, li 로 출력하는 함수형 컴포넌트를 정의하고,
+        // => 배열 2개, 버튼 2개 (재료, 조리법) 를 정의하여 출력하도록 완성하세요.
+        // => Data 개수는 5개이상
+
+        // function ingredients() {
+        //     let items = ['똥', '방귀', '버터', '슬라이스 마늘', '밥'];
+
+        //     const ingredients = React.createElement(
+        //         'ul',
+        //         { 'className': 'ingredients' },
+        //         items.map((item, i) => React.createElement('li', { key: i }, item)) 
+        //     )
+        //     ReactDOM.render(ingredients, document.getElementById('react_container'));
+        // }
+
+
+        // function instruction() {
+        //     let cook = ['달궈진 프라이팬에 버터를 녹인다.', '슬라이스 마늘을 넣어 볶는다.', '똥과 밥을 넣어 함께 볶는다.', '마지막으로 방귀를 뀌어 향을 입힌다.'];
+
+        //     const instruction = React.createElement(
+        //         'ul',
+        //         null,
+        //         cook.map((cook, i) => React.createElement('li', { key: i }, cook)) 
+        //     )
+        //     ReactDOM.render(instruction, document.getElementById('react_container'));
+        // }
+
+        const IngredientsList =({items})=>
+             React.createElement(
+                    'ul',
+                    { 'className': 'ingredients' },
+                    items.map((item, i) => React.createElement('li', { key: i }, item)) //map
+              ) 
+
+        let myRecipe = ['똥', '방귀', '버터', '슬라이스 마늘', '밥'];
+        let cook = ['달궈진 프라이팬에 버터를 녹인다.', '슬라이스 마늘을 넣어 볶는다.', '똥과 밥을 넣어 함께 볶는다.', '마지막으로 방귀를 뀌어 향을 입힌다.'];  
+        
+        function ingredients(){
+            ReactDOM.render(React.createElement(IngredientsList,{items : myRecipe},null),
+                document.getElementById('react_container'))
+        }
+
+        function instruction(){
+            ReactDOM.render(React.createElement(IngredientsList,{items : cook},null),
+                document.getElementById('react_container'))
+        }
+        
+        
+
+    </script>
+
+</body>
+
+</html>
