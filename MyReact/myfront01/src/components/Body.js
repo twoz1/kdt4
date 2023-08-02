@@ -1,113 +1,59 @@
-// ** State
-// => 값을 저장하거나 변경 할 수 있는 객체로 이벤트와 함께 주로 사용됨.
-//    - 즉, 버튼 클릭시 버튼의 컬러를 변경할때 등에 사용됨 
-//    - 이벤트 발생 -> 이로인하여 화면의 리랜더링이 필요한 경우 리랜더링이 자동으로실행될 수 있도록 해줌
-//      -> State변수 로 지정된 변수의 값에 변화가 일어나면 리액트 에서는 리랜더링 해줌  
-// => useState 생성자함수로 State 생성
-//    const [text_State변수, setText_set함수] = useState("초기값");
-// => useState 를 호출하면 현재상태값과 이 State변수의 값을 변경하는 set함수를 담은 배열을 return.
-// => 이후 State변수 값이 변하면 이를 반영하기위해 컴포넌트를 리랜더링 함.
-//    ( 이것을 컴포넌트의 Update 라함 )
+// ** useRef (Reference)
+// => DOM 요소를 직접 제어 할 수 있음.
+//    ( DOM 노드, 엘리먼트, 리액트 컴포넌트의 주소값 참조 가능 ) 
 
+// => useRef는 상태 값을 참조하되 그게 렌더링을 일으키지는 않게 하기 위해 사용하는 리액트 훅
 
-import {useState} from 'react';  //react에서 useState를 갖고 온다.
+// => current 속성을 가지고 있는 객체를 반환. 
+//    인자로 넘어온 초깃값을  이 current 속성에 할당하며 이 속성은 값을 변경하여도
+//    리액트 컴포넌트는 리렌더링 되지 않으며,
+//    리액트 컴포넌트가 리렌더링 되는 경우도 이 속성의 값을 잃지 않음. 
 
-function Body() {
-//state Test1
-    const [count, setCount] = useState(0);
-    const onIncrease = () => {
-        setCount(count+1);
-        if (count >= 100) {
-            alert('100보다 작게요');
-            setCount(0);
-        }
-    }//onIncrease
+// => ref 는 렌더링 중에 읽거나 쓰려고 할 경우 순수기능을 잃고 예상치 못한 결과를 낼 수도 있어서
+//    event handler 에서 주로 사용함.
 
-    const onDecrease =() => {
-        setCount(count-1);
-        if (count <= 0) {
-            alert('0보다 크게요');
-            setCount(0);
-        }
+// => 입력폼 초기화, 포커스하기 등에 사용
+
+// ** 리액트 훅 (HOOK)
+// => 클래스 컴포넌트가 가지고있던 유용한 기능을 
+//    함수컴포넌트에서도 사용가능하도록 개발하여 제공하는 기능들
+//    use~~ 로 명명됨 (useEffect, useContext, useReducer, useCallBack, useMemo 등)
+//    HOOK(갈고리) : 클래스 기능을 낚아채듯 가져와 사용한다데서 유래..
+import{useRef,useState} from 'react';
+import './Body.css';
+
+function Body(){
+   const [text ,setText] = useState();
+   const textRef = useRef();
+  // => 인자(매개변수, Parameter) 로 전달된값을 초기값으로하는
+  //    Ref 객체를 생성하고 textRef 에 저장
+  // => input Tag 에서 ref={textRef} 명령으로 textRef 가 DON 입력폼에 접근하도록 설정
+  //    그러면 textRef 를 이용하여 입력폼을 직접 조작할 수 있음. 
+
+   const onChangeText = (e) =>{setText(e.target.value)}
+   const onClickBtn = () => {
+    // test1) 클릭 후 입력폼 초기화에 적용
+    //  alert(text);
+    //  textRef.current.value="";
+    // test2) 포커스 적용
+    // => 입력된 text 가 3글자 미만이면 포커스가 머문 상태로 입력 기다림
+    if(text.length < 3){
+        textRef.current.focus();
+    } else{
+        alert(text);
+        textRef.current.value="";
     }
-   
-//state Test2
-const [text,setText] = useState('');
-const textChange =(e)=>{
-    setText(e.target.value);
-    
-}//textChange
+   }
 
-const [date,setDate] = useState('');
-const dateChange =(e)=>{
-  setDate(e.target.value);
-  console.log(e.target.value);
-}
+   return(
 
-const [option,setOption] =useState('');
-const companyChange =(e) =>{
-    setOption(e.target.value);
-    // => select option 의 key 값이 value 에 전달됨
-    //    그리고 option 은 이벤트가 일어난 대상은 아님
-    console.log('select : value' + e.target.value + ', key=' + e.target.key);
+    <div className='body'>
+        <h2>**Body : useRef(Reference) Test **</h2>
+        <input ref={textRef} value={text} onChange = {onChangeText} />
+        <button onClick={onClickBtn}>완료</button>
+    </div>
 
-}
+   ); // return 
+} // Body
 
-//** 컴포넌트의 Upadate 확인
-console.log('**컴포넌트의 Update');
-    return (
-        <div className ='body'>
-            <h1>**Body**</h1>
-            <p>**State Test**</p>
-            <button onClick={onIncrease}>+</button>
-            <button onClick={onDecrease}>-</button>
-            <div>count={count}</div>
-            <hr/>
-            <div>
-                <input value={text} onChange={textChange}/>
-                <p>{text}</p>
-                <p>[연습] input Tag의 type date활용해서 값이 변경될때마다 
-                    그 값을 console로 출력하기
-                </p>
-                <input type='date' value={date} onChange={dateChange}/>
-                <p>{date}</p>
-                <select value ={option} onChange={companyChange}>
-                    <option>구글</option>
-                    <option>아마존</option>
-                    <option>네이버</option>
-                    <option>카카오</option>
-                    <option>마이크로소프트</option>
-                </select>
-            </div>
-        </div>
-        
-    );//return
-
-}//body
 export default Body;
-
-// import { useState } from 'react';
-
-// function Body() {
-//     const [count, setCount] = useState(0);
-
-//     const onIncrease = () => {
-//         setCount(count + 1);
-//     };
-
-//     const onDecrease = () => {
-//         setCount(count - 1);
-//     };
-
-//     return (
-//         <div className='body'>
-//             <h1>**Body**</h1>
-//             <p>**State Test**</p>
-//             <button onClick={onIncrease}>+</button>
-//             <button onClick={onDecrease}>-</button>
-//             <h2>count={count}</h2>
-//         </div>
-//     );
-// }
-
-// export default Body;

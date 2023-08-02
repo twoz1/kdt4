@@ -51,7 +51,7 @@ function Body(props) {
     //          alert('나는 소라지롱~!');
     //         }
     const clickTest = (e) => {
-        alert('안뇽안뇽안뇽하세요=>' +e.target.name); 
+        alert('두둠칫=>' +e.target.name); 
         console.log(`**clickTest e객체 확인 => ${e.type} `); //button인 것을 알려줌.
     }
     //**조건문 : jsx에서는 사용불가능하지만 컴포넌트에서는 사용 가능
