@@ -25,18 +25,10 @@ import './Body.css';
 function Body(){
    const [text ,setText] = useState();
    const textRef = useRef();
-  // => 인자(매개변수, Parameter) 로 전달된값을 초기값으로하는
-  //    Ref 객체를 생성하고 textRef 에 저장
-  // => input Tag 에서 ref={textRef} 명령으로 textRef 가 DON 입력폼에 접근하도록 설정
-  //    그러면 textRef 를 이용하여 입력폼을 직접 조작할 수 있음. 
-
+   
    const onChangeText = (e) =>{setText(e.target.value)}
    const onClickBtn = () => {
-    // test1) 클릭 후 입력폼 초기화에 적용
-    //  alert(text);
-    //  textRef.current.value="";
-    // test2) 포커스 적용
-    // => 입력된 text 가 3글자 미만이면 포커스가 머문 상태로 입력 기다림
+
     if(text.length < 3){
         textRef.current.focus();
     } else{

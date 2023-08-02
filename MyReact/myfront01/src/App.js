@@ -35,7 +35,6 @@ function App() {
       <Header bestDress={bestDress}/>
       <Body01/>
       <Body/>
-      
     </div>
 
   );
