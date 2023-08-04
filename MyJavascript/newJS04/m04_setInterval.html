@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>지연함수 setInterval Test</h2>
+    => 텍스트가 자동 회전하며, 마우스로 클릭하면 중단합니다. <br>
+    <hr>
+    <div>
+        <span id="span" style="background-color: palevioletred;  font-size: 100px;" >🐀라따뚜이 움직인다 찍찍찍찍🐁</span>
+    </div>
+    <script>
+        let span = document.getElementById('span');
+        // setInterval("doRotate()",200); //200/1000 초 주기로 실행
+        let count = 0;
+        
+        let timerId = setInterval("doRotate()",300); //200/1000초 (200밀리초) 주기로 실행
+        //=> 마우스로 클릭하면 중단
+        span.onclick =() =>{clearInterval(timerId);}
+
+    function doRotate(){
+          let str = span.innerHTML;
+          let firstChar = str.substr(0, 1); // 자
+          let remains = str.substr(1, str.length-1); // 동 회전 Text ~~...
+          str = remains + firstChar;
+          span.innerHTML = str; 
+    } //doRotate
+    </script>
+</body>
+</html>
