@@ -14,20 +14,36 @@
     </div>
     <script>
         let span = document.getElementById('span');
-        // setInterval("doRotate()",200); //200/1000 초 주기로 실행
+    
+        // 2) 10 회전하면 자동으로 멈추도록 하세요~~ (연습용)
+        // => 1회전할때마다 count 값 1씩 증가하고, 10이면 Stop 
+        //    ( 회전수는 콜백함수 doRotate() 에서 확인가능 
+        //      -> 그러므로 doRotate() 에 작성 )
         let count = 0;
+        let str = span.innerHTML;
+        console.log('** str.length=>'+str.length) ;
+    
+        let timerId = setInterval("doRotate()",200); 
+        // => 200/1000 초 (200밀리초) 주기로 실행 
+        // 1) 마우스로 클릭하면 중단
+        span.onclick = () => { clearInterval(timerId); }
         
-        let timerId = setInterval("doRotate()",300); //200/1000초 (200밀리초) 주기로 실행
-        //=> 마우스로 클릭하면 중단
-        span.onclick =() =>{clearInterval(timerId);}
-
-    function doRotate(){
-          let str = span.innerHTML;
+        function doRotate(){
+          // 1) 
           let firstChar = str.substr(0, 1); // 자
-          let remains = str.substr(1, str.length-1); // 동 회전 Text ~~...
-          str = remains + firstChar;
-          span.innerHTML = str; 
-    } //doRotate
-    </script>
+          let remains = str.substr(1, str.length-1); // 동 회전 Text~~ ...
+           str = remains + firstChar;
+           span.innerHTML = str; 
+    
+          // 2) 10 회전하면 자동멈춤
+          // => 1회전의 의미
+          // => 첫글자가 뒤쪽으로 옯겨지는 과정을 글자길이 만큼하면 1회전
+          count++;
+          if ( count>=(str.length*10) ) clearInterval(timerId);
+          console.log('** count=>'+count) ;
+          
+        } //doRotate
+    
+      </script>
 </body>
 </html>
