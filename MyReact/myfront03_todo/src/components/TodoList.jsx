@@ -21,7 +21,7 @@ import './TodoList.css';
 import TodoItem from './TodoItem';
 import { useState } from 'react';
 
-const TodoList = ({ todo }) => {
+const TodoList = ({ todo, onUpdate, onDelete }) => {
     // => 검색어처리 위한 state 변수 와 onChangeSearch 추가
     const [search,setSearch] = useState("");
     const onchangeSearch =(e)=>{setSearch(e.target.value)}
@@ -62,7 +62,9 @@ const TodoList = ({ todo }) => {
                 */} 
                 {/* 3) 배열(todo)에 filter()적용 */}
                 {/* //=> TodoItem로 전달하기전 filter 처리하고 , 처리된 배열을 map으로 전달 */}
-                {getSearchResult().map((it) => (<TodoItem key={it.id}{...it} />))}
+                {getSearchResult().map((it) => (<TodoItem key={it.id}{...it} 
+                                                 onUpdate={onUpdate} 
+                                                 onDelete={onDelete}/>))}
             </div>
         </div>
     );
