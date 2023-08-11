@@ -17,9 +17,9 @@ const Topics=()=>{
             </ul>
 
             <Routes>
-                <Route path='1' element={'Html은 재밌다~~'} />
-                <Route path='2' element={'JavaScript는 재밌다~~'} />
-                <Route path='3' element={'React는 재밌다~~'} />
+                <Route path='/1' element={'Html은 재밌다~~'} />
+                <Route path='/2' element={'JavaScript는 재밌다~~'} />
+                <Route path='/3' element={'React는 재밌다~~'} />
             </Routes>
         </div>
     ); //return

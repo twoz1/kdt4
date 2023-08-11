@@ -19,7 +19,7 @@
 // ================================================================================================
 import './TodoList.css';
 import TodoItem from './TodoItem';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const TodoList = ({ todo, onUpdate, onDelete }) => {
     // => 검색어처리 위한 state 변수 와 onChangeSearch 추가
@@ -34,10 +34,60 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
         return search === "" ? todo 
                 : todo.filter((it) => it.content.toLowerCase().includes(search.toLowerCase())); 
     }
+  // ------------------------------------------------
+  // ** 분석 기능 추가
+  // 1) 분석 함수 추가
+  // => 배열 todo 의 아이템 총갯수, 완료갯수, 미완료갯수 를 객체에 담아 return
+    const analyzeTodo =()=>{
+        console.log("🤍🤍analyzeTodo 호출🤍🤍")
+        const totalCount = todo.length;
+        // 배열 todo의 isDone의 값이 true인 item의 개수
+        const doneCount = todo.filter((it)=> it.isDone ).length;
+        const notDoneCount= totalCount - doneCount;
+        return{totalCount, doneCount, notDoneCount};
+    };///analyzeTodo
+
+    //2) 분석 함수 호출
+    // => analyzeTodo() 호출하고 return 값을 구조분해 할당
+    // const {totalCount, doneCount, notDoneCount} = analyzeTodo();
+
+    //3) 분석 결과 
+      // => analyzeTodo() 는 todo 에 저장 아이템이 많아질수록
+      //    연산량이 많이지며, 성능에 영향을 줄수있음
+      // => 불필요한 호출이 있는지 확인 위해 analyzeTodo() 에 콘솔 메시지 추가
+      //   ( 마운트시 1 + 검색어 단어 입력시마다 호출됨 을 확인 )
+      // => 재연산이 필요없는 경우에도 호출됨을 알 수 있다.
+      //   ( 컴포넌트 내부의 함수는 리랜더링 할때 마다 호출되기 때문 )  
+      // => 해결 위해 useMemo() 적용. 
+
+      //4) useMemo() 적용시켜 최적화하기
+      const {totalCount, doneCount, notDoneCount} =  useMemo(analyzeTodo,[todo]);
+      // todo 배열의 값에 변경 사항이 있을 때만 analyzeTodo
+
+    //   const returnObj = useMemo(() => {
+    //     console.log('analyzeTodo 가 호출됨!');
+    //     const totalCount = todo.length;
+    //     // => 배열 todo 의 isDone 의 값이 true 인 item 의 개수
+    //     const doneCount = todo.filter((it) => it.isDone).length;
+    //     const notDoneCount = totalCount - doneCount;
+    //     return { totalCount, doneCount, notDoneCount };
+    // }, [todo]);
+    // const { totalCount, doneCount, notDoneCount } = returnObj;
+    // => todo 배열의 값이 변경되었을때만 analyzeTodo 호출
+    // => Code2.
+    //    위 analyzeTodo() 를 useMemo 의 콜백함수로 사용하고,
+    //    useMemo 의 return 값을 바로 할당.
+
+
 
     return (
         <div className="TodoList">
             <h4> TodoList 🖋</h4>
+            <div>
+                <div>* 총 일정 개수 : {totalCount}</div>
+                <div>* 완료된 일정 : {doneCount}</div>
+                <div>* 미완료 일정 : {notDoneCount}</div>
+            </div>
             <input className="searchbar" 
             value={search}
             onChange={onchangeSearch}

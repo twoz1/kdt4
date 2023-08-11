@@ -49,7 +49,7 @@ function reducer(state, action) {
 function TestComp() {
 
     const [count, dispatch] = useReducer(reducer, 0);  //여기서 reducer은 위 function이름 이름 고정 아님. dispatch도 마찬가지
-
+    
     return (
         <div >
             <h3>** useReducer Test **</h3>

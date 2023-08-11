@@ -4,6 +4,6 @@ const Home=()=>{
         <div>
             안녕
         </div>
-    ); //returm
+    ); //return
 } //Home
 export default Home;
