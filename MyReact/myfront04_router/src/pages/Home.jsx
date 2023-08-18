@@ -1,9 +1,8 @@
-const Home=()=>{
-
-    return(
-        <div>
-            안녕
-        </div>
-    ); //return
+export default function Home() {
+  return (
+    <div>
+      <h2>Home</h2>
+      Home.......
+    </div>
+  ); //return
 } //Home
-export default Home;

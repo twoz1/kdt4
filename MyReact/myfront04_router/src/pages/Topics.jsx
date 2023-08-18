@@ -6,44 +6,74 @@
 // 3) Topic 컴포넌트 추가
 
 // ** useParams()
-// => 현재 URL에 포함되어 있는 key, value 형식의 객체를 반환
+// => 현재 URL에 포함되어 있는 파라미터를  key, value 형식의 객체형식으로 반환
+// => <Route path 속성에 ":?????" 로 정의된 파라미터 에 전달된 값을 객체에 담아 전달해주는 Hook.
 //   예) path /test/3 으로 이동한 경우 params의 값 {id:'3'}을 확인할 수 있고
 //      path /test/something 으로 이동한 경우 params의 값 {id:'something'} 확인가능
-// => "/user/:id" 라는 라우트가 있다면 useParams 로 :id 파라미터를 가져올 수 있음
+// => "/test/:id" 라는 라우트가 있다면 useParams 로 :id 파라미터를 가져올 수 있음
+
+// ** 관련 훅(HOOKs) 과 추가사항
+// => useParams(), path 에 :id 사용
+// => useSearchParams()
+//    url 에 있는 쿼리 스트링의 값을 꺼내어 사용할 수 있도록 해줌.
+//   ( 예. login?id=banana&password=12345! )
+// => useLocation()
+//    현재 라우터의 위치를 나타내는 location 객체를 return
+//    현재 위치에 관한 정보가 필요할떄 이용됨.
+// => location 객체의 속성 : pathname, search(쿼리문자열) 등
+//
 
 import { NavLink, Route, Routes, useParams } from "react-router-dom";
 
 // 2) 배열로 목록 정의
 const contents = [
-  {id:1, title:'HTML', description:'HTML 은 재미있다...'},
-  {id:2, title:'JavaScript', description:'JavaScript 는 더 재미있다...'},
-  {id:3, title:'React', description:'React 는 흥미롭다...'}
+  {id:1, title:'HTML', description:'HTML 은 재미있다...ㅎㅎ'},
+  {id:2, title:'JavaScript', description:'JavaScript 는 더 재미있다...ㅎㅎ'},
+  {id:3, title:'React', description:'React 는 흥미롭다...ㅎㅎ'}
 ]
 
 // 3) Topic 컴포넌트 추가
+// => 배열 contents 에서 전달된 id 에 해당하는 Data 의 description(서술/기술/묘사/표현) 출력하기
+// => filter 적용 id 가 일치하는 경우에만 true
 function Topic() {
-  const {params} = useParams();
-  console.log('** params='+params);
+  //const params = useParams(); // { topic_id:1 }
+  //console.log(`** params=${params}, params.topic_id=${params.topic_id}`);
+  const {topic_id} = useParams();
+
+  // 3.2) filter 적용
+  let selected_item = {
+    title: 'Sorry',
+    description: '~~ NotFound ~~'
+  }
+  const find_item = contents.filter( (content) => content.id==topic_id ); //filter
+  selected_item = find_item.length > 0 ? find_item[0] : selected_item;
+
   return (
-      <div className="App">
+      <div>
+          {/* 3.1) 
           <h3>** Topic **</h3>   
-          Topic.....
+          Topic..... */}
+
+          {/* 3.2) filter 적용  => 결과물 출력 */}
+          <h3>** {selected_item.title} **</h3>
+          <h3>{selected_item.description}</h3> 
       </div>
   ); // return
 }; //Topic
 
-
 // -------------------------------------------------------
 // ** ver02
 function Topics() {
+  const lis = contents.map((content) => 
+    <li key={content.id}><NavLink to={"/topics/"+content.id}>{content.title}</NavLink></li>
+  ); //map
+
   return (
     <div>
       <h2>Topics</h2>
       <ul>
         {/* 2) map 적용 */}
-        { contents.map((it) => {
-              <li key={it.id}><NavLink to="/topics/{it.id}">{it.title}</NavLink></li>
-        }) }
+        { lis }
       </ul>
       <div>
         <Routes>
@@ -62,24 +92,24 @@ function Topics() {
 } //Topics
 
 // ** ver01
-function Topics01() {
-  return (
-      <div className="App">
-          <h2>** Topics **</h2>   
-          {/* 1) 자식 page 1,2,3 추가 */}
-          <ul>
-              <li><NavLink to="/topics/1">HTML</NavLink></li>
-              <li><NavLink to="/topics/2">JavaScript</NavLink></li>
-              <li><NavLink to="/topics/3">React</NavLink></li>
-          </ul>
-          <Routes>
-              <Route path="/1" element={"HTML 은 재미있다..."} />
-              <Route path="/2" element={"JavaScript 는 더 재미있다..."} />
-              <Route path="/3" element={"React 는 신기하다..."} />
-          </Routes> 
+// function Topics01() {
+//   return (
+//       <div className="App">
+//           <h2>** Topics **</h2>   
+//           {/* 1) 자식 page 1,2,3 추가 */}
+//           <ul>
+//               <li><NavLink to="/topics/1">HTML</NavLink></li>
+//               <li><NavLink to="/topics/2">JavaScript</NavLink></li>
+//               <li><NavLink to="/topics/3">React</NavLink></li>
+//           </ul>
+//           <Routes>
+//               <Route path="/1" element={"HTML 은 재미있다..."} />
+//               <Route path="/2" element={"JavaScript 는 더 재미있다..."} />
+//               <Route path="/3" element={"React 는 신기하다..."} />
+//           </Routes> 
 
-      </div>
-  ); // return
-}; //Topics01   
+//       </div>
+//   ); // return
+// }; //Topics01   
 
 export default Topics;

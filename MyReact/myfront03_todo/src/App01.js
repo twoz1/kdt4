@@ -1,5 +1,5 @@
 
-// ** TodoList (일정관리 앱)
+// ** TodoList (일정관리 앱) 1.
 // 1. UI
 // 2. Mock Data 만들기
 // => Mock Data: 모조 Data (개발중 테스트 목적으로 사용하는 Data)
@@ -90,7 +90,7 @@ function App() {
 
   // 3.2) 일정추가 (Create) 함수 생성
   // => new 일정을 인자로 전달받아 배열에 저장
-  // => 생성된 함수를 TodoEditor 컴포넌트로 전달
+  // => 생성된 함수를 TodoEditor 컴포넌트 로 전달
   const onCreate = (content) => {
     // -> 추가할 일정 객체 생성
     const newItem = {
@@ -117,21 +117,21 @@ function App() {
       { ...it, isDone: !it.isDone } : it ) ); //setTodo
   }
 
-
   // 3.4) 일정 삭제 
   // => todo 변경 (삭제 대상 제거)
   // => todo.filter() 로 id 가 일치하는 item 만 제외시키고 다른 item 들은 return
-  const onDelete=(targetId)=>{
-    setTodo(todo.filter((it)=>it.id !==targetId));//setTodo
+  // => 삭제 대상인 id 를 인자로 전달받음
+  const onDelete = (targetId) => {
+    setTodo( todo.filter( (it) => it.id !== targetId )); //setTodo
   }
-
+  
   return (
     <div className="App">
       <Header />
       {/* 3.2) 입력을 위한 일정추가 함수 전달 */}
       <TodoEditor onCreate={onCreate} />
       {/* 3.1) 배열을 리스트로 랜더링하기 */}
-      <TodoList todo={todo} onUpdate={onUpdate} onDelete={onDelete}  />
+      <TodoList todo={todo} onUpdate={onUpdate} onDelete={onDelete} />
     </div>
   );
 }

@@ -1,5 +1,16 @@
+// ** useReducer()
+// => React에서 컴포넌트의 상태 관리를 위해 가장 많이 쓰이는 hook은 setState() 함수,
+//    좀 더 복잡한 상태 관리가 필요한 컴포넌트에서는 setReducer() hook 함수를 사용.
+// => const [<상태 객체>, <dispatch 함수>] = useReducer(<reducer 함수>, <초기상태값>)
+// => reducer 함수는 현재 상태(state) 객체와 행동(action) 객체를 인자로 받아서 
+//    새로운 상태(state) 객체를 반환하는 함수.
+// => dispatch 함수는 컴포넌트 내에서 상태 변경을 일으키기 위해서 사용되는데
+//    인자로 reducer 함수에 넘길 행동(action) 객체를 받습니다.
+//    행동(action) 객체는 어떤 동작인지를 나타내는 type 속성과 해당 동작과 괸련된 데이터를 담고 있음.
+// => 즉, 컴포넌트에서 dispatch 함수에 행동(action)을 던지면, 
+//    reducer 함수가 이 행동(action)에 따라서 상태(state)를 변경해줌.
 
-// ** TodoList (일정관리 앱)
+// ** TodoList (일정관리 앱) 2.
 // => useReducer 적용
 //=================================================
 import './App.css';
@@ -11,7 +22,7 @@ import { useReducer, useState, useRef } from "react";
 
 // 2. Mock Data
 const mockTodo = [
-{ id: 0,
+{
   isDone: false,
   content: 'React 공부하기',
   createDate: new Date().getTime()
@@ -37,7 +48,7 @@ const mockTodo = [
   createDate: new Date().getTime()
 }
 ]
-
+// ** useReducer 적용
 function reducer(state, action) {
   switch (action.type) {
     case "Create" : { return [action.newItem, ...state] }
@@ -98,6 +109,7 @@ function App() {
       <TodoEditor onCreate={onCreate} />
       <TodoList todo={todo} onUpdate={onUpdate} onDelete={onDelete} />
     </div>
+   
     
   );
 }
