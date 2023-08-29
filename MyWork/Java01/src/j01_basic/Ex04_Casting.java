@@ -30,7 +30,7 @@ public class Ex04_Casting {
 		i = (int)d;
 		System.out.printf("디모션 demotion : i = %d \n", i);
 		
-		// => 같은크기 다Type (int, float)
+		// => 같은크기 다른Type (int, float)
 		
 		float f = 456.789f;
 		int n = 100;
@@ -38,11 +38,10 @@ public class Ex04_Casting {
 		n = (int)f;
 		System.out.printf("디모션 demotion : n = %d, f = %f \n", n, f);
 		
-		// => 정수형 연산의경우 
+		// => 정수형 연산 
 		// 4byte 이하 type 의 정수형 연산의 경우 무조건 그 결과는 int(4byte) 로 처
 		
 		short s1 = 10, s2 = 20, s3 = 0;
-		
 		// s3 = s1 + s2; -> Error : Type mismatch ( s1 + s2 의 결과는 int 때문)
 		s3 = (short)(s1 + s2);
 		
@@ -53,6 +52,12 @@ public class Ex04_Casting {
 		System.out.printf("디모션 char2 : n = %d, n의 char값 = %s \n", n, (char)n);
 		
 		// ----------------------------------------------- 강제 형변환
+		
+		// => 교재, 연습문제 3장 1번
+		long l = 1000l;
+		float ff = 1;
+		// => float는 4byte, long 8byte이지만 
+		//    float의 표현범위가 크기 때문에 자동형변환이 됨.
 	}
 
 }

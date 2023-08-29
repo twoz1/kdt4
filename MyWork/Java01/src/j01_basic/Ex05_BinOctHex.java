@@ -21,12 +21,23 @@ public class Ex05_BinOctHex {
 		// => int to String : 문자열에 연결되면 문자로 취급
 		System.out.println("int to String1 => " +bin+oct+hex);
 		System.out.println("int to String2 => " +(bin+oct+hex));
+		System.out.println("int to String3 => " +(String.valueOf(bin)+100));
 		
 		// => String to int
 		String s = "123";
-	    System.out.println("String to int1 =>" +(s+100));
-	    System.out.println("String to int2 =>"+(Integer.parseInt(s)+100));
+	    System.out.println("String to int1 =>" +(s+100)); //123100
+	    System.out.println("String to int2 =>"+(Integer.parseInt(s)+100)); //223
+	    System.out.println("String to int3 =>"+(Integer.valueOf(s)+100)); //223
 	    s="일이삼";
-	    System.out.println("String to int3 =>"+(Integer.parseInt(s)+100));
+        // System.out.println("String to int3 =>"+(Integer.parseInt(s)+100)); 
+	    // Error -> java.lang.NumberFormatException: For input string: "일이삼"
+	    
+	    // => String to double
+	    s="123.456";
+	    System.out.println("String to int1 =>" +(s+100));//123.456100
+	    System.out.println("String to int2 =>" +(Double.parseDouble(s)+100));//223.45600000000002
+	    s="abcd.4567";
+        //System.out.println("String to int3 =>" +(Double.parseDouble(s)+100));
+	    // Error ->java.lang.NumberFormatException: For input string: "abcd.4567"
 	}
 }
