@@ -2,7 +2,7 @@
 //
 //import java.util.Random;
 //import java.util.Scanner;
-//
+
 //public class Ex05_RandomGame {
 //	//** 숫자 맞추기 게임
 //	//=> 1~10 범위에서 숫자 하나를 입력받아
@@ -27,13 +27,12 @@
 ////		int result = Math.abs(happyNumber-myNumber);
 //		
 //		switch(Math.abs(happyNumber-myNumber)) {
-//		case 0 : text = "금메달"; break;
-//		case 1 : text = "은메달"; break;
-//		case 2 : text = "동메달"; break;
-//		default : text = "꽝꽈웅꽈아아아아앙~~~~멍청이냐?";
+//		case 0 : medal = "금메달"; break;
+//		case 1 : medal = "은메달"; break;
+//		case 2 : medal = "동메달"; break;
+//		default : medal = "꽝꽈웅꽈아아아아앙~~~~멍청이냐?";
 //		System.out.printf("**오늘의 당첨번호 = %d, myNumner = %d, 결과 =%s \n", happyNumber, myNumber,medal);
 //
-//				
 //	}
 //	}
 //}
