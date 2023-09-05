@@ -21,8 +21,9 @@ public class Ex04_Factorial {
 	      // 5! => 5*factorial(4) ->  4*factorial(3) -> 3*factorial(2) -> 2*factorial(1)
 	}
 	
-	// **static, instance 비교 
-	// => 교재 174~175, 188~190 (예습)
+	// ** static, instance 비교
+    // => 비교 174 ~ 175, 188~190 (예습)
+    // => 숙제: 207P 6-1 풀어오기;
 	
 	public static void main(String[] args) {
 		//1. 인스턴스 정의
