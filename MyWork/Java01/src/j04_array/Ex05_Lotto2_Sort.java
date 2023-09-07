@@ -1,4 +1,4 @@
-package J04_array;
+package j04_array;
 
 import java.util.Arrays;
 import java.util.Random;

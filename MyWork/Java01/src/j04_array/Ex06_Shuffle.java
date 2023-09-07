@@ -1,4 +1,4 @@
-package J04_array;
+package j04_array;
 
 
 	//**배열 활용 (섞기 Shuffle)

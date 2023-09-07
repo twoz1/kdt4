@@ -1,4 +1,4 @@
-package J04_array;
+package j04_array;
 
 //** 다차원 배열
 //1차원 배열이 2개 모이면 2차원 배열
