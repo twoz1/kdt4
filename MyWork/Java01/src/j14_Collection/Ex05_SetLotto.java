@@ -71,7 +71,6 @@ public class Ex05_SetLotto {
        Collections.sort(list);
        System.out.println("**Collection.sort => "+list);
        
-       
    }
 
 }

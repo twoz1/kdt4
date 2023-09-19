@@ -19,13 +19,15 @@ import j07_classExtends.Ex01_Car;
 //=> 제네릭으로 기본 자료형(int, float, double....)은 사용할 수 없지만
 // 기본자료형의 wrapper 클래스를 이용할 수있다. 
 
-//** Generic 타입제한 (Wildcards_와일드카드타입 이용으로)
+//** Generic 타입제한 (사용시, Wildcards_와일드카드타입 이용으로)
 //=> <?>
 // Unbounded Wildcards (제한없음_모든 클래스나 인터페이스 타입 가능)
 //=> <? extends ...>
 // Upper Bounded Wildcards (상위클래스 제한_같거나 하위 타입 가능)
 //=> <? super ...>
 // Lower Bounded Wildcards (하위클래스 제한_ 같거나 상위타입 가능)
+
+//=> 정의할 때 : <T>,<T extends 클래스명>, <T super 클래스명>
 //------------------------------------------------------------
 
 // 1. Object 이용한 기존방식

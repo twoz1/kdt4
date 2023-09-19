@@ -51,7 +51,7 @@ public class Ex01_ArrayList {
 		
 		// => 출력
 		for(Object o : list) {
-			System.out.println(o);
+			System.out.println("짜증나"+o);
 		}
 		
 		//ArrayList<Ex01_Car> list2 = new ArrayList<Ex01_Car>();

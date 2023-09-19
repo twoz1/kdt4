@@ -38,7 +38,7 @@ class Student {
 	public void setHtml(int html) {
 		this.html = html;
 	}
-d
+
 	@Override
 	public String toString() {
 		return "Student [no=" + no + ", name=" + name + ", java=" + java + ", html=" + html + ", sum=" + sum + "] \n";
