@@ -1,0 +1,574 @@
+=========================================================================
+
+*** 문자셋(Character Set)
+말 그대로 특정 '문자(좀 더 정확히는 symbol)'가 컴퓨터에 저장될 때 어떠한 '코드'로 인코딩되어 저장될 것인지에 대한
+규칙이 정의되어있는 집합을 말함. (A character set is a set of symbols and encodings.)
+대표적인 것으로는 ASCII, 한글을 지원하는 EUC-KR, 유니코드 UTF-8, UTF-16 등이 있음.
+문자셋은 자신이 처리할 문자 집합이 얼마나 큰가에 따라 하나의 '문자'를 저장하는데 필요한 저장공간의 크기가 달라지게 된다.
+또한 항상 모든 문자들을 동일한 크기로 인코딩하는 고정폭 방식의 문자셋이 있는가 하면, 
+EUC-KR(1~2바이트)이나 UTF-8(1~3바이트)과 같이 가변폭 방식의 인코딩을 사용하는 문자셋도 있다.
+
+** 콜레이션(Collation)
+이것은 특정 문자셋에 의해 데이터베이스에 저장된 값들을 검색하거나 정렬 등의 작업을 위해
+문자들간에 서로 '비교'할때 사용하는 규칙들의 집합이다. 
+(A collation is a set of rules for comparing characters in a character set.) 
+따라서, 일반적인 Data Type에는 적용되지 않고, CHAR, VARCHAR, TEXT와 같은 데이터 타입을 가지는 칼럼들에 대해서만 적용된다.
+주로 대소문자를 구별하는 binary 형식을 사용할 것인지, 대소문자를 구별하지 않는 Case Insensitive 형식을 사용할 것인지로 나누어진다.
+Case Insensitive 형식을 사용하는 collation들은 모두 collation 이름의 끝에 'ci'라는 문자가 붙어있다.
+
+=========================================================================
+
+** 실행1 : 시작버튼에서 ...
+	=> MySql 8.5 Command Line Client ...선택
+	=> Password : mysql
+
+** 실행2 : cmd 창으로 ... (환경변수 설정 후 해야함)
+	=> 환경변수 설정: https://m.blog.naver.com/c6369/220625848670
+	=> mysql -u root -p 입력후 엔터 
+	=> Password : mysql  입력 
+	
+** 종료 	=> exit
+-----------------------------------------------------------------------------------	
+
+** 사용자계정 만들기
+	=> root 계정으로 로그인 후
+	=> create user apple identified by 'admin' ;
+** 권한 부여 
+	=> grant all privileges on javadb to apple ;
+	=> 생성 후 login
+		cmd 창에서 mysql -u apple -p admin ;
+
+** 사용자계정 & 권한 설정
+	=> grant all privileges on javadb apple@localhost identified by 'admin' with grant option;
+	=> flush privileges;
+	( 사용자계정 & 권한 설정을 동시에 처리 한 후에는 반드시 위의 명령을 실행 ) 
+
+* privilege 1. (특정 개인단체가 갖는) 특전   2. (사회 내의 부유층이 갖는) 특권
+
+
+** passsword 변경하기 
+
+=> 5.x 이전버전
+$mysql> UPDATE user SET Password=PASSWORD('admin') WHERE USER='root';
+UPDATE user SET Password=PASSWORD('mysql') WHERE USER='root';
+
+=> 8.x 이상 버전
+alter user 'root'@'localhost' identified with mysql_native_password by 'new password';
+
+
+** 사용자계정 확인하기
+	=> select User from mysql.user ;
+-----------------------------------------------------------------------------------
+** DataBase 
+* 확인 => drop database javadb;
+*  만들기   => create database mydb ;
+
+*  확인하기 => show databases ; 
+	       => 설치시 자동생성: test , mysql(mysql의 다양한 정보 저장)
+
+*  사용하기 => use mydb ;
+*  현재 사용중인 DB 표시하기 => select database() ;
+*  삭제하기 => drop database db1 ;
+                => select database() ;
+
+-----------------------------------------------------------------------------------
+=========================================================================
+
+*** 관련 능력 단위
+
+***  능력단위 : 2001020205_16v4   데이터 입출력 구현
+    ** 능력단위요소
+	=> 2001020205_16v4.3  데이터 조작 프로시저 작성하기 
+     	=> 2001020205_16v4.4  데이터 조작 프로시저 최적화하기
+
+***  능력단위 : 22001020413_16v3   SQL활용
+    ** 능력단위요소
+      => 2001020413_16v3.1 기본 SQL 작성하기
+      => 2001020413_16v3.2 고급 SQL 작성하기
+   
+*** KDT 
+=> 데이터베이스
+
+=================================================
+2001020413_16v3.1 기본 SQL 작성하기
+=================================================
+*** SQL 구문 종류 
+
+1. DDL(Data Definition Language) : 데이터를 정의 -> 스키마
+   - create, alter, drop, rename, truncate 등
+   - 자동커밋이 발생
+
+2. DML(Data Manipulation Language) : 데이터를 조작하는 기능 -> DB 인스턴스
+※기본적인 DML SQL문  ( C:create/insert,  R:read/select, U:update,  D:delete )
+   - select, insert, delete, update
+   - transcation처리 지원 (commit, rollback)
+   - mySQL : autoCommit  true => START TRANSACTION;  실행 후 적용가능  
+   - java : autoCommit  true => transaction 처리위해 autoCommit 을 false 로 한 후 실행.
+ 
+   ( DQL : 데이타검색 )
+   - select 
+
+3. DCL(Data Control Language) : 계정관리
+   - grant : 권한부여  ,  revoke : 권한회수
+
+4. TCL : Transaction 제어
+   - START TRANSACTION, commit, rollback, savepoint
+   
+   ** 적용
+   - transaction 적용전:  update student set info="" where name="홍길동"; //rollback 의미없음
+   - transaction 적용후
+	. START TRANSACTION;   // commit 또는 rollback 실행시까지 유효 
+	. update student set info="" ;  // 조건이 없으므로 모든 row 가 update 됨
+	. update student set point=point+100 ;
+	. select * ~~~
+	. ROLLBACK; 
+	. select * ~~~   // rollback 됨을 확인
+
+
+-------------------------------------
+** 관련 단어
+=> schema : 개요, 윤곽
+=> domain : 영역, 범위
+=> revoke : 폐지하다
+=> grant : 승인하다, 인정하다
+=> describe : 묘사하다, 서술하다, 분석표
+
+==MySql 과 오라클 비교 ==============================
+
+*** 오라클은 계정 별로 Table 관리
+
+*** 반면에 MySql 은 Table 위에 DataBase가 있음
+	( 계정 아래에 반드시 DataBase가 있어야 Table 생성이 가능하다 )	
+	=> DataBase 생성 후 Table 생성 
+	만들기   => create database db1 ;
+	확인하기 => show databases ; 
+	사용하기 => use db1 ;
+	현재 사용중인 DB 표시하기 => select database() ;
+	삭제하기 => drop database db1 ;
+
+*** 데이터 타입 의 다른점 
+	-> oracle : number
+	-> mySql : integer , float 로 구별해서 사용 
+
+-------------------------------------------------------------------------
+=========================================================================
+
+**** DDL 기본사항 **** 
+-------------------------------------------------------------------------
+
+*** Data 자료형 종류 
+
+=> 정수형: int(m), integer(m) 
+	-> m : 최대 화면표시 너비를 나타내며 표시 가능한 최대 너비는 255
+	          화면 출력용으로 예약하는 문자의 개수를 지정할 뿐이므로 사용가능한 숫자범위가 아님
+	         그러므로 저장이나 계산 측면에서 INT(1)은 INT(20)과 동일함.		          		
+ 	-> 부호포함 범위는 -2147483648 - 2147483647
+	-> 부호 없는 범위는 0 ~ 4294967295
+
+=> 실수형: float(m,d) 	 
+	-> m은 총 자릿수 d는 소수점 뒤의 자릿수
+	-> m과 d를 생략하면 하드웨어에서 허용하는 한계까지 값이 저장
+	-> float(7,4) : 999.9999 
+	-> double(m,d) 은 MySQL 8.0.17부터 더이상 사용되지 않음
+
+=> 문자열 : char(n)  
+	-> n : 글자수 , 0 ~ 255 길이까지 저장
+	-> 용도 : 데이터의 길이가 고정인 경우
+		( 핸드폰번호 등 고정길이 데이터를 varchar 로하면 길이 보관 1~2 byte 추가사용하게됨 )
+		변경 가능성이 높은 경우
+		(내부에서 별도연산 없이 수정됨 -> varchar 는 추가로 필요한 블럭생성을 위해 더많은시간이 소요됨) 
+ 
+=> 문자열 : varchar(n)
+	-> n : 글자수 , 0 ~ 65,535 길이까지 저장
+	-> 길이 저장을 위해 1byte ~ 2byte를 사용 (길이 255 이하 1byte, 이상 2byte)
+	     그러므로 char(5), varchar(5)의 경우에는 varchar가 더 많은 메모리를 차지함.
+	-> 용도 : 데이터 길이를 예측하기 힘든 경우, 변경할 가능성이 낮은 경우 사용하면 좋음.
+
+=> char 와 varchar 의 차이점
+	-> char : 고정크기  char(5) -> A---- , ab---, abc--, abcd-, abcde
+	-> varchar : 가변크기 varchar(5) -> A , ab, abc, abcd, abcde
+
+-------------------------------------------------------------------------
+
+*** MySqL 의 Numeric Data Type Syntax
+=> https://blog.naver.com/sinjoker/222668127228
+
+- BIT[(M)]
+	비트 값 유형. M은 값당 비트 수(1 ~ 64)를 나타낸다. M이 생략된 경우 기본값은 1이다.
+
+- TINYINT [(M)], [UNSIGNED] [ZEROFILL] 
+	아주 작은 정수. 서명 범위는 -128 ~ 127이다. 부호 없는 범위는 0 ~ 255이다.
+
+- BOOL, BOOLEAN
+	이러한 유형은 TINYINT(1)의 동의어 이며,  true 는 1, false 는 0 로 간주됨.
+
+- SMALLINT [(M)] [UNSIGNED] [ZEROFILL]
+	작은 정수. SIGNED 범위는 -32768 ~ 32767이다. 부호 없는 범위는 0-65536이다.
+
+- MEDIUMINT[(M)] [UNSIGNED] [ZEROFILL]
+	중간 크기의 정수. 서명 범위는 -8388608 ~ 8388607이다. 부호 없는 범위는 0 - 16777215이다.
+
+- INT[(M)] [UNSIGNED] [ZEROFILL]
+	정규 크기의 정수이다. 부호가 붙은 범위는 -2147483648 - 2147483647이다. 부호 없는 범위는 0 ~ 4294967295이다.
+
+- INTEGER[(M)] [UNSIGNED] [ZEROFILL]
+	이 유형은 INT의 동의어이다.
+
+- BIGINT[(M)] [UNSIGNED] [ZEROFILL]
+	큰 정수. 서명된 범위는 -9223372036854775808 ~ 9223372036854775807이다. 
+	부호 없는 범위는 0~18446744073709551615이다. 
+	SERIAL 은 BIGINT 서명되지 않은 NULL AUTO_INCREMENT UNIQUE의 별칭이다.
+  
+- DECIMAL[(M[,D])] [UNSIGNED] [ZEROFILL]
+- FLOAT[(M,D)] [UNSIGNED] [ZEROFILL]
+- FLOAT(p) [UNSIGNED] [ZEROFILL]
+- DOUBLE[(M,D)] [UNSIGNED] [ZEROFILL]
+- DOUBLE PRECISION[(M,D)] [UNSIGNED] [ZEROFILL], REAL[(M,D)] [UNSIGNED] [ZEROFILL]
+ 
+-------------------------------------------------------------------------
+
+*** 기타 자료형
+
+=> Text문자열(text) : 문자 셋과 콜레이션이 있는 텍스트 데이터를 저장
+=> BLOB(Binary Large Object)  : 문자 셋이나 콜레이션이 없는 바이너리 데이터를 저장
+=> 시간관련(date, time, datetime, timestamp) 
+
+=> 이진 데이터 타입
+	- BINARY(n) - 255 byte 
+    	- BLOB(n) - 이진 데이터 타입 ( 65,535 byte)
+	- MEDIUMBLOB - 최대 16,777,215 byte
+    	- LONGBLOB - 최대 4.294,967,295 byte
+
+-------------------------------------------------------------------------
+=========================================================================
+
+*** Table 관리 Sql
+
+=> SHOW TABLES;
+=> DESC member ;  
+// -> table 의 구조를 표시함.
+// -> describe : 묘사하다, 서술하다, 분석표
+
+=> SHOW COLUMNS FROM member;
+=> SHOW FULL COLUMNS from student;
+   ( Collation : 콜레이션 
+	      문자열 형태로  저장된 값들을 검색하거나 정렬 등의 작업을 위해
+	      문자들간에 서로 '비교'할때 사용하는 규칙들의 집합이다. 
+	      이름의 끝에 'ci'라는 문자가 붙어있으면
+	      대소문자를 구별하지 않는 Case Insensitive 형식을 사용하고 있음을 의미 ) 
+
+	select * from student where id="ST"; 	
+-------------------------------------------------------------------------
+=========================================================================
+
+1.  Table (Enity) 생성  (DDL)
+
+1.1)  제약조건 없음
+
+=> 생성
+CREATE TABLE test (
+Id VARCHAR(10),
+name VARCHAR(10),
+age INT(3)
+);
+
+=> 확인
+select * from test ;  -> Empty set (0.10 sec)
+
+=> 자료 입력1
+	- insert 
+	- id 에 p.key 를 설정하지 않았으므로 동일 id 입력 가능 
+	- insert into test(id, name, age) values("apple", "사과나무", 20);
+ 
+=> 자료 입력2
+	- 컬럼명 생략 가능 (모든컬럼의 값을 정의한 순서로 입력하는경우)
+	- insert into test values('apple','스티브 ',20); 
+
+-------------------------------------------------------------------------
+=========================================================================
+
+1.3) 제약조건 적용 
+
+*** DDL 제약조건 5종류 ( Constraint )
+-> DBMS 가 오류시 에러 발생 시켜 무결성을 보장해줌 
+
+=> not null : 반드시 입력
+=> unique : 유일성
+=> Primary key :  unique, not null
+=> check : 원하는 조건식 사용가능
+=> 외래키 (Foreign Key, 참조키)
+----------------------------------
+=> 제약조건 외 편리한 기능
+- default : 기본값
+- auto_increment : 자동증가
+
+-------------------------------------------------------------------------
+
+=> 실습 : student 테이블 만들기
+	-> sno: P.Key, 자동증가 
+	-> name: 반드시 입력
+	-> age: 구간 ( age>15 and age<100 ) 
+	-> 추가 : jno int(1), info 문자 30글자, point float(5,2 -> 999.99)
+
+create table student (
+sno int(3) auto_increment Primary key,
+name varchar(10) not null,
+age int(3) check( age>15 and age<100 ),
+jno int(1), 
+info varchar(30),
+point float(5,2) default 100
+);
+
+=> 테이블 생성 확인
+	- SHOW TABLES;
+	- DESC student;
+	- SHOW COLUMNS FROM student;
+	- SHOW FULL COLUMNS from student;  // Collation : 콜레이션 확인가능
+
+=> 제약 조건 확인
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'student' ;
+ 
+=> AUTO_Increment 값 확인하기
+	- auto_increment -> primary key 만 사용가능
+
+	- select LAST_INSERT_ID() ;  // 데이터 입력하기전 확인
+	select LAST_INSERT_ID() from student where sno = LAST_INSERT_ID() ; 
+	-> Empty set (0.04 sec)   // 데이터 입력하기전 확인
+
+-------------------------------------------------------------------------
+
+*** 실습~
+각자의 팀프로젝트 중,
+1개의 엔티티를 선택하고,
+항목(컬럼)을 5개 결정해서,
+Table 을 생성하고,
+Data 를 5개 입력하세요~~
+
+-------------------------------------------------------------------------
+=========================================================================
+
+2. Record (Row) 입력 (DML)
+
+2.1) simple insert
+=> 컬럼갯수, 순서 일치
+   (  auto_increment, default 특성이 지정된 컬럼값도 모두 입력 ) 
+insert into student values(11, "김길동", 90, 1, "info 없음", 100); //OK
+insert into student values("홍길동", 90, 1, "info 없음");  // Error
+
+2.2) 컬럼지정
+=> auto_ increment,  default
+insert into student(name, age, jno, info) values("엄길동", 90, 1, "info 없음");
+=> not null Test
+insert into student(age, jno, info) values(90, 1, "name 없음");
+select * from student;
+
+2.3)  auto_ increment 특징 Test
+=> 현재 마지막 Data 를 삭제
+delete from student where sno=3; 
+
+=> 중간 Data 삭제
+delete from student where sno=3; 
+
+=> 특정 Data insert
+-> 중간에 누락된 번호
+insert into student(sno, name, age, jno, info) values(3, '엄미현', 20, 9, '이전강사 였고 앞으로도 평생강사' );
+-> 존재하는 번호 사용 :  ERROR 1062 (23000): Duplicate entry ....
+insert into student(sno, name, age, jno, info) values(3, '엄미현', 20, 9, '이전강사 였고 앞으로도 평생강사' );
+ 
+-> lastNo + 1  입력후 auto_inc 추가 
+insert into student(sno, name, age, jno, info) values(8, '엄미현', 20, 9, '이전강사 였고 앞으로도 평생강사' );
+insert into student(name, age, jno, info) values('엄미현', 20, 9, '이전강사 였고 앞으로도 평생강사' );
+
+=> p.Key & auto_ inc 값 수정
+	-> name 수정 (일반컬럼)
+	Update student Set name='이순신', age=99 Where sno=1;
+	-> p.Key & auto_ inc 에 적용
+	Update student Set sno=9 Where sno=11;
+
+	update student set sno=8 where sno=9; // 존재하는 번호로 변경하는경우
+	-> ERROR 1062 (23000): Duplicate entry '8' for key 'student.PRIMARY'
+
+=> default Test :  값을 입력하는 컬럼만 적용
+insert into friends(name, phone, age) values("홍길동2","010-1234-7778",33);
+
+insert into student(id,name,age,jno,info) values("banana","홍길동",20,9,"이전강사 였고 앞으로도 평생강사"); 
+
+2.4) check 조건 확인
+
+=> age int(3) check( age>15 and age<100 )
+	
+	-> insert
+	insert into student(name, age, jno, info) values("엄길동", 190, 1, "info 없음");
+	// ERROR 3819 (HY000): Check constraint 'student_chk_1' is violated.
+	-> update 
+	Update student Set age=10 where sno=13;
+
+-------------------------------------------------------------------------
+=========================================================================
+
+3. Record 수정 & 삭제 & select (DML)  
+
+=> 수정 (Update)
+update student set id="zzzz" where id="teacher" ;
+update student set id="zzzy" where id="banana" ;
+
+=> 삭제 (Delete)
+
+=> select 연습
+
+-> 컬럼 선택
+select id, name, age from student ;
+
+-> Record 선택
+select * from student where name="홍길동";
+
+- 조건문 (관계연산자) 
+	. 25세 이상 30세 이하 ( 25<= , 30>= )
+	. 25세 부터 30세 까지 ( 25<= , 30>= )
+	. 25세 초과 30세 미만 ( 25< , 30> )
+	. 25미만, 30초과 입장불가 ( 25> , 30<) 
+
+	select * 
+	from student 
+	where age>=25 AND age<=30
+	order by age desc;
+
+-------------------------------------------------------------------------
+=========================================================================
+
+4. 다른 테이블을 이용해서 신규 테이블을 생성하는 방법 (교재 10p)
+-------------------------------------------------------------------------
+
+4.1) 테이블 구조와 데이터 모두 복사
+=> 컬럼, 조건별 row 선택가능
+=> 단, 제약조건은 복사가 안됨 
+=> 그러나 not null 과 default 는  복사됨
+ 
+-> 모든 컬럼, 모든 Record 복사 
+	Create Table Test1 as select * from student;
+	select * from Test1;
+	desc Test1
+
+-> 컬럼 sno, name, jno 선택,  모든 Record 복사 
+	Create Table Test2 as select sno, name, jno from student;
+	select * from test2;
+
+-> 모든 컬럼, sno 7 이상인 자료복사 해서 Test3 만들기
+	Create Table Test3 as select * from student where sno >= 7;
+	select * from test3;
+
+-> 컬럼 sno, name, jno 선택,  sno 7 미만인 자료복사 해서 Test4 만들기
+	Create Table Test4 as select sno, name, jno 
+	from student where sno < 7;
+	select * from test4;
+
+------------------------------------------------------------------------------------
+
+4.2) 데이터 없이 테이블 구조만 복사 
+
+=> where 에서 항상 false 인 조건을 지정  
+
+-- test5) where 에서 항상 false 인 조건을 지정
+create table test5 as select * from item where 1=2;
+select * from test5;
+desc test5;
+
+-> select * from mytest4;
+-> desc mytest4;
+
+-------------------------------------------------------------------------------------
+
+4.3) 이미 만들어진 Table에 다른 Table의 자료들 복사하기
+=> 테이블 구조가 같아야함, 원하는 column, row 선택가능
+
+=> 실습
+-> 구조만 있는 Table 만들기
+	_ where 무조건 false 조건을 지정하여 data 가 선택되지 않도록 함
+	create table myjo as select * from jo where 1=2;
+	
+-> 자료만 복사하기
+	* student 의 sno, name -> mytest5에 복사
+	insert into test5(sno,name) select sno,name from student;
+
+	* 연습 1 : student의 name, age를 test 테이블에 입력
+	insert into mytest3 select * from mytest ;
+	-> select * from mytest3;
+
+	* 연습 2 : member(id, name, point) -> mytest2 (id, name, age)
+	insert into mytest2 (id, name, age) select id, name, point from member ; 
+	insert into test select id, name, point from mymember ;
+
+-------------------------------------------------------------------------
+=========================================================================
+
+5. Table 이름 변경과 삭제 (DDL)
+
+=> 이름변경
+Rename table test to newtest;
+
+
+=> Table 삭제1: Drop
+	- Table 삭제
+	- Drop Table newtest;
+
+=> Table 삭제2: Truncate 잘라내다 절단하다.
+	- Table 의 Data 만 모두 삭제 (Table 의 구조만 남겨놓음)
+	- Truncate newtest;
+
+=>  truncate 와 drop 비교
+	- mysql> truncate test;  
+	- mysql> select * from test;
+		// Empty set (0.03 sec)
+
+	- mysql> drop table test;
+	- mysql> select * from test;	
+		// ERROR 1146 (42S02): Table 'mydb.test' doesn't exist
+
+-------------------------------------------------------------------------
+=========================================================================
+
+
+** KDT 실습
+=> student, jo Table 생성후 Data 입력
+=> 다양하게 조회 실습을 하며 DB 의 특징을 이해함. 	
+
+-------------------------------------------------------------------------
+=> student 삭제  
+=> Student create
+ 
+=> Jo create  ( jno, jname, captain_sno, project_Name, slogan_조의구호) 
+ 
+-------------------------------------------------------------------------
+=> Data 입력하기
+ -> Student
+
+insert into student(name, age, jno, info) values("홍길동",29,4,"장래희망 : Godmulju");
+
+
+select * from student;
+
+-> Jo
+
+INSERT INTO jo VALUES(5, 'ATEAM', 14, 'parfume_shop', 'addon');
+ 
+select * from jo ;
+
+-------------------------------------------------------------------------
+=> 다양한 List 출력
+-> 조 순서로, 특정조만 출력
+select * from student order by jno;
+
+-> 나이순
+select * from student order by age;
+ 
+-> 참조 (Relation) 
+	- student 에서 조이름 출력하기
+	select sno, name, s.jno, jname from student s, jo j where s.jno=j.jno  order by s.jno ;
+	- jo 에서   출력하기 ( jno, jname, captain, 조장이름, project, slogan )
+	select j. jno, jname, captain,  name 조장이름, project, slogan
+	from jo j, student s where j.captain = s.sno;
+	
+-------------------------------------------------------------------------
+===============================================
