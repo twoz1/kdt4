@@ -1,0 +1,545 @@
+
+-------------------------------------------------------------------------
+=========================================================================
+*** 제약조건 Constraints 
+  
+*** 1. 5가지 기본 조건
+ 
+1) PRIMARY KEY , p
+	: NOT NULL & UNIQUE
+2) FOREIGN KEY , r     // FOREIGN : 대외적인
+3) NOT NULL , c
+4) UNIQUE  , u
+	: 중복 불가 (유일성 조건)
+5) CHECK  , c
+	: 저장 가능한 데이터의 값의 범위나 조건을 지정하여 설정한 값만을 허용
+	( MySQL 7 까지는 적용 안됨 )
+
+=> DEFAULT, AUTO_Increment  (부여할 수 있지만, 제약조건에 속하지는 않음)
+
+-------------------------------------------------------------------------
+=========================================================================
+
+*** 2. 제약조건 PRIMARY KEY  특징 
+ 
+=> 단일 컬럼
+	-> 컬럼레벨:  컬럼 정의시 같이 정의
+			id varchar2(10) PRIMARY KEY
+	-> 테이블레벨: 컬럼 정의 후 뒤편에 정의  
+			PRIMARY KEY(id) 
+=> 여러개를 지정할 수 없음
+
+	create table 테이블명(
+		컬럼1 number primary key,
+		컬럼2 number primary key
+	);
+	-> 기본키 에러가 발생
+	'기본키를 구성하는 컬럼이 복수' 일 수는 있지만,
+	'기본키가 복수' 일 수는 없다'
+
+=> 즉, 복합 컬럼은 가능함 
+     컬럼 레벨로 정의 하기는 불가능하므로 테이블 레벨로 정의 한다.
+	-> 아래 table 에서 이름과 핸드폰 번호를 PRIMARY KEY 로 지정 
+	-> create  table friend (    
+		name varchar(30),
+		phone varchar(16),
+		addres varchar(100),
+		CONSTRAINT friend_pk PRIMARY KEY(name,phone));
+
+	-> PRIMARY KEY : name + phone 
+
+	=> 연습
+	-> Test1) 컬럼 레벨로 정의
+	create  table friend (    
+		name varchar(30) PRIMARY KEY,
+		phone varchar(16) PRIMARY KEY,
+		addres varchar(100)
+	);
+	// ERROR 1068 (42000): Multiple primary key defined
+
+	-> Test2) 테이블 레벨로 정의
+	create  table friend (    
+		name varchar(30),
+		phone varchar(16),
+		addres varchar(100),
+		Constraint pk_friend PRIMARY KEY(name, phone)
+	);
+// Query OK, 0 rows affected (0.01 sec)
+
+-> 확인
+		desc friend;	
+		insert into friend values("홍길동","010-1234-1234","Korea");
+		insert into friend values("홍길동","010-1234-1234","Korea");
+	  // ERROR 1062 (23000): Duplicate entry 
+		insert into friend values("홍길동","010-1234-1111","Korea");
+		// Query OK
+		insert into friend values("김길동","010-1234-1234","Korea"); 
+-------------------------------------------------------------------------
+=========================================================================
+
+** 3. 제약조건 생성
+ 
+=> Constraint name
+	-> 부여
+	-> 부여하지 않는 경우 :  system이 정의함,  Constraint 키워드 생략가능
+
+=> 제약조건 정의 위치 
+     * 컬럼레벨 제약조건 지정
+				-> 컬럼정의 와 동시에 설정 
+     * 테이블레벨 제약조건 지정
+				-> 컬럼정의 후 제약조건 설정
+				-> 복합키 적용시에 필요 (복합키는 컬럼레벨로는 불가능함)
+				-> NOT NULL 속성은 적용 불가능 (NOT NULL 속성은 컬럼레벨로 정의)
+
+-------------------------------------------------------------------------
+1) Constraint name 부여
+
+1.1)  컬럼레벨 제약조건 지정 : 컬럼정의 와 동시에 설정
+=> Primary key
+	- Primary key  Constraints 설정
+	- auto_increment 와 Constraint sc01 동시사용불가능
+	 ( ERROR 1064 (42000): .... )
+	 
+create table student2 (
+sno int auto_increment Constraint sc01 Primary key,
+name varchar(10) Constraint sc02 not null,
+age int(3) Constraint sc03 check(age>15 and age<100),
+jno int(1),
+info varchar(30),
+point float(5,2) default 100
+) ;
+->   ERROR 1064 (42000): .... 
+
+=> not null: 컬럼레벨, 제약조건명 허용하지않음 
+create table student2 (
+sno int  auto_increment Primary key,
+name varchar(10) not null,
+age int(3) Constraint sc02 check(age>15 and age<100),
+jno int(1),
+info varchar(30),
+point float(5,2) default 100
+) ;
+-> Error (not null: 컬럼레벨, 제약조건명 허용하지않음 )
+
+create table student2 (
+sno int  auto_increment Primary key,
+name varchar(10) not null,
+age int(3) Constraint sc02 check(age>15 and age<100),
+jno int(1),
+info varchar(30),
+point float(5,2) default 100
+) ;
+-> Query OK
+
+-------------------------------------------------------------------------
+
+*** 비교 확인
+=> student : Constraint 조건명 사용하지 않음 (시스템이 조건명 부여)
+=> 제약 조건 확인
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'student' ;
+
+=> student2: Constraint sc02 조건명 사용함
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'student2' ;
+
+-------------------------------------------------------------------------
+
+=> Foreign key  Constraints 설정  Test  
+
+			CREATE TABLE parent_col(
+         p_id int(10) CONSTRAINT pk_p_id PRIMARY KEY,
+         p_name varchar(20) NOT NULL,
+         phone varchar(13)
+      );
+
+			CREATE TABLE child_col (
+				seq int(5) primary key,
+				id int(10) Constraint fk_c_id references parent_col(pid),
+				title varchar(20) 
+			);
+
+			CREATE TABLE child_col (
+				seq int(5) primary key,
+				id int(10) references parent_col(pid),
+				title varchar(20) 
+			);
+ 
+			-> 컬럼레벨로 정의시에는  FOREIGN KEY(id)  생략됨
+			-> OK ( 오류는 없지만, 설정은 안되어있음 )
+			-> 제약조건 확인 ( PRIMARY KEY 만 설정되었음을 확인 )
+			SELECT constraint_name, constraint_type
+			FROM information_schema.table_constraints
+			WHERE table_name = 'jo2' ;
+
+=> 생성 후 child Test  (parent 에 없는 id를 입력해본다.)
+insert into child_col values(1, 50, '컬럼레벨 Test');  
+
+*** 스키마 확인하기
+-> DESC parent ; ( = SHOW COLUMNS FROM parent;)
+-> SHOW FULL COLUMNS from parent; (Collation : 콜레이션 확인가능)
+-> 제약 조건 확인
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'parent2' ;
+
+-------------------------------------------------------------------------
+ 1.2)  테이블레벨 제약조건 지정 : 컬럼정의 후 제약조건 설정
+-------------------------------------------------------------------------
+=> PRIMARY Key
+      CREATE TABLE parent(
+         p_id int(10),
+         p_name varchar(20) NOT NULL,
+         phone varchar(13),
+         CONSTRAINT pk_parent_id PRIMARY KEY(p_id)
+      );
+
+			CREATE TABLE child (
+				seq int(5) primary key,
+				id int(10),
+				title varchar(20), 
+				Foreign Key(id) References parent(p_id) 
+			);
+
+
+=> 다양한 CONSTRAINT Test 
+	- auto_increment,   CONSTRAINT 동시지정 -> OK
+	- 여러개의  CONSTRAINT Table level 로 지정 -> OK
+	- not null  Table level 로 지정불가 확인
+
+      CREATE TABLE parent2(
+         parent_id int(10) auto_increment 
+         parent_name varchar(20) NOT NULL,
+         phone varchar(13),
+         PRIMARY KEY(parent_id),
+         CONSTRAINT un_parent_ph unique(phone)
+      );
+     -> OK	
+
+     CREATE TABLE parent3(
+         parent_id int(10) auto_increment,
+         parent_name varchar(20) NOT NULL,
+         phone varchar(13),
+         PRIMARY KEY(parent_id),
+         unique(phone),
+      );
+	  -> OK ( 테이블 레벨로 정의하면서 제약조건명 생략)
+
+    // drop table parent2;
+     CREATE TABLE parent3(
+         parent_id int(10) auto_increment,
+         parent_name varchar(20) NOT NULL,
+         phone varchar(13),
+         CONSTRAINT pk_parent_id PRIMARY KEY(parent_id),
+         CONSTRAINT un_parent_ph unique(phone),
+         CONSTRAINT nn_parent_nm NOT NULL(parent_name)
+      );
+     -> ERROR 1064 (42000): You have an error in your SQL syntax;.... 		
+-------------------------------------------------------------------------
+
+*** 스키마 확인하기
+-> DESC parent ; ( = SHOW COLUMNS FROM parent;)
+-> SHOW FULL COLUMNS from parent; (Collation : 콜레이션 확인가능)
+
+-> 제약 조건 확인
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'parent2' ;
+
+PRIMARY KEY는 시스템에서 제약 조건명을 PRIMARY로 부여함.
+
+
+-------------------------------------------------------------------------
+=========================================================================
+
+2)  Foreign_Key 설정  (Child_Table) 
+-------------------------------------------------------------------------
+ 
+=> Child 참조 -> Parent 
+	- 반드시 Parent 는 생성 되어있어야함
+	- 참조키는 Parent Table 에서 유일성이 보장 되어야 함. (P.Key 또는 Unique)
+	- Parent 와 Child Table 은 서로 종속되어 
+	  Child 입력값은 반드시 Parent 에 존재해야하고,
+	  Child를가진 Parent 의 값은 Update 또는 Delete 할 수 없다. 
+	- 이를 위해 Child 에는 ON DELETE CASCADE 또는 ON UPDATE CASCADE 설정가능
+
+      CREATE TABLE parent(
+         p_id int(10),
+         p_name varchar(20) NOT NULL,
+         phone varchar(13),
+         CONSTRAINT pk_parent_id PRIMARY KEY(p_id)
+      );
+
+			CREATE TABLE child (
+				seq int(5) primary key,
+				id int(10),
+				title varchar(20), 
+				CONSTRAINT fk_child_id Foreign Key(id) References parent(p_id) 
+			);
+
+-> OK 
+-> 제약 조건 확인
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'parent' ;
+
+ SELECT constraint_name, constraint_type
+	FROM information_schema.table_constraints
+	WHERE table_name = 'child' ;
+
+-> child insert(parent에 없는 id입력)
+insert into child values(1,1,'child insert test');
+에러 
+그러므로 parent먼저 입력
+
+insert into parent values(1,햄스터,'010-1111-1111');
+insert into parent values(2,햄스터,'010-2222-1111');
+insert into parent values(3,햄스터,'010-3333-1111');
+select * from parent;
+
+insert into child values(1,1,'child insert test1');
+insert into child values(2,2,'child insert test2');
+insert into child values(3,3,'child insert test3');
+insert into child values(4,4,'child insert test4');
+select * from child;
+
+4번이나 5번을 입력하면 parent에 없기에 안됨.
+
+-> child에 있는 id 수정하기
+   - 존재하는 id로 수정하기 (seq 4의 id 를 2로 변경)
+	update child set id=2 where seq=4;
+
+   - 없는 id로 수정하기(seq 1의 id를 5로 변경)
+   update child set id=5 where seq=1;
+
+-> child 삭제 
+   delete from child where seq=2;
+
+
+-> parent insert 
+   insert into parent values(7,햄스터,'010-7777-1111');
+   insert into parent values(8,햄스터,'010-8888-1111');
+   insert into parent values(9,햄스터,'010-9999-1111');
+
+-> parent update
+	- child 가 없는 경우 p_id(7 -> 5), p_name;
+	update parent set p_id = 5, p_name = '고양이' where p_id = 7;
+
+	- child가 있는 경우 p_id(3 -> 6), p_name;
+	update parent set p_id = 6, p_name='강아지' where p_id = 3;
+
+	-  child가 있는 경우(참조관계가 없는 컬럼)p_name 수정
+	update parent set p_name = '다람쥐' where p_id=3;
+
+-> parent Delete
+	- child 가 없는 경우 p_id =9 삭제 -> OK
+	  delete from parent where p_id = 9; 
+   
+	- child가 있는 경우 p_id =3 삭제 -> 오류
+	  delete from parent where p_id = 3;
+
+    - child가 있는 경우 삭제 하려면 Child 먼저 삭제 후 Parent 먼저 삭제 
+	  delete From child where id=3; OK
+	  delete from parent where p_id = 3; OK
+
+	- table 삭제하기 (child 먼제 삭제 후 parent 삭제)
+	Drop Table child;  OK
+	Drop Table parent;  OK
+
+	- child가 있는 경우(참조관계가 없는 컬럼)
+-> 없는 sno 를 jo3 에 insert
+insert into jo3 values(9, 'Test', 90, 'project', 'slogan');
+-> ERROR 1452 (23000): Cannot add or update a child row:....
+
+
+
+select * from jo3 ;
+insert into jo3 values(1, 'Test', 15, 'project', 'slogan'); 
+-> student 에서 sno=15 학생 delete 하기
+delete from student where sno=15;
+-> ERROR 1451 (23000): Cannot delete or update a parent row: 
+
+-> jo3 에서 delete : Child Table 의 Update 또는 Delete 는 OK (Parent student 에 영향없음)
+-> Child 모두 삭제후 Parent delete : OK 
+delete from jo3 where jno=1 ;
+
+-------------------------------------------------------------------------
+
+=> ON DELETE CASCADE 또는 ON UPDATE CASCADE
+     : 부모 의 Update 또는 Delete 에 종속됨.	
+     
+      Create table child (
+				seq int(5) primary key,
+				id int(10),
+				title varchar(20), 
+				Foreign Key(id) References parent(parent_id) 
+				ON DELETE CASCADE ON UPDATE CASCADE
+			);
+	-> Child Table 먼저 생성시 에러 
+
+	-> Parent에 Data 없는 상태에서 Child 입력
+	Insert into child values(1,1,"parent Data 없는 상태"); -> 에러 
+
+
+	-> parent 입력
+	insert into parent values(1,"햄스터",'010-1111-1111');
+insert into parent values(2,"햄스터",'010-2222-1111');
+insert into parent values(3,"햄스터",'010-3333-1111');
+select * from parent;
+
+-> child 입력
+insert into child values(1,1,'child insert test1');
+insert into child values(2,2,'child insert test2');
+insert into child values(3,3,'child insert test3');
+insert into child values(4,1,'child insert test4');
+insert into child values(5,5,'child insert test4'); -> 에러  
+
+-> parent 수정
+   - child 가 있는 경우 (p_id 1 -> 5) : child도 같이 수정됨
+   update parent set p_id = 5 where p_id = 1; ->OK
+   select * from parent;
+   select * from child;
+
+-> parent 삭제
+	- child 가 있는 경우 
+	delete from parent where p_id=5;
+
+-------------------------------------------------------------------------
+=========================================================================
+
+3) 제약조건 추가, 수정
+
+** 복습 & 실습준비
+=> student Table 의 구조와 Data 를 복사해서 
+   student2 Table 생성하기
+=> 단, 제약조건은 복사가 안됨    
+   Create Table student2 as select * from student; 
+   -> 확인
+   desc student;
+   desc student2;
+ 
+-------------------------------------------------------------------------
+3.1) ADD 
+-------------------------------------------------------------------------
+=> Alter Table student2 Add Primary Key (sno); //OK
+
+=> student2 에 참조키 추가하기.
+   Alter Table student2 Add Foreign Key(jno) references jo(jno) ;
+
+=> constraint 이름을 정의하며 추가하기 
+     alter table member2 add Constraint ccc01 unique(birthd) ;  
+     -> 적용시 현재 입력된 data에  적용가능하면 OK
+     alter table member2 Add Constraint ccc02 unique(weight) ;  
+     -> 숫자 Data 도 마찬가지 (입력data에  적용가능하면 OK)
+
+=> 중복 Data 가 존재하는경우 upique 제약조건 설정
+    Alter Table student2 Add Constraint ccc03 unique(name);  
+    // ERROR 1062 (23000): Duplicate entry...
+
+=> not null 추가시 주의 사항
+     alter table mymember add constraint cc02 not null(point) ;
+    -> not null 속성은 column level 속성이라서  add constraint 는 불가능하고,
+        column modify  로 가능함.         
+
+=> point 에 check부여 ( ADD )
+      Alter Table student2 Add Constraint ccc01 check(point between 100 and 5000);  
+
+=> 확인 
+	desc student2;
+	SELECT constraint_name, constraint_type 
+   FROM information_schema.table_constraints
+   WHERE table_name = 'student2';
+
+-------------------------------------------------------------------------
+3.2) Modify
+-------------------------------------------------------------------------
+
+=> student2 에 참조키 추가하기
+   Alter Table student2 Modify jno int(1) references jo(jno);
+
+=> not null 추가
+   Alter Table student2 Modify point float(5,2) not null;
+  // null 값이 있으면 오류발생
+   Alter Table student2 Modify info varchar(30) not null ;      
+
+-------------------------------------------------------------------------
+=========================================================================
+
+4) 제약조건 삭제
+
+=> 제약조건의 이름 부여하면 편리
+    (그렇지 않으면 조회하여 확인 후 삭제 가능)   
+
+=> Alter Table student2 Drop constraint ccc01 ;
+
+-> check 삭제
+
+=> parent 와  child 에 참조키, Cascade 적용 
+
+-> 제약 조건 확인
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'parent';
+
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'child';
+
+-> parent의 primary key 삭제
+	alter table parent drop primary key; -> 오류
+	//참조관계 삭제 이전 
+
+-> child의 foreign key 삭제
+	alter table child drop constraint child_ibfk_1;
+
+-> 확인 : parent에 없는 id 입력
+	insert into child values(55,55,"Drop constraint"); -> 더 이상 참조관계가 없기에 잘 들어감
+
+   Alter table board modify id varchar2(10) constraints cc33  references member(id)  on delete cascade ;
+  // Error: 참조 제약이 이미 테이블에 존재합니다 
+  //   - 제약조건 삭제 후 수정 
+      Alter Table board drop constraint SYS_C0011060; 
+
+-------------------------------------------------------------------------
+=========================================================================
+
+5) 제약조건 비활성화 & 활성화
+
+=> 오라클에서는 제약조건을 삭제하지 않고 비활성화 하여 사용을 잠시 보류할 수 있도록 해줌
+=> 제약조건의 규칙 때문에 특별한 경우 작업 진행이 어려울때 사용.
+    ( 예: foreign key 가 설정된 경우 child data 가 존재하는 data는 삭제 불가능 )  
+
+5.1) 제약조건 비활성화 (Disable Constraint)
+=>  제약조건을 일시 비활성화 시켜줌 (반드시 다시 활성화 시켜주어야함)   
+  
+=> Alter table t_name DISABLE CONSTRAINT constraint_name;   
+   - alter table parent Disable constraint pc00_pk ;
+   ( ORA-02297: cannot disable constraint (SYSTEM.PC00_PK) - dependencies exist )
+   - ORA-02297: cannot disable constraint (SYSTEM.PC00_PK) - dependencies exist
+   - alter table parent Disable constraint pc01 ;  // OK
+      INSERT into parent values ('melon','',55);   // name = null  : 입력 허용
+
+   - alter table parent ENABLE constraint pc01 ;  
+   //  -> 작업후엔 반드시 다시 활성화 한다.
+   //  -> 이전에 조건에 맞지 않는 Test Data 삭제후에 활성화된다. 
+     DELETE from parent where id = 'melon' ;    
+   
+
+5.2) 제약조건 활성화 (Enable Constraint)
+=>  제약조건을 활성화 시켜줌 
+  
+=> Alter table t_name ENABLE CONSTRAINT constraint_name;
+
+-> insert into board values(4,'title ...','black','하하하하 호호홓 ...',sysdate,0);
+    ORA-02291: 무결성 제약조건(SYSTEM.CC33)이 위배되었습니다- 부모 키가 없습니다
+-> references 조건을 잠시 disable 후 insert 
+    Alter table board DISABLE CONSTRAINT cc33;
+-> references 조건을 잠시 enable 후 Test
+    Alter table board ENABLE CONSTRAINT cc33;
+    ORA-02298: 제약 (SYSTEM.CC33)을 사용 가능하게 할 수 없음 - 부모 키가 없습니다
+    delete board where id='black' ;
+
+-------------------------------------------------------------------------
+=========================================================================
