@@ -1,0 +1,267 @@
+============================================================
+------------------------------------------------------------
+
+*** Transaction(거래, 매매, 처리) 제어
+=> DML 실행의 하나의 거래(처리) 의 단위 (여러 DML 을 한번에 처리하도록 묶음) 
+
+=> DML은 실행 즉시 DB에 반영 되지 않고 버퍼에 보관했다가,
+     확정되면 DB 에 반영함 ( commit )
+     반영되기 전에는 취소 가 가능 ( rollback )
+
+=> START TRANSACTION, commit, rollback
+
+=> 반드시 동시에 같이 처리되어야 하는 DML 들을 하나의 단위로 취급해서 처리
+     동시에 모두 성공이면 commit, 하나라도 오류시에는 rollback
+     예 ) a -> b  만원 송금 할때 아래 거래는 반드시 동시에 모두 성공해야함.
+          	a 의 잔액  -=만원
+	        b 의 잔액 +=만원
+
+=> mysql은 기본적으로 자동커밋 상태 (변경 가능)
+
+=> 실습
+
+	1) START TRANSACTION 전 ->  auto commit 
+	update student2 set info='Transaction Test' where sno=88;
+  
+	-> select * from student2;
+	-> 입력취소 :  rollback;   // Query OK,...
+	-> rollback 확인 :  select * from student2;  
+	    ( 입력즉시 commit 되었으므로 rollback 되지않음 )
+
+	2) START TRANSACTION 적용 
+	-> 처리 결과를 버퍼에 보관,
+	-> commit을 해야 실제 Table 에 반영됨 
+	-> rollback 하면 취소됨
+	
+	START TRANSACTION;  // Query OK, ....
+	update student2 set info='Start Transaction' ; 
+	// Query OK, .... where 조건 없으면 모두 수정됨   
+
+	select * from student2;
+	-> 취소 : rollback;  // Query OK, ....  
+                           select * from student2;
+	
+	-> Start Transaction 은 commit 또는 rollback 문을 만나면 종료됨
+	update student2 set point=500.567 where sno=88;  // Query OK, ....
+	select * from student2;
+	-> 실제 Table 에 반영 : commit 또는 rollback 과 무관하게 반영됨
+	 
+	3) delete 로 연습
+	-> start transaction 후에 jo2을 delete All , rollback
+		- start transaction;
+		- delete from jo2;   // OK ...모든 Data  삭제됨
+		- select * from jo2; // Empty set
+		- rollback;
+		- select * from jo2; // 모두 복구됨
+	
+============================================================
+------------------------------------------------------------
+*** JOIN ***
+------------------------------------------------------------
+
+=> Join 기능
+	- 컬럼을 이용해서 다른테이블을 참조 
+	- Foreign Key 를 설정해야만 가능한것은 아님
+	- Foreign Key 설정과 무관하게 참조가능한 컬럼이 있으면 모두 가능함. 
+
+=> 두 개 이상의 테이블로부터 관련 있는 데이터를 읽어올 때 사용
+
+=> 기본 구문
+	select A.칼럼1, A.칼럼2, B.칼럼3, B.칼럼4
+	from [테이블1] as A, [테이블2] as B
+	where A.[칼럼x] = B.[칼럼y]
+
+=> 조인 사용에 따른 장단점
+	- 다수의 테이블을 한번에 조회할 때 유용
+	- 조인이 복잡해 질수록 조회 속도가 느려질 가능성 높음
+
+=> 별명(alias) 적용 : table명, column명 (as 생략가능) 
+
+============================================================
+------------------------------------------------------------
+
+*** join 표준형식1  
+
+select 필드명 from 테이블명1, 테이블명2 where 테이블1.조인애트리뷰트=테이블2.조인애트리뷰트 ;
+select seq, b.id, name, title from board b, member m where b.id=m.id ;  
+
+--------------------------
+*** join 표준형식2 : 국제표준 (Ansi Join)
+
+select 필드명 from 테이블명1 JOIN 테이블명2 ON 테이블1.조인애트리뷰트=테이블2.조인애트리뷰트 ;
+=>  select id, name, s.jno, jname from student s JOIN jo j On s.jno=j.jno ; 
+
+=> 종류 : join ~ on, NATURAL JOIN (비권장) , join using, equi join
+
+--------------------------
+** NATURAL JOIN
+=> 두테이블의 참조하려는 열의 이름과 타입이 같을때
+=> mymember 의 id 와 board 의 id 의 경우
+
+	-> 동등join 과 비교
+	select seq, b.id, name, title from board b, member m where b.id=m.id ;  
+
+	-> NATURAL JOIN : 열의 이름과 타입이 같으면 가능
+	select id, name, jno, jname FROM student NATURAL JOIN jo ;
+
+--------------------------
+** JOIN  ~  USING
+=> 두테이블의 열의 이름이 같을때, 타입은 다를때
+	select id, name, jno, jname FROM student JOIN jo USING (jno);
+
+	select seq, id, name, title from board JOIN member USING (id);
+
+============================================================
+------------------------------------------------------------
+
+** JOIN 종류
+=> 종류 : cross_Join, equi_Join , outer_Join, self_Join
+----------------------------------------------
+** non equi_Join , cross_Join  ( m*n 갯수 )
+----------------------------------------------
+=> student , jo 에서 id, name, jno, jname 의 이름을 출력하기
+	-> cross_Join : 데이터의 row 의 갯수를 빠르게 늘릴때
+	select  sno, name, s.jno, j.jno, jname from student s, jo j ;
+
+----------------------------------------------
+** equi_Join : 다른 테이블과 동등비교로 join
+( equivalent : 동등 )
+----------------------------------------------
+=> equi_Join, 동등 조인, inner_Join
+	select sno, name, s.jno, j.jno, jname from student s, jo j  where s.jno=j.jno ;
+	-> 조건에 맞는 data 만 출력 ( 조원이 없는 9조와 해당조가 없는 8조 는 출력 안됨 )
+
+	-> jo 에 7조   turkey,  "칠면조" 추가
+	insert into jo values(7, "칠면조", "turkey", "조원 모집") ;
+	select * from jo ;
+---------------------------------------------- 
+** outer_Join : 연결되는 값이 있는쪽 기준
+----------------------------------------------
+=> 종류 : LEFT , RIGHT OUTER JOIN
+
+	-> LEFT OUTER JOIN  (  jno 에 해당하는 조가 jo Table 에 없는 학생 "홍길동" 8조 도 출력됨  )
+	select sno, name, s.jno, j.jno, jname 
+	from student2 s JOIN jo2 j ON s.jno = j.jno;  //inner Join (=equi_Join) -> "홍길동" 출력안됨
+
+	select  sno, name, s.jno, j.jno, jname from student2 s LEFT OUTER JOIN jo j ON s.jno=j.jno ;
+
+	-> RIGHT OUTER JOIN
+	( jno가 중심 : 조원이 없는 9조도 출력됨, 그러나 해당조가 없는 "햄스터"는 출력되지않음 )
+	select  sno, name, s.jno, j.jno, jname from student s RIGHT OUTER JOIN jo j ON s.jno=j.jno ;
+
+	** 연습
+	-> 조(jo2) 의 전체 목록 출력시 추가적으로 조장의 이름과 나이 출력하기
+	    단, 조의 조장이 student2에 없어도 출력 되도록 	
+	select j.jno, j.jname, j.captain, s.name , s.age
+   	from jo j Left Outer Join student2 s On j.captain=s.sno ;
+	
+	-> 위 구문에 right outer join 적용해보기(비교)
+		select j.jno, j.jname, j.captain, s.name , s.age
+   	from jo j right Outer Join student2 s On j.captain=s.sno ;
+
+============================================================
+------------------------------------------------------------
+
+***  Foreign Key 설정과 무관하게 참조가능한 컬럼이 있으면 모두 가능함 Test
+
+	-> 확인 : student, jo 로 동일 구문 작성 Test   
+	  select snum, sname 이름, age, info, s.jno, jname as 조이름 from student as s, jo j
+	  where s.jno =  j.jno ;   ( 실행결과 차이점 : 출력순서, F.Key 설정시 F.Key 순으로출력 됨 )
+
+	** Foreign Key 설정 Test 결과 비교 ( jno F.Key 순으로출력 됨)
+	select id, name, age, s.jno, j.jno, jname 조이름 , info from studentr as s, jor j where s.jno=j.jno ;
+	select id, name, age, s.jno, j.jno, jname 조이름 , info from studentr as s, jor j ; // id 순으로 출력
+
+
+	** c, u, d 구문 에도 적용가능
+	update board b, member m set b.cnt=100, m.age=100 where b.seq=1 and b.id=m.id 
+
+============================================================
+------------------------------------------------------------
+
+** 실습
+=> student2 목록 에 조이름(jo2의 jname) 추가 해서 출력하기 ( jno 순으로 출력 )
+-> 앨리어스 적용 : Table명, 컬럼명 에 적용가능 ( as 는 생략가능 )   
+	select s.sno, s.name, s.jno, j.jname 조이름 
+	from  student2 s, jo2 j
+	where s.jno=j.jno 
+	order by s.jno;
+	
+-> Test1 : join 조건을 지정하지 않은경우
+
+	select s.sno, s.name, s.jno, j.jno, j.jname 조이름 
+	from  student2 s, jo2 j ;   
+	- 결과 : student2 갯수 * jo2 갯수 : 빠르게 많은양의 데이터를 만들때 이용됨.
+	// 확인(무조건 출력) : jo2 Table 에 jno가 없는 "홍길동" 도 출력됨
+	
+-> Test2 :  join 조건을 지정하는경우
+	- select s.sno, s.name, s.jno, j.jname 조이름 from  student2 s, jo2 j
+	  where s.jno=j.jno; 
+	// 확인 : jo2 Table 에 jno가 없는 "홍길동" 은 출력안됨
+
+-> Join 연습 ( jo2, student2 )
+	- 조(jo2) 의 전체 목록 출력시 추가적으로 조장의 이름과 나이 출력하기 
+	select j.jno, jname, captain, name, age from student2 s, jo2 j where captain=sno;
+	// 확인 : student2에 조장번호가 없는 조는 출력안됨
+
+============================================================
+------------------------------------------------------------
+
+** SELF_JOIN : 하나의 테이블 내에서 Join
+------------------------------------------------
+=> student2 Table 수정 : 추천인번호 rno int 추가 
+	alter table student2 ADD rno int default sno;  //ERROR 1064 : ... default 에 컬럼명사용XXX  
+	alter table student2 ADD rno int default 21 ; 
+=> student2 Update
+	update student2 set rno = 12 where sno=13;
+	update student2 set rno = 5 where sno = 17;
+	update student2 set rno = 9 where sno = 3 ;
+	update student2 set rno=10 where sno=6;
+	UPDATE student2 SET rno = 8 WHERE sno=14;
+	UPDATE student2 SET rno = 14 WHERE sno=8;
+	update student2 set rno = 6 where sno = 10;
+	update student2 set rno = 1 where sno=7;
+	update student2 set rno = 3 where sno = 9; 
+	update student2 set rno = 7 where sno =1;
+	update student2 set rno = 2 where sno = 16 ;
+	update student2 set rno = 15 where sno = 4;
+	update student2 set rno=17 where sno=5;
+	Update student2 set Rno=18 where sno=11;
+	Update student2 set Rno=11 where sno=18;
+	update student2 set rno = 13 where sno =12;
+	update student2 set rno = 4 where sno = 15;
+
+=> 실습1: student2 의 sno, name, jno, rno, rname(짝꿍이름) 출력하기
+	select s1.sno, s1.name, s1.jno, s1.rno, s2.name as 짝꿍이름 
+	from student2 s1, student2 s2
+	where s1.rno=s2.sno ;
+
+=> 실습2: student2 의 sno, name, jno, jname, captain, cname 조장이름 출력하기
+	-> student2 , jo2 을 join 해서 captain 을 가져온 다음 selfJoin
+	select  s1.sno, s1.name, s1.jno, j.jname, j.captain, s2.name 조장이름
+	from student2 s1, jo2 j, student2 s2 
+	where s1.jno=j.jno  AND  j.captain=s2.sno
+	order by jno;
+
+=> 실습3: 실습2+"홍길동" 
+	-> jo 테이블에 jno 가 없는 학생 "홍길동" 도 출력 되도록
+	-> Outer Join
+		2개 이상의 Table을 Outer Join 하는것은 문법적으로 허용안됨 
+	select  s1.sno, s1.name, s1.jno, j.jname, j.captain, s2.name 조장이름
+	from student2 s1 Left Outer Join  jo2 j, student2 s2 
+	ON s1.jno=j.jno  AND  j.captain=s2.sno;  // ERROR 1064 (42000): ....
+	
+	-> 해결 : sub_Query (Query문 내부에 Query문 작성 가능함)
+	SELECT s1.sno, s1.name, s1.jno, j.jname, j.captain, 
+	( select name from student2 where sno=j.captain ) 조장이름	
+ 	from student2 s1 Left Outer Join jo2 j 
+	On s1.jno=j.jno; 
+
+=> 3개 Table 조인 :  sno, name, jno, jname, chief, 조장이름 출력하기
+=> mymember Table 에서 추천인의 이름 출력하기
+	select m1.id, m1.name , m1.test 추천인ID , m2.name 추천인이름 
+	from mymember m1, mymember m2 
+	where m1.test=m2.id ;
+
+============================================================
+------------------------------------------------------------
