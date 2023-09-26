@@ -1,0 +1,194 @@
+
+=======================================================================
+  Sub Query  
+=======================================================================
+=> 종류 : single row S , multi row S, multi column S, correlated(상관 관계) S
+
+** 과제 :  
+	-> 이름이 "안진혁" 인 학생과 같은 조원 출력하기
+		select * from student where jno = ( 이름이 "안진혁" 인 학생의 jno )
+		- 이름이 "안진혁" 인 학생의 jno 출력
+		select jno from student where name="안진혁";
+		- Sub Query 적용
+		select * from student where jno = (select jno from student where name="안진혁");
+
+	-> 조이름이 "오조" 조의  조원 sno, name, jno  출력하기
+		( student 의 jno 가  jo Table 의 조이름 '오조' 인 jno 와 동일한 학생 명단 출력 )
+		select sno, name, jno from student where jno=(select jno from jo where jname="오조") ;
+
+	-> student 에서 "조현주" age 이상인 학생 출력하기 
+		select * from student where age>= ( select age from student where name="조현주" );
+	-> student 에서 "조현주" age 미만인 학생 출력하기 
+		select * from student where age < ( select age from student where name="조현주" );
+	-> + 나이순 내림차순 (desc)
+		select * from student 
+		where age < ( select age from student where name="조현주" )
+		order by age desc;
+
+=> subQuery -> query문이 query문을 포함
+	select  id, name, lev from mymember
+      		where lev=(select lev from mymember where id='banana') ;
+
+----------------------------------------------------------------------
+***  Join 기능을 Sub Query 로 처리하기
+----------------------------------------------------------------------
+
+=> jo 에서 조장 name 출력할때 join 사용
+	select j.jno, jname, captain, s.name from jo2 j, student2 s where j.captain=s.sno; 
+	select j.jno, jname, captain, s.name from jo2 j  Left Outer Join student2 s On j.captain=s.sno; 
+
+=> Sub Query 적용 (join 과 비교)
+	select jno, jname, captain, 조장이름 from jo;
+		- 조장이름 출력하기
+			select name from student where sno= jo Table 의 captain
+	-> 완성된 구문
+	select jno, jname, captain, 
+	( select name from student where sno=j.captain ) 조장이름 from jo j;
+	-> 컬럼명이 동일한 경우 앨리어스를 사용해서 구별해주면 됨.
+
+=> 연습
+	student 에서 sno, name, jno, jname 출력, 조이름은 sub_Query 로 구현
+	select sno, name, s.jno, (select jname from jo j where j.jno = s.jno) 조이름
+	from student s;
+
+
+----------------------------------------------------------------------
+***  Join + Sub Query
+----------------------------------------------------------------------
+=> student 에서 name="조현주" 인 학생의 age 보다 age 값이 작거나 같은 학생들의 sno, name, age, jno, jname 출력하기
+	-> student 에서 sno, name, age, jno, jname 출력 (Join)
+	-> name="조현주" 인 학생의 age 보다 age 값이 작거나 같은 (Sub Query)
+	-> + 나이순 출력
+
+		select sno, name, age, s.jno, j.jname 
+		from student s, jo j
+		where s.jno=j.jno and 
+					age <= ( select age from student where name="조현주" )
+		order by age desc;
+
+========================================================= 
+=========================================================
+ *** 그룹함수 와 GROUP BY ~ Having
+---------------------------------------------------------
+
+=> 그룹함수: count(*) row 갯수  ,  sum(?)  ,  avg(?)  ,  max(?)  ,  min(?)
+=> GROUP BY : 그룹단위로 묶기
+=> Having: 그룹함수 를 대상으로하는 조건 지정
+=> Where : table 에 존재하는 컬럼으로 조건지정
+     
+=> 실습
+-> 그룹함수
+	select count(*), sum(age), avg(age), max(age), min(age)
+	from student;
+
+-> count(info) : info 컬럼에 값이 있는 Row 만 count  
+	select count(*), count(info), sum(age), avg(age), max(age), min(age)
+	from student;
+
+	select count(*), count(info), sum(age), avg(age), max(age), min(age), max(age)+min(age)
+	from student;
+
+	count :  *  모든 record count , 컬럼명 해당컬럼에 값이 있는 record 만 count
+                       -> 예: count(jno)  조가 있는 학생만 count  
+
+	
+-> 조별 통계 ( row 갯수는 조의 갯수와 동일 )
+	select jno, count(*), sum(age) , avg(age), max(age), min(age) 
+	from student GROUP BY jno order by jno ;  // OK
+
+	-> select 절 에 name, age, jno 등 Group By 에 사용하지 않은 컬럼출력
+	select jno, name, count(*), sum(age) , avg(age), max(age), min(age) 
+	from student GROUP BY jno order by jno ; 
+	// ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP BY ....
+
+-> 조별 통계 + 조건
+	1) 일반 컬럼 을 이용한 조건문 (where)
+		-> from 뒤에오는 Table 에 존재하는 컬럼으로 조건줄때 사용
+
+	2) 그룹함수 를 이용한 조건 (having) : 인원이 4 이상인 경우만 출력  ( count(*)>=4 )
+		-> 그룹함수 또는 그룹핑 컬럼 을 대상으로하는 조건
+		 
+	- age 28 이상 을 대상으로 ( student 의 모든 컬럼 where 에서 사용가능 )
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		where age >= 28 
+		Group By jno; 
+
+	- jno 가 2 초과 인 경우만 출력 
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		where jno > 2 
+		Group By jno; 
+
+	- 조별 인원이 4인 경우만 출력  ( count(*)=4 )
+		-- 그룹함수 where 에 적용
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		where count(*)>=4 
+		Group By jno; 
+		// ERROR 1111 (HY000): Invalid use of group function
+
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		Group By jno Having count(*)>=4 ;
+
+		-- 일반컬럼 Having에 적용
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		Group By jno Having age>=28 ;
+		// ERROR 1054 (42S22): Unknown column 'age'
+
+		-- Group By 에 사용한 jno 를 Having에 적용
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		Group By jno  Having jno > 2; // OK
+
+		-- Where + Having : count(*)>=4 , age>=28 모두 적용
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		where age>=22
+		Group By jno Having count(*)>=3 ;
+
+		-- + Order By count(*) desc 추가
+		select jno, count(*), sum(age), avg(age), max(age), min(age)
+		from student 
+		where age>=22
+		Group By jno Having count(*)>=3 
+		order by count(*) desc;
+
+---------------------------------------------------------
+
+	** 연습
+	그룹 + 조건 : jno < 5  ( jno 는 having, where 모두 적용가능 ) 
+	select jno, count(*), sum(age) , avg(age), max(age), min(age) from student3 GROUP BY jno having jno < 5 ; // OK
+	select jno, count(*), sum(age) , avg(age), max(age), min(age) from student3 where jno < 5 GROUP BY jno ;  // OK
+	
+	** having, where 모두 적용 하기
+	-> group + 조건1 sum(age)>110 + 조건2 age>25 인 학생들 대상
+	select jno, count(*), sum(age) , avg(age), max(age), min(age) from student3
+	where age > 25
+	GROUP BY jno
+	Having  sum(age)>110 ;  // OK
+
+------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*** 주말 과제 ( Group + Join ) 
+	-> 조별 통계목록에 조이름 출력하기 
+	select jno, jname, count(*), sum(age) , avg(age)
+	from student
+	Group By jno; 
+	// ERROR 1054 (42S22): Unknown column 'jname'
+
+	-> jname 해결1 (Join)
+	select s.jno, j.jname, count(*), sum(age) , avg(age)
+	from student s, jo j
+	where s.jno=j.jno
+	Group By jno; 
+
+	-> jname 해결2 (Sub Query)
+	select s.jno, (select jname from jo where jno=s.jno) 조이름, count(*), sum(age) , avg(age)
+	from student s
+	Group By jno; 
+
+=================================================================

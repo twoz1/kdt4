@@ -1,0 +1,188 @@
+-----------------------------------------------
+===============================================
+ ***  VIEW 
+===============================================
+=> 물리적인 테이블에 근거한 논리적인 가상 테이블
+   그러므로 별도의 저장공간을 필요로 하지 않는다 -> 용량산정시 포함되지않음 	
+   ( 실제 데이터를 중복해서 보관하지 않고 조건문을 보관함 )
+
+=> 장점
+	: 자주 검색하는 자료유형을 가상의 테이블로 만들어
+	  매번 조건문을 입력하지 않아도 되도록 해줌.
+
+	  보안에 유리
+	( 사용자별로 접근권한을  부여하여 필요한 부분만 view 를 통해 접근토록함. )
+
+=> 생성1 : CREATE VIEW view_Name AS select 컬럼선택 from 테이블명 ;
+
+	** student  의 sno, name, jno 조회구문 을 view로
+			CREATE VIEW myview01 AS select sno, name, jno from student ;
+     	select * from myview01;
+
+	-> view 를 통한 update, delete :  실제 Table 에 반영됨
+	
+	-> 확인
+		select * from myview01 ;
+		select sno, name from student ;
+
+	** student jo OUTER JOIN , jname 출력구문을 view 로 
+	-> myview02 : sno, name, jno, jname, captain 출력
+		Create View myview02 As (student jo OUTER JOIN , jname 출력구문)	 
+
+		Create View myview02 As 
+		select s.sno, s.name, s.jno, j.jname, j.captain
+		from student s Left Outer Join jo j 
+		On s.jno=j.jno; 
+		확인 : select * from myview02;
+	
+	** myview02 활용
+	-> select * from myview02;
+	-> 위 + 조장이름 출력하기 (self_Join)
+		 select v1.sno, v1.name, v1.jno, v1.jname, v1.captain, v2.name 조장이름 
+		 from myview02 v1, myview02 v2
+		 where v1.captain = v2.sno ;
+
+	-> view 를 이용한 수정 또는 삭제 : 실제 Table에 적용 됨
+
+=> 생성2 : Create Or Replace Test ( 없으면 생성 , 있으면 변경 )
+	-> Create View myview01 As select sno, name, jno from student order by jno; 
+		// ERROR 1050 (42S01): Table 'myview01' already exists
+	-> Create Or Replace View myview01 As select sno, name, jno from student order by jno; 
+	   select * from myview01;
+-----------------------------------------------
+-----------------------------------------------
+
+=> view 수정 
+	ALTER VIEW 뷰이름 AS SELECT 필드이름1, 필드이름2, ... FROM 테이블이름
+
+=> view name 수정
+	Rename View myview02 to testview ;  // ERROR 1064 (42000): ... 허용안됨
+	Alter Table student2 rename view myview02 to testview ;   // ERROR 1064 (42000):
+	Alter View myview02 rename view to testview ; // ERROR 1064
+	-> 삭제후 new name 으로 재작성 
+
+-----------------------------------------------
+-----------------------------------------------
+ 
+=> 조회 : desc myview01
+
+
+** View 목록조회 ( Mysql ) 
+=> MySQL의 기본 스키마인 information_schema 의 views 테이블
+use information_schema;  // DB 변경
+select table_schema, table_name, definer from views ;
+select table_schema, table_name, definer, VIEW_DEFINITION from views where TABLE_SCHEMA="mydb" ;
+select * from views where TABLE_SCHEMA="mydb" ;
+
+-----------------------------------------------
+-----------------------------------------------
+use mydb;
+
+=> View 삭제
+Drop View myview02 ;
+확인 select * from myview02 ;
+
+-----------------------------------------------
+===============================================
+*** INDEX  
+
+=> SQL 구문의 처리 속도를 향상시키기 위하여 컬럼에 생성하는 객체
+    단, 인덱스를 위한 추가공간이 필요함.  ( 그러므로 용량산정시에 반드시 반영 )
+    인덱스 생성을 위한 추가시간 필요하므로 Insert, Update, Delete 가 자주 일어나는경우엔 성능에 영향을 줌.
+    (ppt 8장_index 20p)
+
+=> PRIMARY KEY, UNIQUE 제약조건 지정하면 자동 생성
+
+=> 인덱스 조회  :   SHOW INDEX FROM 테이블명; 
+		SHOW INDEX FROM student ;
+		SHOW INDEX FROM jo ;
+		SHOW INDEX FROM test ;
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+** Cardinality --------------------------------
+
+서로 연관된 실체 유형 간의 관계유형. 
+한 실체 유형과 쌍을 맺고 있는 다른 편 실체 유형의 수를 정의한다.
+관계 소속의 관계 수 1：1, 1：n(일대다), n：1(다대일) 
+혹은 n：n(다대다) 관계의 정도 혹은 순서 3가지가 있다.
+
+=> Table 의 한 릴레이션을 구성하는 튜플(레코드)의 수.
+
+=> Table의 Index 에서
+카디널리티(Cardinality)를 간단하게 말하자면 해당 컬럼의 중복된 수치인데,
+전체 행에 대한 특정 컬럼의 중복 수치를 나타내는 지표이다.
+여기서 컬럼의 중복도가 낮으면 카디널리티가 높은게 되고 컬럼의 중복도가 높다면 카디널리티가 낮다고 표현된다. 
+
+특정 컬럼을 기준으로 중복도가 높으면 카디널리티가 낮고, 중복도가 낮으면 카디널리티가 높다고 한다.
+테이블 전체 row에서 얼마나 중복되는가에 대한 지표로 활용할 수 있으며 이는 상대적인 수치이다.
+
+인덱스를 생성해야 할 때 이 카디널리티를 참고해서 인덱스를 생성하면 좋다. 
+예를 들어 대한민국 국민 테이블이 있다고 가정했을 때 
+주민등록번호의 값은 카디널리티가 '높다' 고 표현할 수 있다. 
+그와 반대로 성별, 이름과 같은 컬럼은 중복 데이터가 존재하기 때문에 
+주민등록번호에 비해 상대적으로 카디널리티가 낮다고 표현할 수 있다. 
+또한 여러 칼럼을 인덱스로 생성해야하는 경우 카디널리티가 높은 순에서 낮은 순으로 구성하는 것이 좋다. 
+
+MySQL 의 SHOW INDEX FROM '테이블명' 에서 볼 수 있는 Cardinality 값은
+한 Index의 정량적 수치의 카디널리티 값이다. 
+
+=> 예를들면 기본키 컬럼은 항상 중복이 불가능하므로 기본키에 대한 인덱스의 Cardinality는 
+     테이블의 행의 갯수만큼 나오게된다. 
+=> 그러나 Mysql 내부에서 Cardinality의 숫자는 항상 동일하지 않다.
+     인덱스를 다시 만드는 과정에서 새롭게 연산이 들어가는데 이 때 Cardinality의 숫자는 매번 다를 수 있다.
+    ( 즉, P.Key 의 경우에도 전체 행(count(*))을 계산했을 때 보다 더 적을 수도 있다. )	
+=> 인덱스 테이블은 한번 만들고나면 이후 추가된 데이터들에 대해서는 인덱스 정렬이 최적화되어있지 않기 때문이다.
+     이를 최적화 한 후 확인해보면 일치함을 확인할 수 있다. 
+
+=> 최적화 
+	- ANALYZE TABLE student;
+	- SHOW INDEX FROM student; // 확인
+
+-----------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+=> 생성
+CREATE INDEX 인덱스명 ON 테이블명(컬럼명)
+ALTER TABLE 테이블명 ADD INDEX 인덱스명(컬럼명)
+
+	-> student 의 name으로 myindex01 만들기
+	Create Index namei on student(name) ;
+
+	-> create or replace 적용 (지원안됨 )
+	Create or Replace Index namei On student(name) ; 
+	// ERROR 1064 (42000): You have an error in your SQL syntax;......
+
+-> 확인 : SHOW INDEX FROM student ;
+ 
+-> mind01 : student 의 name 으로 인덱스를 물리적인 공간에 만들어 줌.
+Create Index md01 On student(name);
+Create Or Replace Index md01 On student(name); // ERROR 1064 (42000): You...
+
+-> 조회 속도가 빨라질 수 있겠죠 ??????
+	select * from student where name="김그린";
+-> 생성확인 : SHOW INDEX FROM student ;
+
+-----------------------------------------------
+
+=> 삭제
+DROP INDEX md01 ; // Mysql 은 Error
+ALTER TABLE 테이블명 DROP INDEX 인덱스명;
+-> Alter Table student Drop Index namei;
+
+DROP INDEX myindex;  // ERROR 1064 (42000): You have an error in your SQL syntax
+ALTER TABLE student DROP INDEX md01;  // OK
+
+=> 인덱스 수정 : 삭제한 후에 다시 생성
+
+=> 조회
+SHOW INDEX FROM student ;
+
+=> 실습 : student , jno (숫자, 중복 많음)
+	-> 생성:	create index jnoi on student(jno) ;
+		select * from student where jno=4; 
+	-> 확인:	SHOW INDEX FROM student ;
+	-> 삭제:	drop index jnoi ;  // ERROR
+		ALTER TABLE student DROP INDEX jnoi; 
+
+-----------------------------------------------
+===============================================
