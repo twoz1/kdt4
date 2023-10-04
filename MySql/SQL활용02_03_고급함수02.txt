@@ -1,0 +1,302 @@
+-----------------------------------------------------
+=====================================================
+
+-- 다양한 함수 및 함수의 응용
+--  IF, IFNULL, Case 
+
+-----------------------------------------------------
+=====================================================
+
+*** IF
+ 
+=> IF(condition, value_if_true, value_if_false)
+=> 중첩 적용 가능
+	-> select sno, name, jno, IF(jno=7,'관리자','학생') ifTest from student;
+
+	-> 짝수조 , 홀수조 출력하기 
+	   select sno, name, jno, if(jno%2=0,'짝수조','홀수조') iftest from student;
+
+	-> select sno, name, jno, 
+		IF(jno=1, '일조', IF(jno=2, '이조', IF(jno=3, '삼조', IF(jno=4, '사조', IF(jno=5, '오조', '구조'))))) ifTest 
+		from student;
+
+	-> 1이면 1조, 2는 이조.....
+	   select sno, name, jno, if(jno=1, '일조', if(jno=2, '이조',if(jno=3, '삼조', if(jno=4,'사조',if(jno=5,'오조','육조'))))) from student;
+ 	-> select id, name, lev, IF(lev='A', '관리자', '일반')  from mymember ;
+	-> A 관리자, B 나무, C 잎새, D 새싹  이 출력 되도록 작성
+	    select id, name, lev, IF(lev='A', '관리자', IF(lev='B', '나무', IF(lev='C', '잎새', '새싹'))) 회원등급 from mymember;
+
+-----------------------------------------------------
+
+** IFNULL
+ 
+=> IFNULL(column_name, value) 
+    해당 필드의 값이 NULL 을 반환할 때, 지정한 값으로 대체하여 출력
+
+=> 중첩 적용 가능
+	-> select IFNull(Null, 123) , IFNull('Test', 123);
+	-> student의 address에 적용 : null 이면 Error 출력하기
+	   select sno, name, address, IfNull(address,'Error') from student2;
+
+=> Auto Numbering 에 활용됨
+	-> Auto Numbering : sno 의 최대값에 +1  Max(sno)+1
+	insert into student(sno, name, age, info, jno, point, birthday) 
+	values((select * from (select IFNull(Max(sno), 0)+1 from student) as temp)
+	, '김그린',22,'IfNull Test', 8, 200, '1999-05-05');
+
+-> 실습준비 
+	- student와 동일한 구조를 가진 student5 생성 (제약 조건은 동일하지 않아도 됨)
+	create table student5 select * from student where 1=2; -- 컬럼은 모두 오지만 데이터는 갖고 올 수 없음
+	Data 없는 상태에서 max(sno) 확인
+	select max(sno), max(sno)+1, IfNull( max(sno),0) from student5;
+
+	-> ifnull을 적용한 입력문 만들기
+	insert into student5 (sno, name, age, jno) 
+     values((select * from (select ifnull(max(sno),0)+1 from student5 )as temp),"멍멍이",22,7); 
+-----------------------------------------------------
+
+** Case   
+ 
+=> 기본형식
+	select  컬럼들,
+		CASE WHEN 조건1 THEN 조건별 값
+		        WHEN 조건2 THEN 조건별 값
+		        .....
+		        ELSE 값 
+		END Test(앨리어스)
+		from student ;
+
+=> IF -> Case 로 변경하기
+
+	select sno, name, jno, 
+		Case When jno=1 Then '일조'
+		     When jno=2 Then '이조'	
+		     When jno=3 Then '삼조'	
+		     When jno=4 Then '사조'	
+		     When jno=5 Then '오조'		
+		     Else 'Test조'
+		End cTest
+		from student;
+
+=> student 에서 point 값 에 따라 grade 구분
+	-> 200점 초과 500까지 :  'VVIP회원',  
+	    150~200  :  'VIP회원',
+	    150 미만  :  '일반' 
+	    해당안되면 : 'Error' 로  나누고,  point 에는 '점' 을 붙여 출력
+	-> select sno, name, Concat(point,'점') ,
+		Case When point < 150  then '일반'
+		       When point >= 150 And point <= 200 then 'VIP회원'	  // Between 150 And 200 	
+		       When point > 200 And point <= 500 then 'VVIP회원'   // Between 적용 불가능 
+		       Else 'Error'
+		End 등급
+	    from student;	
+
+	-> Between 적용 수정
+	//  실수형Data 를 적용하는 경우엔 경계 값에서 사각지대 가 있을 수 있으므로 주의
+	select sno, name, Concat(point,'점') ,
+		Case When point < 150  then '일반'
+		       When point Between 150 And 200 then 'VIP회원'	  
+		       When point Between 201 And 500 then 'VVIP회원'    
+		       Else 'Error'
+		End 등급
+	from student;
+
+	-> Data 수정 후 Test (경계값에 소수이하 자리가 있도록) 위의 구문 실행해보기
+	    89번의 point 값 200 에 0.5 를 더해주세요 ~~
+	update student set point=point+0.5 ;  // 모두 수정해도 무관
+	// 경계 값에서 누락되는 자료가 있을 수 있음 확인
+
+	-> 구간의 사각지대 존재
+	-> 비교 :  실수형에 BETWEEN 을 적용하면 사각지대 발생 : 60.1 ~60.99999 까지 제외됨  
+	-> Between 적용
+	select id, name,  Concat(point,' 점') Point,  
+		      Case When point <=250 Then 'Silver'
+			When point BETWEEN 251 and 287 Then 'Gold'			
+			When point BETWEEN 288 and 400 Then 'Platinum'
+			Else 'Error' 
+		       End grade
+		       from student;	                                                            
+	
+	-> Between 적용하지않음
+	select id, name,  Concat(point,' 점') Point,  
+		      Case When point <=250 Then 'Silver'
+			When point > 250 and point <= 287 Then 'Gold'			
+			When point > 287 and point <= 400 Then 'Platinum'
+			Else 'Error' 
+		       End grade
+		       from student;	   
+
+( **  size 는 Oracle 예약어 ,
+  **  rank, member(Table명) 는 MySQL 예약어, 앨리어스로 허용하지않음  )
+
+** 실습 
+=> student Table 에서 point 를 출력,  
+	조별로    1조 :  age*2000 ,    2조 : age*5000/3 ,  3조 : age*jno*1000
+		4조 :  age*7000/2 , 5조 : age*1500 ,     6조 : jno*6000
+		select snum, sname, 
+			case when jno = 1 then age * 2000
+            			      when jno = 2 then age * 5000/3
+            			      when jno = 3 then age * jno * 1000
+             		          when jno = 4 then age * 7000 / 2 
+            			      when jno = 5 then age * 1500
+            			      when jno = 6 then age * 6000
+         		end point
+		    from student;
+
+-----------------------------------------------------
+=====================================================
+
+*** EXISTS(서브 쿼리) , NOT EXISTS(서브 쿼리)
+
+=> 데이터 존재여부를 확인하는 연산자
+     즉, 데이터가 존재할 경우 / 존재하지 않을경우 특정 액션을 해야하는 상황에 사용하면 편리
+=> Join 과 유사한 기능을 수행
+
+-----------------------------------------------------
+
+*** EXISTS(서브 쿼리) 
+	EXISTS은 논리연산자 중의 하나로 후행 조건절로 서브쿼리 형태로만 올 수 있으며,
+	서브 쿼리의 결과가 "한 건이라도 존재하면" TRUE 없으면 FALSE를 리턴하고 쿼리를 더 이상 수행하지 않는다.
+	그러므로 서브쿼리에 데이터량이 많은경우 사용하면 성능에 도움이됨.
+	데이터 양이 많으면 join보다 더 도움이 될 수 있음.
+-----------------------------------------------------
+
+=> NOT EXISTS(서브 쿼리)
+	서브 쿼리의 결과가 "한 건도 존재하지 않으면" TRUE 존재하면 FALSE를 리턴한다
+
+=> 사용법
+
+	SELECT 컬럼
+	FROM 테이블
+	WHERE EXISTS / NOT EXISTS
+	(서브쿼리);
+
+=> 사용예
+    -> EXISTS : BBB 에 데이터가 있는 AAA 데이터 출력 
+	SELECT * FROM AAA A WHERE EXISTS
+	( SELECT * FROM BBB B
+   		WHERE A.CODE = B.CODE ) ;
+
+	-> 적용 : jno 가 jo Table 에 있는 경우만 student 출력하기
+	select sno, name, s.jno from student s
+	where EXISTS ( select jno from jo j where j.jno=s.jno ) ; 
+
+	-> 실습: student 에서 조장만 출력하기
+	(  sno가 jo  Table 의 captain 에 존재하면 출력하기 )
+	select sno, name, jno from student
+	where EXISTS (select * from jo where captain = sno) ;
+
+	-> 연습 : jno 가 jo table에 없는 경우 info를 '조 없음' 출력하기
+    select sno, name, jno, replace(info, info, '조없음') from student s 
+    where not exists (select * from jo j where j.jno = s.jno);
+
+    -> NOT EXISTS : BBB 에 데이터가 없는 AAA 데이터 출력 
+	SELECT * FROM AAA A WHERE NOT EXISTS
+	( SELECT * FROM BBB B
+   		WHERE A.CODE = B.CODE ) ;
+   
+   -> NOT EXISTS : BBB 에 데이터가 없는 AAA 데이터 삭제 
+	DELETE FROM AAA A WHERE NOT EXISTS
+	( SELECT * FROM BBB B
+   		WHERE A.CODE = B.CODE ) ;		
+
+	-> 적용1 : jno 가 jo Table 에 없는 경우만 student 출력하기
+	select sno, name, jno, info from student s
+	where Not Exists (select * from jo j where j.jno=s.jno) ; 
+
+	-> 적용2 : jno 가 jo Table 에 없는 경우의 student, info 를 "조 없음" 으로 수정하기
+	update student s set info = "조 없음"
+	where Not Exists (select * from jo j where j.jno=s.jno) ; 
+	
+	-> 조장 아닌 학생만 출력하기
+	select sno, name, jno, info from student s
+	where Not Exists (select * from jo j where j.captain=s.sno) ; 
+
+	-> update에 적용
+	jno가 jo table에 없는 경우만 info를 '조 없음'으로 수정하기 
+	update student s set info='조 없음' where not exists (select * from jo j where j.jno = s.jno);
+
+=> 실습 
+	-> student 중 조장 아닌 학생만 출력하기
+	select id, name, jno from student
+	where Not Exists (select 1 from jo where chief=id) ; 
+	( -> 서브퀴리의 SELECT 절에 컬럼은 불필요하기 때문에 형식적으로 의미없는 1을 기입 )
+
+=> IN 복습 1,4,5만 출력
+
+   select sno, name, jno from student
+   where jno =1 or jno =4, jno = 5;
+
+   select sno, name, jno from student where jno in(1,4,5);
+
+=> IN + sub_Query 와 비교 ( 조장 출력하기 )
+	select sno, name, jno from student 
+	where  sno IN ( select captain from jo where captain=sno ) ;
+	-> 비교
+	select sno, name, jno from student 
+	where  sno IN ( select captain from jo) ;
+
+=> Join 와 비교 ( 조장 출력하기 )
+	위와 동일 : jo 에 일치하는 chief 가 존재하는 경우에만 출력 
+	select sno, name, s.jno from student s, jo j
+	where s.sno=j.captain ;
+
+=> student 중 jo , chief 에 id 가 존재하면 "조장" / 아니면 "조원" 출력하기 
+	select sno, name, s.jno, 
+	Case When Exists(select 1 from jo where captain = sno ) Then  "조장"
+	       Else "조원"
+	End 구성	
+ 	from student s; 
+ 
+	-> mymember 중 board 에 글이 있으면 'Yes' 출력하기
+ 	select m.id, m.name , m.lev, 
+		CASE When Exists (Select 1 from board b where b.id=m.id)
+		        Then 'Yes'
+		END writeBoard
+   		from mymember m ; 
+
+	-> 조건추가 ( lev 가 'A' 아닌경우 에만 출력)
+	    lev B~D 중에 board 에 글쓴적 있는 member 는 'Yes' 출력
+	select m.id, m.name , m.lev, 
+		CASE When Exists (Select 1 from board b where b.id=m.id)
+		        Then 'Yes'
+		END writeBoard
+   		from member m where m.lev>'A' ; 
+
+-----------------------------------------------------
+=====================================================
+
+=> 비교 test  (EXISTS 사용한 경우와 사용하지않은 경우 비교)
+	
+	-> dogkind 테이블에서 해당하는 강아지가 존재하는  kindcode 만 출력하기
+	select kindcode, kindname, note
+	from dogkind k 
+	WHERE EXISTS(select kindcode from dog d where k.kindcode= d.kindcode) ;
+	
+	-> exists 사용하지않은 경우 비교 : DOG에 존재하는 만큼 모두 출력
+	   ( d.dogno 또는 d.name 을 추가하고 확인해본다. )	
+	select K.kindcode, kindname, note, D.NAME
+	from dogkind k, dog d 
+	WHERE k.kindcode= d.kindcode ;
+
+-----------------------------------------------------
+
+ 	-> 자료확인 
+	select * from member; 
+	select * from board;
+	
+	board 에 작성한 글이 있는 회원 만 출력하기
+	select id, name from member m where exists(select id from board b where m.id=b.id);
+	=> member, board 에 모두 존재하는 id 만 출력
+
+	select m.id, name from member m, board b where m.id=b.id;
+	=> member 와 board 에 id 가 일치하면 모두 출력
+                  ( 만약 일치하는 id가 여러개면 모두 출력 
+                    즉, board 에 banana 가 쓴글이 3개면 banana 는 3번 모두 출력됨 )
+	
+	insert into board values(6,'title','banana','Test test',sysdate,0);
+	insert into board values(7,'title','banana','Test test',sysdate,0);
+	insert into board values(8,'title','banana','Test test',sysdate,0);
+
+-----------------------------------------------------
+=====================================================
