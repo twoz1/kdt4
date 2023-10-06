@@ -106,8 +106,13 @@ public class Ex01_StudentTest {
 		pst.setInt(2, age);
 		pst.setInt(3, jno);
 		pst.setString(4, info);
-		int count = pst.executeUpdate(); // 매개변수로 sql이 들어가면 안 됨. 그럼 위 물음표가 들어감
-		if(count > 0 ) System.out.println("*** insert 성공 ***");
+		
+		
+		// int count = pst.executeUpdate(); // 매개변수로 sql이 들어가면 안 됨. 그럼 위 물음표가 들어감
+		// if(count > 0 ) System.out.println("*** insert 성공 ***");
+		//  => 비교
+		
+		if(pst.executeUpdate() > 0 ) System.out.println("*** insert 성공 ***");
 		else System.out.println("*** insert 실패 ***");
 		
 	} catch (Exception e) {
@@ -201,7 +206,7 @@ public class Ex01_StudentTest {
       studentList(3);
       
       //5) insert 
-      insert("냥냥관리자",99,7,"prepareStatement Test");
+      //insert("냥냥관리자",99,7,"prepareStatement Test");
       
    }// main
 

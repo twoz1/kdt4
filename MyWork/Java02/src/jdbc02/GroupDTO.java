@@ -8,7 +8,7 @@ public class GroupDTO {
 	private int max;
 	private int min;
 	
-	// getter / setter
+	// ** getter/setter 
 	public int getJno() {
 		return jno;
 	}
@@ -46,12 +46,10 @@ public class GroupDTO {
 		this.min = min;
 	}
 	
-	// toString
+	// ** toString
 	@Override
 	public String toString() {
 		return "GroupDTO [jno=" + jno + ", count=" + count + ", sum=" + sum + ", avg=" + avg + ", max=" + max + ", min="
 				+ min + "]";
 	}
-	
-	
-}
+} //class

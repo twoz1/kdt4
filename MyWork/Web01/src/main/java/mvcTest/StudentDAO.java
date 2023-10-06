@@ -1,4 +1,4 @@
-package jdbc02;
+package mvcTest;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import jdbc01.DBConnection;
 
 //** DAO(Data Access Object)
 //=> SQL 구문 처리
@@ -85,33 +84,7 @@ public class StudentDAO {
 		}
 	} //selectOne
 	
-	// ** Group 적용
-	public List<GroupDTO> groupList() {
-		sql="select jno, count(*), sum(age), avg(age), max(age), min(age) "
-				+ "from student Group by jno Order by jno";
-		List<GroupDTO> list = new ArrayList<>();
-		try {
-			pst=cn.prepareStatement(sql);
-			rs=pst.executeQuery();
-			if (rs.next()) {
-				do {
-					GroupDTO dto = new GroupDTO();
-					dto.setJno(rs.getInt(1));
-					dto.setCount(rs.getInt(2));
-					dto.setSum(rs.getInt(3));
-					dto.setAvg(rs.getDouble(4));
-					dto.setMax(rs.getInt(5));
-					dto.setMin(rs.getInt(6));
-					
-					list.add(dto);
-				}while(rs.next());
-			}else list=null;
-		} catch (Exception e) {
-			System.out.println("** groupList Exception => "+e.toString());
-			list=null;
-		}
-		return list;
-	} //groupList
+	
 	
 	// ** insert
 	// => 입력 컬럼: name, age, jno, info
