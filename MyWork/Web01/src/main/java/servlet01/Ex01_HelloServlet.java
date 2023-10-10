@@ -9,8 +9,33 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//** 톰켓10 사용시 주의사항
+//=> Java 8 까지 지원
+//=> 문제가 많아 실무에서 잘 안쓰임
+//=> javax.servlet을 지원안함.
+//그러므로 javax -> jakarta 로 변경
+//=> 실습: 톰켓9
 
-@WebServlet(asyncSupported = true, urlPatterns = { "/helloS" })
+//** Servlet 계층도
+//=> Object -> interface : Servlet, ServletConfig, java.io.Serializable 
+//         -> GenericServlet (A) -> HttpServlet (A) 
+
+//  public abstract class HttpServlet extends GenericServlet {...}
+//  public abstract class GenericServlet implements Servlet, ServletConfig,
+//                               java.io.Serializable {...}
+
+//** Servlet 의 실행방식
+//=> 클라이언트의 요청에 자동반응하는 이벤트 드리븐 방식으로 작동
+//=> 요청방식 이 Get -> doGet , Post -> doPost
+
+//** url 매핑 네임
+//=> url 배열 형태로 복수 선언가능
+//=> 그러나 프로젝트 전체 기준 중복되면 안됨 : server Start 안됨. 
+//=> 숫자, 한글 사용시 오류는 없으나 비추
+//=> xml 로 설정가능 (web.xml 설정화일)
+//=> @ , xml 모두 사용가능하지만 매핑네임 중복은 허용하지않음  
+
+//@WebServlet(urlPatterns = { "/helloS","/안녕","/77","/7seven", "/seveb7" })
 public class Ex01_HelloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
