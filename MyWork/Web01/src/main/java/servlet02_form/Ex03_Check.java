@@ -16,41 +16,36 @@ public class Ex03_Check extends HttpServlet {
     public Ex03_Check() {
         super();
     }
-
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1) 요청분석 
-		// => 한글처리, Parameter처리
-		request.setCharacterEncoding("UTF-8");
-		
-		// => CheckBox 처리
-		//	-> 하나의 Name 에 복수개의 Value 들이 있음
-		//	-> request.getParameterValues("gift") 를 이용해서 배열로 처리 		 
-		
-		String[] gift =	request.getParameterValues("gift");
-		
-		// 2) Service : add 연산
-		// 3) View 처리 : 연산결과 출력
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print("<h2>** CheckBox Test **</h2>");
-		
-		// => 선택여부를 확인 후 출력 
-		if ( gift!=null && gift.length>0 ) {
-			// 선택
-			for (String s:gift) {
-				out.print(s+"<br>");
-			}//for
-		}else {
-			out.print("<h2>=> 선택항목이 없음</h2>");
-		}//else
-		
-		out.print("<br><br><h2><a href='javascript:history.go(-1)'>다시 입력하기</a></h2><br>");
-	
-	} //doGet
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("* Post Test **");
-		doGet(request,response);
-	}//doPost	
+	      // => 한글처리
+	      // => request Parameter 처리
+	      request.setCharacterEncoding("UTF-8");
+	      
+	      String[] gift = request.getParameterValues("gift");
+	   
+	      // 2) Service 처리
+	      // 3) 결과 (View) 처리
+	      // => 한글처리, 출력객체 생성 & response 에 담기
+	      response.setContentType("text/html; charset=UTF-8");
+	      PrintWriter out = response.getWriter();
+	      out.print("<h2>** Check Test **</h2>");
+	      
+	      if(gift!=null && gift.length>0) {
+	    	  for(String g : gift) {
+		    	  out.print(g+"<br>");
+		      }  
+	      }else {
+	    	  out.print("<h2> 선택항목 없음 </h2>");
+	      }
+	     
+	      
+	     
 
-}//class
+	}
+
+	
+
+
+}

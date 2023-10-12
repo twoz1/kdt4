@@ -17,7 +17,7 @@
 		<option value="4">Select_Jsp</option>
 	</select><br><br>
 	이동 방법 :
-	<input type="radio" name="send" id="fo" value="f" checked>
+	<input type="radio" name="`" id="fo" value="f" checked>
 	<label for="fo">Forward</label>&nbsp;&nbsp;
 	<input type="radio" name="send" id="re" value="r">
 	<label for="re">Redirect</label><br><br>

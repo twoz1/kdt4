@@ -23,8 +23,7 @@
 	<textarea rows="5" cols="50" name="content" id="con"></textarea>
 	<br><br>
 	<input type="submit" value="전송">&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="reset" value="취소">		
-	
+	<input type="reset" value="취소">			
 </form>
 </h2>
 </body>
