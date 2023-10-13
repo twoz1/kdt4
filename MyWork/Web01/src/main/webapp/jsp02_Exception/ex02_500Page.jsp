@@ -20,7 +20,7 @@ A:hover   {color:black; text-decoration:none;} /* 마우스 링크 위 올려 �
 <b>잠시 서비스에 문제가 발생했습니다.</b><br>
 빠른 시간 내에 처리하겠습니다. <br>
 => <%=exception.toString()%><br><br>
-<img src="img/remon.gif" width="300" height="200"><br><br>
+<img src="/Web01/jsp02_Exception/img/remon.gif" width="300" height="200"><br><br>
 <a href="#" onclick="history.back()" >
 	[돌아가기]</a></font></div>
 </body>
