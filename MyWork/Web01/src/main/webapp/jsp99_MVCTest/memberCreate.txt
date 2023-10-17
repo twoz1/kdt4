@@ -1,0 +1,87 @@
+** member Table Create
+=> student의 컬럼과 Data 활용
+=> 구조
+   private String id; // 추가, Primary Key, varchar(10)
+   private String password; // 추가, not null, 12345!
+   private String name;
+   private int age;
+   private int jno;
+   private String info;
+   private double point;
+   private String birthday;
+   private String rid;  // 추천인 추가, varchar(10) 
+   
+=> 제약조건
+   -> Primary Key
+   -> not null
+========================================================   
+** 1.  student 를 이용해서 만들기 
+=> 단, 컬럼순서가 추가하는 password, rid 위치가 뒤쪽이됨. 
+
+create table member as select * from student;
+
+=> sno 에  Primary Key 추가
+alter table member Add Primary Key (sno);
+
+=> sno 를 varchar(10) 으로 변경 
+alter table member Modify sno varchar(10);
+=> sno 를 id 로 변경 
+alter table member Rename Column sno to id;
+
+=> password 컬럼 추가,  값은 모두 "12345!" 로
+alter table member Add password varchar(10) not null;
+update member set password="12345!"; 
+
+=> rid , 추천인 추가, varchar(10)
+alter table member Add rid varchar(10) ;
+
+=> rename table member to member1;
+========================================================
+** 2.  member Create 후 student 에서 Data 만 가져오기 
+
+create  table member (    
+id varchar(10) primary key ,
+password varchar(10),
+name varchar(30),
+age int(3) not null,
+jno int(1),
+info varchar(30),
+point float(7,2),
+birthday varchar(10),
+rid varchar(10)
+) ; 
+
+=> Data 가져오기
+
+insert into member(id, password, name, age, jno, info, point, birthday) 
+select id, password, name, age, jno, info, point, birthday from member1;
+========================================================================
+
+=> id 수정하기
+
+update member set id='green' where id='22';
+
+update member set id='csh98' where id='20';
+update member set id='haerim' where id='5';
+update member set id='silver' where id='16';
+update member set id = "hyejin11" where name = "신혜진";
+update member set id='sora' where id='1';
+update member set id='ajh97' where id='10';
+update member set id='ruhappy' where id='12';
+update member set id="suehyun" where id='8';
+update member set id="ezirenge" where id='2';
+update member set id='kongbori' where id='19';
+update member set id='wonee512' where id='14';
+update member set id='memoire' where id='18';
+update member set id='jekichan' where name='이성룡';
+update member set id='papipu' where id='15';
+update member set id='ajh97' where id='10';
+update member set id = "nameground" where id ='3';
+update member set id='jeseung' where id='13';
+update member set id="ysh" where id='11';
+update member set id='papipu' where id='15';
+update member set id='bae87' where id='7';
+update member set id='wri' where id='6';
+update member set id = "zzaeminy" where id = "4";
+
+   
