@@ -18,7 +18,7 @@
 
 <table border="1" style="width:90%">
    <tr bgcolor="pink">
-      <th>Id</th>
+      <th>ID</th>
       <th>Password</th>
       <th>Name</th>
       <th>Age</th>
@@ -27,7 +27,10 @@
       <th>Point</th>
       <th>Birthday</th>
       <th>Rid</th>
-      <th>Delete</th>
+      <!-- 관리자 기능 추가 -->
+      <c:if test="${sessionScope.loginID == 'admin' }">
+         <th>Delete</th>
+      </c:if>
    </tr>
    <c:if test="${not empty requestScope.banana}">
       <c:forEach var="s" items="${requestScope.banana}">
@@ -41,7 +44,9 @@
             <td>${s.point}</td>
             <td>${s.birthday}</td>
             <td>${s.rid}</td>
-            <td align="center"><a href="/Web01/delete?sno=${s.id}">삭제</a></td>
+            <c:if test="${sessionScope.loginID == 'admin' }">
+               <td align="center"><a href="/Web02/delete?id=${s.id}">삭제</a></td>
+            </c:if>
          </tr>
       </c:forEach>
    </c:if>

@@ -8,15 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mvcTest.StudentDTO;
-import mvcTest.StudentService;
-
 
 @WebServlet("/logout")
-public class Ex04_Logout extends HttpServlet {
+public class MVC2_Logout extends HttpServlet {
    private static final long serialVersionUID = 1L;
 
-   public Ex04_Logout() {
+   public MVC2_Logout() {
       super();
 
    }

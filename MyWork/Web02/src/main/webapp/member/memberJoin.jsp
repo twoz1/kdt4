@@ -6,23 +6,32 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>** Web_MVC2 Student Join**</title>
+<title>** Web_MVC2 Member Join**</title>
 </head>
 <body>
-<h2>** Web_MVC2 Student Join**</h2>
-<form action="/Web01/join" method="get">
+<h2>** Web_MVC2 Member Join**</h2>
+<form action="/Web02/join" method="get">
    <table>
+   	<tr height="40">
+			<th bgcolor="pink">ID</th>
+			  <td><input type="text" name ="id" placeholder="영어, 10글자 이내" size="20"></td>
+		</tr>
+   	<tr height="40">
+			<th bgcolor="pink">Password</th>
+			  <td><input type="text" name ="password" placeholder="영어,숫자,특수문자" size="20"></td>
+		</tr>
 		<tr height="40">
-			<th bgcolor="aqua">Name</th>
+			<th bgcolor="pink">Name</th>
 			  <td><input type="text" name ="name" placeholder="한글 또는 영어" size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="aqua">Age</th>
+			<th bgcolor="pink">Age</th>
 			  <td><input type="text" name ="age" placeholder="숫자입력" size="20"></td>
 		</tr>
+
 		<tr height="40">
-			<th bgcolor="aqua">Jno</th>
-			<td> <select name ="jno"  size="20">
+			<th bgcolor="pink">Jno</th>
+			<td> <select name ="jno"  >
 			  <option value="1">1조 : 119조</option>
 			  <option value="2">2조 : 여우조</option>
 			  <option value="3">3조 : i4조</option>
@@ -30,19 +39,22 @@
 			  <option value="5">5조 : 오조</option>
 			  <option value="7">7조 : 관리팀</option>
 			  </select>
-			  <input type="text" name ="jno" placeholder="숫자입력" size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="aqua">Info</th>
+			<th bgcolor="pink">Info</th>
 			<td><input type="text" name ="info" placeholder="자기소개와 희망사항을 반드시 입력하세요" size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="aqua">Point</th>
-			 <td><input type="text" name ="point" placeholder="실수" size="20"></td>
+			<th bgcolor="pink">Point</th>
+			 <td><input type="text" name ="point" placeholder="실수 입력" size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="aqua">Birthday</th>
+			<th bgcolor="pink">Birthday</th>
 			 <td><input type="date" name ="birthday" size="20"></td>
+		</tr>
+		<tr height="40">
+			<th bgcolor="pink">추천인</th>
+			 <td><input type="text" name ="rid" size="20"></td>
 		</tr>
 		<tr height="40">
 			 <td><input type="submit" value="가입"> &nbsp;&nbsp;&nbsp;

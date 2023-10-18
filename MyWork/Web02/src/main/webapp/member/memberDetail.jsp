@@ -12,39 +12,49 @@
 	<table>
 	<c:if test="${not empty requestScope.apple}">
 		<tr height="40">
-			<th bgcolor="skyblue">Sno
+			<th bgcolor="thistle">ID
 			</th>
-			  <td>${requestScope.apple.sno}</td>
+			  <td>${requestScope.apple.id}</td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="skyblue">Name
+			<th bgcolor="thistle">Password
+			</th>
+			  <td>${requestScope.apple.password}</td>
+		</tr>
+		<tr height="40">
+			<th bgcolor="thistle">Name
 			</th>
 			  <td>${requestScope.apple.name}</td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="skyblue">Age
+			<th bgcolor="thistle">Age
 			</th>
 			  <td>${requestScope.apple.age}</td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="skyblue">Jno
+			<th bgcolor="thistle">Jno
 			</th>
 			  <td>${requestScope.apple.jno}</td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="skyblue">Info
+			<th bgcolor="thistle">Info
 			</th>
 			  <td>${requestScope.apple.info}</td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="skyblue">Point
+			<th bgcolor="thistle">Point
 			</th>
 			  <td>${requestScope.apple.point}</td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="skyblue">Birthday
+			<th bgcolor="thistle">Birthday
 			</th>
 			  <td>${requestScope.apple.birthday}</td>
+		</tr>
+		<tr height="40">
+			<th bgcolor="thistle">추천인
+			</th>
+			  <td>${requestScope.apple.rid}</td>
 		</tr>
 	</c:if>	
 	<c:if test="${empty requestScope.apple}">
@@ -54,7 +64,8 @@
 	</c:if>
 	</table>
 	<hr>
-	
+	&nbsp; <a href="javascript:history.go(-1)">이전으로</a>
+    &nbsp; <a href="/Web02/index.jsp">Home</a> <br>
 	
 </body>
 </html>
