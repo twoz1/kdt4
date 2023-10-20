@@ -2,9 +2,12 @@ package service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import domain.MemberDTO;
 import model.MemberDAO;
 
+@Component
 public class MemberService {
 	// ** 전역변수 정의
 	MemberDAO dao = new MemberDAO();

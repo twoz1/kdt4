@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- JavaConfig 파일에서 @, xml 과 병행사용 Test 
+      => SsTVsi 생성   -->
+   <bean id="sstv" class="iocDI03_jc.SsTVsi" lazy-init="true" />
+
+<!-- SpeakerB 를 xml에서 생성한 후 JC 에서 생성자주입(LgTVsi)시 전달되는지 확인 -->
+   <!-- <bean id="spb" class="iocDI03_jc.SpeakerB" lazy-init="true" /> 
+    => 전달 안되므로 JC에서 생성함-->
+   
+<!-- SpeakerA, xml 생성후 AiTVsi 에서  @Autowired 로 주입받음 -->
+   <bean id="spa" class="iocDI03_jc.SpeakerA" lazy-init="true" />
+   
+<!-- AiTVsi : xml 생성후, 위의 SpeakerA @Autowired 로 주입받음 -->
+   <bean id="aitv" class="iocDI03_jc.AiTVsi" lazy-init="true" />
+</beans>

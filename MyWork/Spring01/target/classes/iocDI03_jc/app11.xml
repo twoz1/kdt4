@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<!-- ** xml 을 통해 JavaConfig 사용하기 **
+      => JavaConfig 파일을 생성 (<bean.. 설정) 해주고 , 
+      => 이 파일의 @을 인식 가능 하도록 해줌 -->
+      <bean class="iocDI03_jc.JavaConfig04"/>
+	  <context:annotation-config/>  
+	  
+<!-- SsTVsi xml 생성 -->
+	  <bean id="sstv" class="iocDI03_jc.SsTVsi" lazy-init="true"/>
+	  
+<!-- 1) SpeakerA xml 에서 생성후 AiTVsi 에서 @Autowired
+     2) 소스코드에서 @ 으로 생성후  AiTVsi 에서 @Autowired
+        -> @Component 를 인식할 수 있도록 package 등록 -->   
+     <bean id="spa" class="iocDI03_jc.SpeakerA" lazy-init="true"/>
+	 <context:component-scan base-package="iocDI03_jc"/>
+</beans>
