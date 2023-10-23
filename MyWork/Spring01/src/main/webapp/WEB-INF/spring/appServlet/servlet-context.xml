@@ -17,9 +17,9 @@
 	
    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
    <!-- * spring DispatcherServlet Test 1단계 **
-      => xml 적용 ( 2단계 : @ 적용 )
+      => xml 적용 ( 2단계 : @ 적용 , MemberController)
       1. HandlerMapping Bean 등록        -->   
-   <beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+  <!--  <beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
       <beans:property name="mappings">
          <beans:props>
             <beans:prop key="/mlistsp">ml</beans:prop>
@@ -28,9 +28,9 @@
       </beans:property>
    </beans:bean>
    
-   <!-- 2. Controller Bean 등록  -->
+   2. Controller Bean 등록 
    <beans:bean class="spDispatcher.C01_MList" id="ml" lazy-init="true" />
-   <beans:bean class="spDispatcher.C02_MDetail" id="md" lazy-init="true" />
+   <beans:bean class="spDispatcher.C02_MDetail" id="md" lazy-init="true" /> -->
    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
    
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -39,7 +39,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.ncs.green, service" />
+	<context:component-scan base-package="com.ncs.green, service , model" />
 	
 	
 	

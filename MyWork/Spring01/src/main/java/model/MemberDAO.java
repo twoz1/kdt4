@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import domain.MemberDTO;
 
 
@@ -19,7 +21,7 @@ import domain.MemberDTO;
 // 	- 요청 처리 결과를 제공
 //	- 즉, 메서드의 역할별로 처리결과를 return 해야함
 //	- 그러므로 특히 select 결과를 전달하기위해 결과를 담는 작업이 필요함  
-
+@Component
 public class MemberDAO {
 	// ** 전역변수 정의
 	private static Connection cn = DBConnection.getConnection(); 
