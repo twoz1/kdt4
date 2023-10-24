@@ -1,0 +1,31 @@
+*** Board 실습 ***
+1. Board Table 생성 & 기본자료 입력
+
+drop table board;
+
+create  table board (    
+seq int(5) primary key AUTO_Increment,
+id varchar(10) not null,
+title varchar(200) not null,
+content Text(2000),
+regdate  datetime DEFAULT CURRENT_TIMESTAMP,
+cnt int default 0
+); 
+
+=> Data 5개 이상 입력 
+insert into board(id, title, content) values("banana","Spring 이란? ","처음에 복잡하고 난해하지만 친해지면 매우 편리하다.");
+insert into board(id, title, content) values("apple","spring IOC/DI? ","dependency injection_객체간의 의존관계를 객체 자신이 아닌 외부의 조립기가 수행한다.");
+insert into board(id, title, content) values("coffee","스프링의 의존성 주입","설정파일은 Spring Conatainer가 어떻게 일할 지를 설정하는 파일");
+insert into board(id, title, content) values("green","Spring 의 AOP? ","객체는 인터페이스에 의한 의존 관계만을 알고 있으며....");
+insert into board(id, title, content) values("admin","Spring 재밌어요~~","Spring Container가 DI 조립기(Assembler)를 제공");
+
+select * from board;
+
+2. Spring02 구현1 
+=> Java : BoardDTO, BoardDAO, BoardService, BoardController 
+=> View : boardList , boardDetail , boardInsert , boardUpdate
+
+3. Spring02 구현2
+=> 댓글 달기 , 페이징 
+
+ 

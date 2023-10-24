@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+ <!-- <link rel="stylesheet" type="text/css" href="/green/resources/myLib/myStyle.css"> -->
 <title>Spring MemberList</title>
 </head>
 <body>
@@ -58,7 +59,7 @@
 </table>
 
 <hr>
-&nbsp; <a href="home">Home</a> <br>
+&nbsp; <a href="/green/home">Home</a> <br>
 
 </body>
 </html>
