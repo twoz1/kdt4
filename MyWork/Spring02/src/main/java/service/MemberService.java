@@ -5,6 +5,9 @@ import java.util.List;
 import domain.MemberDTO;
 
 public interface MemberService {
+	
+	// ** Jo_List 추가
+	List<MemberDTO> joList(int jno);
 
 	// ** selectList
 	List<MemberDTO> selectList();

@@ -17,7 +17,7 @@
    ${requestScope.message} <br><hr>
 </c:if>
 
-<table border="1" style="width:90%">
+<table style="width:100%">
    <tr bgcolor="orange">
       <th>Seq</th>
       <th>Title</th>
@@ -30,8 +30,16 @@
          <tr>
             <td>${s.seq}</td>
             <!-- Title
-                 => 로그인 한 경우에만 글내용을 볼 수 있도록 Link -->
+                 => 로그인 한 경우에만 글내용을 볼 수 있도록 Link 
+                 => 댓글 작성 후에는 indent 값에 따른 들여쓰기 기능
+                 -->
             <td>
+			 <c:if test="${s.indent>0}">
+			 	<c:forEach begin="1" end="${s.indent}">
+			 		<span>&nbsp;&nbsp;</span>
+			 	</c:forEach>
+			 	<span style="color:red;">re..</span>
+			 </c:if>            	
              <c:if test="${not empty loginID}">
   		        <a href="bdetail?seq=${s.seq}"> ${s.title}</a>
              </c:if>

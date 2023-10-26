@@ -3,14 +3,18 @@ package service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import domain.JoDTO;
 import model.JoDAO;
-@Component
+
+//** interface 자동완성 
+//=> Alt + Shift + T  
+//=> 또는 마우스우클릭 PopUp Menu 의  Refactor - Extract Interface...
+
+@Service
 public class JoServiceImpl implements JoService {
-	// ** 전역변수 정의
-	// MemberDAO dao = new MemberDAO();
+	
 	@Autowired
 	JoDAO dao;
 	
@@ -24,22 +28,20 @@ public class JoServiceImpl implements JoService {
 	public JoDTO selectOne(JoDTO dto) {
 		return dao.selectOne(dto);
 	}
-
-	// ** insert
+	// ** Insert
 	@Override
 	public int insert(JoDTO dto) {
 		return dao.insert(dto);
 	}
-	// ** update
+	// ** Update
 	@Override
 	public int update(JoDTO dto) {
 		return dao.update(dto);
 	}
-	// ** delete
+	// ** Delete
 	@Override
 	public int delete(JoDTO dto) {
 		return dao.delete(dto);
 	}
 
-	
 } //class

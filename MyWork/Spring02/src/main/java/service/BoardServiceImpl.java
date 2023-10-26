@@ -15,6 +15,12 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	BoardDAO dao;
 	
+	// ** 답글등록
+	@Override
+	public int rinsert(BoardDTO dto) {
+		return dao.rinsert(dto);
+	}
+	
 	// ** selectList
 	@Override
 	public List<BoardDTO> selectList() {
@@ -41,6 +47,5 @@ public class BoardServiceImpl implements BoardService {
 	public int delete(BoardDTO dto) {
 		return dao.delete(dto);
 	}
-
 	
 } //class

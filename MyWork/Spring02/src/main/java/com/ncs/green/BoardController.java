@@ -22,22 +22,84 @@ import service.BoardService;
 public class BoardController {
 
    BoardService service;
+   
+   // ** replyInsert
+   // => replyInsert Form 출력 메서드
+   //    bdetail 화면에서 요청시 퀴리스트링으로 보낸 부모글의 root, step, indent 를 
+   //    replyInsert Form 으로 전달
+   // => replyInsert Form 에서는 이값들을 hidden 으로 숨겨놓음 (rinsert 위해 필요함)
+   
+   // => 매핑메서드의 인자로 정의된 dto 는 request.setAttribute 와 동일 scope
+   //    그러므로 response 출력 전까지는 사용가능
+   //    단, 클래스명의 첫글자를 소문자로 ...  ${boardDTO.root}
+   //      그러므로 아래와같은 구문은 필요없음.
+   //     model.addAttribute("apple", dto);
+   @GetMapping(value="/replyInsert")
+   public void replyInsert(BoardDTO dto) {
+	   // viewName 생략 
+   }
+   
+   @PostMapping(value="/rinsert")
+   public String rinsert(BoardDTO dto, Model model, RedirectAttributes rttr) {
+	   // ** 답글등록
+	   // => SQL 구문 : reply_insert, step_update
+	   // => 성공 : boardList
+	   // => 실패 : replyInsert 입력폼으로 
+	   String uri="redirect:boardList";
+	   
+	   // => dto의 값
+	   //    -> id, title, content : 사용가능
+	   //    -> 부모글의 root : 동일
+	   //    -> 부모글의 step, indent : 1씩 증가
+	   dto.setStep(dto.getStep()+1);
+	   dto.setIndent(dto.getIndent()+1);
+	   if(service.rinsert(dto) > 0) {
+		   rttr.addFlashAttribute("message", "~답글등록성공~");
+	   }else {
+		   uri="board/replyInsert";
+		   model.addAttribute("message","우~답글등록실패ㅜㅜ");
+	   }
+	   return uri;
+   }
    // BoardList
    @GetMapping(value = "/boardList")
    public void blist(Model model) {
       model.addAttribute("banana", service.selectList());
    }
-
-   // ===============================================================
-
+   
    // ** BoardDetail
+   // => 조회수 증가 조건
+   //   -> 글보는이(loginID)와 글쓴이가 다를때 
+   //   -> 글보는이(loginID)가 "admin" 이 아닌경우 
+   //   -> 수정요청이 아닌경우
+   // => 조회수 증가 처리 
+   //   -> Table 의 cnt=cnt+1
+   //   -> Update 메서드 활용
+   //      - mapper 의 xml 수정 (Mybatis)
+   //      - bUpdateForm 에서 cnt값 전달 가능하도록 수정
+   
    // @RequestMapping(value = "/mdetail", method = RequestMethod.GET)
    @GetMapping(value = "/bdetail")
    public String bdetail(HttpServletRequest request, Model model, BoardDTO dto) {
+      // 1) Detail Service 처리
+      dto=service.selectOne(dto);
+      
+      // 2) 조회수 증가
+      // => get loginID
+      String loginID = (String)request.getSession().getAttribute("loginID");
+      
+      // => 조회수 증가 조건
+      if(!"admin".equals(loginID) && !dto.getId().equals(loginID) &&
+    	 !"U".equals(request.getParameter("jCode"))) {
+    	  // => 조회수 증가 처리
+    	  dto.setCnt(dto.getCnt()+1);
+    	  service.update(dto);
+      }
       
       model.addAttribute("apple", service.selectOne(dto));
       
-      // => 글 수정화면 요청인경우 구분
+      // 3) View 처리
+      // => 글 수정 화면 요청인 경우
       if( "U".equals(request.getParameter("jCode")) ) {
          return "board/boardUpdate";
       }else {

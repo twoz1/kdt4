@@ -14,4 +14,7 @@ public class BoardDTO {
 	private String content;
 	private String regdate;
 	private int cnt;
+	private int root;
+	private int step;
+	private int indent;
 }

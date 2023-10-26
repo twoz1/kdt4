@@ -1,65 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
- <link rel="stylesheet" type="text/css" href="/green/resources/myLib/myStyle.css">
-<title>Spring_MVC2 JoList</title>
+	<meta charset="UTF-8">
+	<title>** JoList Spring_MVC2 **</title>
+	<link rel="stylesheet" type="text/css" href="/green/resources/myLib/myStyle.css">
 </head>
 <body>
-<h2>Spring_MVC2 JoList</h2>
-
-<!-- MVC2_sDelete에 만든 message 부분 구현하기 -->
-<hr>
-<c:if test="${not empty requestScope.message}">
-   ${requestScope.message} <br><hr>
+<h2>** JoList Spring_MVC2 **</h2>
+<br>
+<c:if test="${not empty message}">
+	${message}<br>
 </c:if>
-
-<table border="1" style="width:90%">
-   <tr bgcolor="orange">
-      <th>Jno</th>
-      <th>Jname</th>
-      <th>ID</th>
-      <th>Project</th>
-      <th>Slogan</th>
-   </tr>
-   <c:if test="${not empty requestScope.banana}">
-      <c:forEach var="s" items="${requestScope.banana}">
-         <tr>
-            <td>${s.jno}</td>
-            <!-- Title
-                 => 로그인 한 경우에만 글내용을 볼 수 있도록 Link -->
-            <td>
-             <c:if test="${not empty loginID}">
-  		        <a href="jdetail?jno=${s.jno}"> ${s.jname}</a>
-             </c:if>
-            
-            <c:if test="${empty loginID}">
-  		        ${s.jname}
-            </c:if>
-            	
-            </td>	
-            <td>${s.id}</td>
-            <td>${s.project}</td>
-            <td>${s.slogan}</td>
-         </tr>
-      </c:forEach>
-   </c:if>
-   <c:if test="${empty requestScope.banana}">
-      <tr>
-         <td colspan="5">출력할 Data 가 1건도 없습니다.</td>
-      </tr>
-   </c:if>
+<hr>
+<table width=100%> 
+	<tr bgcolor="Gold" height="30">
+		<th>Jno</th><th>JoName</th><th>CaptainID</th><th>조장이름</th><th>Project</th><th>Slogan</th>
+	</tr>
+	<c:if test="${not empty banana}">
+		<c:forEach  var="jo" items="${banana}" >
+		<tr height="30">
+			<td><a href="jdetail?jno=${jo.jno}">${jo.jno}</a></td>
+			<td>${jo.jname}</td><td>${jo.id}</td> 
+			<td>${jo.cname}</td><td>${jo.project}</td><td>${jo.slogan}</td>
+		</tr>	
+		</c:forEach>
+	</c:if>
 </table>
-
 <hr>
-<!-- 로그인 한 경우에만 새글등록 가능-->
- <c:if test="${not empty sessionScope.loginID}">
-&nbsp; <a href="joInsert">새로운 조 등록</a> <br>
-</c:if>
-&nbsp; <a href="/green/home">Home</a> <br>
-
+<hr>
+&nbsp;<a href="joInsert">조등록</a>&nbsp;
+&nbsp;<a href="javascript:history.go(-1)">이전으로</a>&nbsp;
+&nbsp;<a href="/green/home">[Home]</a>
 </body>
 </html>
