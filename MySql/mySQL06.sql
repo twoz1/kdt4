@@ -276,4 +276,110 @@ select sno, name, s.jno,
  	from student s;
     
     select sno, name, s.jno from student s, jo j where s.sno=j.captain ;
+    select * from student;
+    update student set sno = 65 where sno=71;
+    delete from student where sno between 34 and 36; 
     
+    alter table student drop column address;
+    
+    start transaction;
+    update student set name='홍길동';
+    select sno, name from student;
+    rollback;
+    select * from student;
+    delete from student where sno between 62 and 68;
+    
+ALTER TABLE student AUTO_INCREMENT=1;
+SET @COUNT = 0;
+UPDATE student SET sno = @COUNT:=@COUNT+1;
+delete from student where sno = 25;
+ 
+create table member(
+id varchar(10) primary key,
+password varchar(10) not null,
+name varchar(10),
+age int(3),
+jno int(3),
+info varchar(30),
+point float(5,2),
+birthday varchar(10),
+rid varchar(10)
+);
+
+
+insert into member(id,password,name,age,jno,info,point,birthday)
+select s.sno,'12345!', s.name, s.age,s.jno, s.info, s.point, s.birthday
+from student s;
+
+update member set id='csh98' where id='20';
+update member set id='haerim' where id='5';
+update member set id='silver' where id='16';
+update member set id = "hyejin11" where name = "신혜진";
+update member set id='sora' where id='1';
+update member set id='ajh97' where id='10';
+update member set id='ruhappy' where id='12';
+update member set id="suehyun" where id='8';
+update member set id="ezirenge" where id='2';
+update member set id='kongbori' where id='19';
+update member set id='wonee512' where id='14';
+update member set id='memoire' where id='18';
+update member set id='jekichan' where name='이성룡';
+update member set id='papipu' where id='15';
+update member set id='ajh97' where id='10';
+update member set id = "nameground" where id ='3';
+update member set id='jeseung' where id='13';
+update member set id="ysh" where id='11';
+update member set id='papipu' where id='15';
+update member set id='bae87' where id='7';
+update member set id='wri' where id='6';
+update member set id = "zzaeminy" where id = "4";
+
+select * from student;
+select * from member;
+
+delete from member where jno=7;
+
+insert into student select * from student2;
+
+create  table board (    
+seq int(5) primary key AUTO_Increment,
+id varchar(10) not null,
+title varchar(200) not null,
+content Text(2000),
+regdate  datetime DEFAULT CURRENT_TIMESTAMP,
+cnt int default 0
+); 
+
+insert into board(id, title, content) values("banana","Spring 이란? ","처음에 복잡하고 난해하지만 친해지면 매우 편리하다.");
+insert into board(id, title, content) values("apple","spring IOC/DI? ","dependency injection_객체간의 의존관계를 객체 자신이 아닌 외부의 조립기가 수행한다.");
+insert into board(id, title, content) values("coffee","스프링의 의존성 주입","설정파일은 Spring Conatainer가 어떻게 일할 지를 설정하는 파일");
+insert into board(id, title, content) values("green","Spring 의 AOP? ","객체는 인터페이스에 의한 의존 관계만을 알고 있으며....");
+insert into board(id, title, content) values("admin","Spring 재밌어요~~","Spring Container가 DI 조립기(Assembler)를 제공");
+
+insert into board(id, title, content) values("banana","Spring 이란? ","처음에 복잡하고 난해하지만 친해지면 매우 편리하다.");
+insert into board(id, title, content) values("apple","spring IOC/DI? ","dependency injection_객체간의 의존관계를 객체 자신이 아닌 외부의 조립기가 수행한다.");
+insert into board(id, title, content) values("coffee","스프링의 의존성 주입","설정파일은 Spring Conatainer가 어떻게 일할 지를 설정하는 파일");
+insert into board(id, title, content) values("green","Spring 의 AOP? ","객체는 인터페이스에 의한 의존 관계만을 알고 있으며....");
+insert into board(id, title, content) values("admin","Spring 재밌어요~~","Spring Container가 DI 조립기(Assembler)를 제공");
+
+select * from board;
+
+select * from jo;
+
+drop table jo;
+create table jo (
+   jno int(1),
+   jname varchar(10) not null,
+   id varchar(10) not null,  
+   project varchar(20) not null,
+   slogan varchar(30) not null,
+   Primary Key(jno)
+);
+
+insert into jo values(1, '119', 'bae87', '펫밀리', '애완동물을 위한 홈페이지');
+insert into jo values(2, '여우', 'haerim', '여우책방', '책으로 마음의 양식을♡');
+insert into jo values(3, "i4", 'jeseung', "단Dog", "반려동물 한마리 한마리 모두 소중하다");
+insert into jo values(4,"최고조", 'ezirenge',"tbtConcept","열정빼면 시체");
+insert into jo values(5, "오조", 'wonee512', "Ojoa", "완주 아니면 죽음뿐");
+insert into jo values(7, "칠면조", 'admin', "관리팀", "열심히 일하자 !!!");
+select * from jo;
