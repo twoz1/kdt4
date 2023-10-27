@@ -383,3 +383,19 @@ insert into jo values(4,"최고조", 'ezirenge',"tbtConcept","열정빼면 시�
 insert into jo values(5, "오조", 'wonee512', "Ojoa", "완주 아니면 죽음뿐");
 insert into jo values(7, "칠면조", 'admin', "관리팀", "열심히 일하자 !!!");
 select * from jo;
+
+alter table board add root int(5)  default 0 ; 
+alter table board add step int(5) default 0 ;
+alter table board add indent int(3) default 0 ;  
+   
+select seq, title, id, root, step, indent from board order by root desc, step asc;
+update board set root=seq ; 
+
+alter table member modify uploadfile varchar(50) default "resources/uploadImages/aaa.gif";
+select * from member;
+update member set uploadfile="resources/uploadImages/aaa.gif"; 
+update member set uploadfile="resources/uploadImages/bbb.gif" where jno=2;
+update member set uploadfile="resources/uploadImages/ccc.gif" where jno=3;
+update member set uploadfile="resources/uploadImages/ddd.gif" where jno=4;
+update member set uploadfile="resources/uploadImages/eee.gif" where jno=5;
+update member set uploadfile="resources/uploadImages/xxx.gif" where jno=7;

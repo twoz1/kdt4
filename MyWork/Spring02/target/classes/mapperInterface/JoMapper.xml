@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapperInterface.JoMapper" >
+
+	<select id="selectList" resultType="domain.JoDTO">
+		select j.jno, jname, j.id, m.name cname, project, slogan
+		    from jo j LEFT OUTER JOIN member m ON j.id=m.id
+	</select>
+	
+	<select id="selectOne" resultType="domain.JoDTO">
+		select * from jo where jno=#{jno}
+	</select>
+	
+	<insert id="insert">
+		insert into jo values(#{jno},#{jname},#{id},#{project},#{slogan})
+	</insert>
+	
+	<update id="update">
+		update jo set jname=#{jname},id=#{id},project=#{project},slogan=#{slogan} where jno=#{jno}
+	</update>
+	
+	<delete id="delete">
+		delete from jo where jno=#{jno}
+	</delete>
+</mapper>

@@ -10,7 +10,13 @@
 <body>
 <h2>** Spring Student Detail **</h2>
    <table>
+    <tr height="40">
+         <th bgcolor="thistle">Password
+         </th>
+           <td><img alt="MyImage" src="/green/${apple.uploadfile}" width="80" height="80"></td>
+      </tr>
    <c:if test="${not empty requestScope.apple}">
+   
       <tr height="40">
          <th bgcolor="thistle">ID
          </th>

@@ -57,7 +57,7 @@
    <!-- 로그인 id 와 글쓴이 id가 동일하면 수정과 삭제 가능 -->
    <c:if test="${sessionScope.loginID == requestScope.apple.id}">
        &nbsp; <a href="bdetail?jCode=U&seq=${requestScope.apple.seq}">글수정</a>&nbsp;
-       &nbsp; <a href="bdelete?seq=${requestScope.apple.seq}">글삭제</a>&nbsp;
+       &nbsp; <a href="bdelete?seq=${apple.seq}&root=${apple.root}">글삭제</a>&nbsp;
    </c:if>
    <hr>   
    &nbsp; <a href="javascript:history.go(-1)">이전으로</a>
