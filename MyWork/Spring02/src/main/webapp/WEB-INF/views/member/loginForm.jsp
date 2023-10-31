@@ -36,7 +36,7 @@ message : ${requestScope.message}
 </c:if>
 <hr>
 
-&nbsp; <a href="/green/home">Home</a>&nbsp;
+&nbsp; <a href="/Spring02/home">Home</a>&nbsp;
 
 </body>
 </html>

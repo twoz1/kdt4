@@ -1,5 +1,7 @@
 package domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 // ** DTO
@@ -21,19 +23,23 @@ import lombok.Data;
 //=> @ToString :  모든 필드를 출력하는 toString() 메소드 생성 
 
 @Data
-//=> 정의된 모든 필드에 대한 
-// Getter, Setter, ToString 과 같은 모든 요소를 한번에 만들어주는 애너테이션.
-public class MemberDTO {
-   private String id; //Primary Key
-   private String password; //not null
-   private String name;
-   private int age;
-   private int jno;
-   private String info;
-   private Double point;
-   private String birthday;
-   private String rid; //추천인
-   private String uploadfile;
-   
+// => 정의된 모든 필드에 대한
+//    getter, setter, ToString 과 같은 모든 요소를 한번에 만들어주는 에너테이션
 
+public class MemberDTO {
+
+	private String id; //Primary Key
+	private String password; //not null
+	private String name;
+	private int age;
+	private int jno;
+	private String info;
+	private Double point;
+	private String birthday;
+	private String rid; //추천인
+	private String uploadfile; // Table에 보관된 File_Path
+	
+	private MultipartFile uploadfilef;
+	// => form 의 Upload_File 정보를 전달받기위한 필드
+	//    MultipartFile (Interface) -> CommonsMultipartFile
 }

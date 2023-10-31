@@ -14,8 +14,7 @@ public class BoardServiceImpl implements BoardService {
 	// MemberDAO dao = new MemberDAO();
 	@Autowired
 	BoardDAO dao;
-	
-	// ** 답글등록
+	// 답글등록
 	@Override
 	public int rinsert(BoardDTO dto) {
 		return dao.rinsert(dto);
@@ -47,5 +46,6 @@ public class BoardServiceImpl implements BoardService {
 	public int delete(BoardDTO dto) {
 		return dao.delete(dto);
 	}
+
 	
 } //class

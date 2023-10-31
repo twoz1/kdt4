@@ -10,13 +10,12 @@
 <body>
 <h2>** Spring Student Detail **</h2>
    <table>
-    <tr height="40">
-         <th bgcolor="thistle">Password
+      <tr height="40">
+         <th bgcolor="thistle">Image
          </th>
-           <td><img alt="MyImage" src="/green/${apple.uploadfile}" width="80" height="80"></td>
+           <td><img alt="MyImage" src="/Spring02/${apple.uploadfile}" width="50" height="70"></td>
       </tr>
    <c:if test="${not empty requestScope.apple}">
-   
       <tr height="40">
          <th bgcolor="thistle">ID
          </th>
@@ -71,7 +70,7 @@
    </table>
    <hr>
    &nbsp; <a href="javascript:history.go(-1)">이전으로</a>
-    &nbsp; <a href="/green/home">Home</a> <br>
+   &nbsp; <a href="/Spring02/home">Home</a> <br>
    
 </body>
 </html>

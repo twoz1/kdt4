@@ -5,19 +5,20 @@ import java.util.List;
 import domain.JoDTO;
 
 public interface JoMapper {
+	
 	// ** selectList
-		List<JoDTO> selectList();
+	List<JoDTO> selectList();
 
-		// ** selectOne
-		JoDTO selectOne(JoDTO dto);
+	// ** selectOne
+	JoDTO selectOne(JoDTO dto);
 
-		// ** Insert
-		int insert(JoDTO dto);
+	// ** insert
+	int insert(JoDTO dto);
 
-		// ** Update
-		int update(JoDTO dto);
+	// ** update
+	int update(JoDTO dto);
 
-		// ** Delete
-		int delete(JoDTO dto);
+	// ** delete
+	int delete(JoDTO dto);
 
 }

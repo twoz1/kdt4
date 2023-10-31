@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd"> 
-   => 변경됨 : 아래 구문으로 변경시켜야 함 -->
+=> 변경됨 : 아래 구문으로 변경시켜야 함 -->
+
 <!DOCTYPE log4j:configuration 
    SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
-      <!-- 
+   <!-- 
    **  Appenders 
       => Appender는 Logger로부터 전달된 로그 메시지를 출력한다.
       => 1개의 Logger에 여러 개의 Appender를 설정할 수 있다.
       => Appender 인터페이스를 구현한 
-         ConsoleAppender, FileAppender, Daily RollingFileAppender, DBAppender
-            등을 기본 제공.
+         ConsoleAppender, FileAppender, Daily RollingFileAppender, DBAppender 등을 기본 제공.
          
    ** Layout
       => 로그 메시지를 어떤 형식으로 출력할 것인지 결정한다.   
@@ -61,5 +63,5 @@
       <priority value="warn" />
       <appender-ref ref="console" />
    </root>
-   
+	
 </log4j:configuration>

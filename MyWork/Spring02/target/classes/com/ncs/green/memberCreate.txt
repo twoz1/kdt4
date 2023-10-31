@@ -111,15 +111,17 @@ insert into jo values(5, "오조", 'wonee512', "Ojoa", "완주 아니면 죽음�
 insert into jo values(7, "칠면조", 'admin', "관리팀", "열심히 일하자 !!!");
 select * from jo;
 
-** Image추가 (File Upload 기능)
-=> member table 에 uploadfile 컬럼 추가
+====================================================================
+
+Image 추가 (File Upload 기능)
+=> member table 에 uploadfile 컬럼추가
 => uploadfile varchar(50)
+alter table member add uploadfile varchar(50) default "resources/uploadImages/aaa.gif";
+update member set uploadfile="resources/uploadImages/bbb.gif" where jno=2;
+update member set uploadfile="resources/uploadImages/ccc.gif" where jno=3;
+update member set uploadfile="resources/uploadImages/ddd.gif" where jno=4;
+update member set uploadfile="resources/uploadImages/eee.gif" where jno=5;
+update member set uploadfile="resources/uploadImages/xxx.gif" where jno=7;
 
-alter table member add uploadfile varchar(50) default "resources/uploadImages/aaa.gif"
-update member set uploadfile="resources/uploadIimages/bbb.gif" where jno=2;
-update member set uploadfile="resources/uploadIimages/ccc.gif" where jno=3;
-update member set uploadfile="resources/uploadIimages/ddd.gif" where jno=4;
-update member set uploadfile="resources/uploadIimages/eee.gif" where jno=5;
-update member set uploadfile="resources/uploadIimages/xxx.gif" where jno=7;
-
+alter table member drop column uploadfile;
 	

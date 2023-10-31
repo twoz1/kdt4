@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="/Spring02/resources/myLib/myStyle.css">
 <title>Spring_MVC2 BoardUpdate</title>
 </head>
 <body>
@@ -13,37 +15,34 @@
 <form action="bupdate" method="post">
 	<table>
 		<c:if test="${ not empty requestScope.apple }">
-			
-			<!-- id: 화면 출력, 서버로 전송, 수정은 불가( 즉, 입력 못하게 막기 )
-					  -> readonly : 값이 서버로 전송 (권장)
-					  -> disabled : 값이 서버로 전송되지 않음
-			-->
 			<tr height="40">
-				<th bgcolor="brown">Seq</th>
+				<th bgcolor="chocolate">Seq</th>
 				<td><input type="text" name="seq" value="${requestScope.apple.seq}" size="20" readonly></td>
 			</tr>
-			
 			<tr height="40">
-				<th bgcolor="brown">ID</th>
+				<th bgcolor="chocolate">Name</th>
 				<td><input type="text" name="id" value="${requestScope.apple.id}" size="20" readonly></td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="khaki">Title</th>
+				<th bgcolor="pink">Title</th>
 				<td><input type="text" name="title" value="${requestScope.apple.title}" size="50"></td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="khaki">Content</th>
-				<td><textarea rows="5" cols="50" name="content">${requestScope.apple.content}</textarea></td>
+				<th bgcolor="pink">Content</th>
+				<td>
+					<textarea rows="5" cols="50" name="content">
+						${requestScope.apple.content}
+					</textarea>
+				</td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="brown">RegDate</th>
+				<th bgcolor="chocolate">RegDate</th>
 				<td><input type="text" name="regdate" value="${requestScope.apple.regdate}" size="20" readonly></td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="brown">조회수</th>
+				<th bgcolor="chocolate">조회수</th>
 				<td><input type="text" name="cnt" value="${requestScope.apple.cnt}" size="20" readonly></td>
 			</tr>
-		
 			<tr height="40">
 				<th></th>
 				<td>
@@ -69,7 +68,7 @@
 
 <hr>
 
-&nbsp; <a href="/green/home">home</a>&nbsp;
+&nbsp; <a href="/Spring02/home">home</a>&nbsp;
 &nbsp; <a href="javascript:history.go(-1)">이전</a>&nbsp;
 
 </body>

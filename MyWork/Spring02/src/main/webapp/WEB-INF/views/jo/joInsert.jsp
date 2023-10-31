@@ -5,41 +5,35 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Spring_MVC2 Board_Insert</title>
+<title>Spring_MVC2 Jo_Insert</title>
 </head>
 <body>
-<h2>Spring_MVC2 Board_Insert</h2>
+<h2>Spring_MVC2 Jo_Insert</h2>
 
 <form action="jinsert" method="post">
 	<table>
 		<tr height="40">
-			<th bgcolor="Violet">Jno</th>
-			<td><input type="text" name="jno"  size="20"></td>
+			<th bgcolor="Spring02">Jno</th>
+			<td><input type="text" name="jno" value="${sessionScope.Jno}"size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="Violet">Jname</th>
-			<td><input type="text" name="jname" size="48"></td>
+			<th bgcolor="Spring02">Jname</th>
+			<td><input type="text" name="jname" size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="Violet">ID</th>
-			<td>
-				<textarea rows="5" cols="50" name="id"></textarea>
-			</td>
+			<th bgcolor="Spring02">I D</th>
+			<td><input type="text" name="id" size="20"></td>
 		</tr>
 		<tr height="40">
-			<th bgcolor="Violet">Project</th>
-			<td>
-				<textarea rows="5" cols="50" name="project"></textarea>
-			</td>
+			<th bgcolor="Spring02">Project</th>
+			<td><input type="text" name="project" size="20"></td>
 		</tr>
-			<tr height="40">
-			<th bgcolor="Violet">Slogan</th>
-			<td>
-				<textarea rows="5" cols="50" name="slogan"></textarea>
-			</td>
-		</tr>
-		
 		<tr height="40">
+			<th bgcolor="Spring02">Slogan</th>
+			<td><input type="text" name="slogan" size="20"></td>
+		</tr>
+		<tr height="40">
+			<th></th>
 			<td>
 				<input type="submit" value="등록"> &nbsp;&nbsp;&nbsp;
 				<input type="reset" value="취소">
@@ -56,7 +50,7 @@
 
 <hr>
 
-&nbsp; <a href="/green/home">home</a>&nbsp;
+&nbsp; <a href="/Spring02/home">home</a>&nbsp;
 &nbsp; <a href="javascript:history.go(-1)">이전</a>&nbsp;
 
 </body>

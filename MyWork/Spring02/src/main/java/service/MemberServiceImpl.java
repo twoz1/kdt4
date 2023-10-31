@@ -3,15 +3,16 @@ package service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import domain.MemberDTO;
 import mapperInterface.MemberMapper;
 
-@Service
+@Component
 public class MemberServiceImpl implements MemberService {
 	// ** 전역변수 정의
-	//Membermapper mapper = new Membermapper();
+	//MemberDAO dao = new MemberDAO();
 	@Autowired
 	MemberMapper mapper;
 	

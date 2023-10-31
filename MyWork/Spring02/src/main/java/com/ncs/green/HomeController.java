@@ -6,8 +6,11 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 //** Locale : (사건등의 현장), 다국어 지원 설정을 지원하는 클래스
 //=> locale 값을 받아서 현재 설정된 언어를 알려줌 -> 한글 메시지 출력 가능
 //=> jsp 의 언어설정을 받아 해당 언어에 맞게 자동으로 message가 출력 되도록 할때 사용.
-// logger.info("Welcome home! 로그 메시지 Test -> locale is {}.", locale);
+//   logger.info("Welcome home! 로그 메시지 Test -> locale is {}.", locale);
 //   -> locale: ko_KR
 //=> {} : 일종의 출력 포맷 으로 우측 ',' 뒷편 변수의 값이 표시됨.
 //-----------------------------------------------------------------
@@ -74,33 +77,61 @@ public class HomeController {
    
    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
    
-   
    @RequestMapping(value = {"/","/home"}, method = RequestMethod.GET)
    public String home(Locale locale, Model model) {
       logger.info("Welcome home! The client locale is {}.", locale);
-      // ** Logger Message Test 
-      /* 1) {} 활용 */
-      /*String name = "홍길동"; int age = 20; 
-      logger.info(" ** test1) 안녕하세요.");
-      logger.info(" ** test2) 안녕하세요,{} 님 ",name);
-      logger.info(" ** test2) name ={}, age={}  ",name,age);
+      // Logger Message Test
+      /* 1) {} 활용
+      String name = "홍길동"; int age = 20;
+      logger.info("test1) 안녕하세요");
+      logger.info("test2) 안녕하세요, {} 님", name);
+      logger.info("test3) name = {} 님 age = {}", name, age);
       
-      // 2) 로깅레벨 조정 Test
+      // 2) 로깅레벨 조정 Test	
       //=> 로깅레벨 단계
-      //TRACE > DEBUG > INFO > WARN > ERROR > FATAL(치명적인)
-      logger.error("** 로깅레벨 Test error: name ={}, age={}", name, age);
-      logger.warn("** 로깅레벨 Test warn: name ={}, age={}", name, age);
-      logger.info("** 로깅레벨 Test info: name ={}, age={}", name, age);
-      logger.debug("** 로깅레벨 Test debug: name ={}, age={}", name, age);
-      logger.trace("** 로깅레벨 Test trace: name ={}, age={}", name, age);
-      */
-      
+      //   TRACE > DEBUG > INFO > WARN > ERROR > FATAL(치명적인)
+      logger.error("로깅레벨 Test error : name = {} 님 age = {}", name, age);
+      logger.warn("로깅레벨 Test warn : name = {} 님 age = {}", name, age);
+      logger.info("로깅레벨 Test info : name = {} 님 age = {}", name, age);
+      logger.debug("로깅레벨 Test debug : name = {} 님 age = {}", name, age);
+      logger.trace("로깅레벨 Test trace : name = {} 님 age = {}", name, age);
+       */
       Date date = new Date();
       DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+      
       String formattedDate = dateFormat.format(date);
       model.addAttribute("serverTime", formattedDate );
-      
       return "home";
-   }
+   } // home
+   
+   @GetMapping("/bcrypt")
+   public String bcrypt() {
+	   PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	   String password = "12345!";
+	   
+	   // 1) encode
+	   // => 동일한 원본(rawData)에 대해 각각 다른 결과(digest)를 생성
+	   String digest1 = passwordEncoder.encode(password);
+	   String digest2 = passwordEncoder.encode(password);
+	   String digest3 = passwordEncoder.encode(password);
+	   String digest4 = passwordEncoder.encode("6789@");
+	   String digest5 = passwordEncoder.encode("abcd#");
+	   
+	   System.out.println("** digest1 => " +digest1);
+	   System.out.println("** digest2 => " +digest2);
+	   System.out.println("** digest3 => " +digest3);
+	   System.out.println("** digest4 => " +digest4);
+	   System.out.println("** digest5 => " +digest5);
+	   
+	   //2) matches(rawData , digest)
+	   System.out.println("** digest1 matches => " +passwordEncoder.matches(password, digest1));
+	   System.out.println("** digest2 matches => " +passwordEncoder.matches(password, digest2));
+	   System.out.println("** digest3 matches => " +passwordEncoder.matches(password, digest3));
+	   System.out.println("** digest4 matches => " +passwordEncoder.matches(password, digest4));
+	   System.out.println("** digest5 matches => " +passwordEncoder.matches(password, digest5));
+	   
+	   return "redirect:home";
+	   
+   } // bcrypt
    
 }

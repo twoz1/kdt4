@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="/Spring02/resources/myLib/myStyle.css">
 <title>Spring_MVC2 BoardUpdate</title>
 </head>
 <body>
@@ -13,33 +15,26 @@
 <form action="jupdate" method="post">
 	<table>
 		<c:if test="${ not empty requestScope.apple }">
-			
-			<!-- id: 화면 출력, 서버로 전송, 수정은 불가( 즉, 입력 못하게 막기 )
-					  -> readonly : 값이 서버로 전송 (권장)
-					  -> disabled : 값이 서버로 전송되지 않음
-			-->
 			<tr height="40">
-				<th bgcolor="brown">Jno</th>
+				<th bgcolor="chocolate">Jno</th>
 				<td><input type="text" name="jno" value="${requestScope.apple.jno}" size="20" readonly></td>
 			</tr>
-			
 			<tr height="40">
-				<th bgcolor="khaki">Jname</th>
-				<td><input type="text" name="jname" value="${requestScope.apple.jname}" size="50"></td>
+				<th bgcolor="chocolate">Jname</th>
+				<td><input type="text" name="jname" value="${requestScope.apple.jname}" size="20" ></td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="brown">ID</th>
-				<td><input type="text" name="id" value="${requestScope.apple.id}" size="20" ></td>
+				<th bgcolor="pink">ID</th>
+				<td><input type="text" name="id" value="${requestScope.apple.id}" size="20"></td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="khaki">Project</th>
-				<td><textarea rows="5" cols="50" name="project">${requestScope.apple.project}</textarea></td>
+				<th bgcolor="pink">Project</th>
+				<td><input type="text" name="project" value="${requestScope.apple.project}" size="20"></td>
 			</tr>
 			<tr height="40">
-				<th bgcolor="brown">Slogan</th>
-				<td><input type="text" name="slogan" value="${requestScope.apple.slogan}" size="20" ></td>
+				<th bgcolor="chocolate">Slogan</th>
+				<td><input type="text" name="slogan" value="${requestScope.apple.slogan}" size="20"></td>
 			</tr>
-	
 			<tr height="40">
 				<th></th>
 				<td>
@@ -65,7 +60,7 @@
 
 <hr>
 
-&nbsp; <a href="/green/home">home</a>&nbsp;
+&nbsp; <a href="/Spring02/home">home</a>&nbsp;
 &nbsp; <a href="javascript:history.go(-1)">이전</a>&nbsp;
 
 </body>

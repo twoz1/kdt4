@@ -50,4 +50,52 @@
       <beans:property name="suffix" value=".jsp" />
    </beans:bean>
    
+   <!--    ** File_Download **
+      => 이전과는 다르게 Data 만을 Response에 담아줘야함  
+      => 이것을 위한 ViewResolver 가 필요하고, : 직접작성 ( DownloadView.java )
+      => 필요에 따라 해당하는 ViewResolver 를 선택할수 있어야함 : BeanNameViewResolver
+      1) BeanNameViewResolver 설정
+      2) DownloadView.java 설정    -->
+      
+   <beans:bean id="viewResolver" 
+            class="org.springframework.web.servlet.view.BeanNameViewResolver">
+      <beans:property name="order" value="1" />
+   </beans:bean>
+      
+   <!--   ** BeanNameViewResolver
+         => id 에 해당하는 Bean이 View(Response) 를 처리하도록 해주는 ViewResolver 
+         컨트롤러에서 return "jsonView" 하게되면  
+         일반적인 경우 InternalResourceViewResolver 에 의해  views/jsonView.jsp 를 찾음,
+         그러나  jsp 가 아닌 형태의  response 를 처리하는 경우에는 한 이 경우에는 "jsonView" 와
+         동일한  id 로 생성된 Bean 을 찾아 response 를 처리함
+      => 그래서   ViewResolver 들 간의 우선순위가 필요함 ( 아래  property order 참고 ) 
+      => 사용예 : "jsonView" , ImageDownLoad 의 "downloadView" 
+
+      ** property order 
+       => 두개이상 존재하는 viewResolver 를 위해서 우선순위를 매기는 것.
+           우선순위를 명시 하지 않으면 "가장 낮은 우선순위를 갖게 된다."
+           우선순위는 "0"이 가장 먼저 실행되고, 이후로 매겨지는 순서에 따라 실행된다.
+       => 그  다음 viewResolver가 실행 기준은 "null" 이 반환되느냐 가 기준이다. 
+           그래서 null 값이 있을수 없는 InternalResourceViewResolver 가 우선순위가 높게 되면,
+           다른 viewResolver는 사용되지 않기 때문에 (항상 뷰 이름에 매핑되는 뷰 객체를 리턴하기 때문)
+        InternalResourceViewResolver 는 우선순위가 가장 낮아야 한다. 
+   -->    
+   <!--  ** Image(File) DownLoad 
+         => 다운로드를 처리할 ViewResolver 클래스 등록  ( Java_Code 작성 )
+          => id="downloadView" 와  컨트롤러의 매핑메서드에서 리턴된 view name 과 같아야 한다. -->      
+   <beans:bean id="downloadView" class="downloadTest.DownloadView" />
+   
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      *** Image(File)_Upload  설정-->
+    <beans:bean id="multipartResolver" 
+                class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+       <beans:property name="maxUploadSize" value="-1" />
+      </beans:bean>
+      <!--
+           => id , name 변경 불가능 
+              : 대부분의 Resolver로 끝나는 클래스의 경우에는 이미 정해져있기 때문에 변경불가능.
+           => maxUploadSize 는 지정하지 않으면 default 값은 -1 이며 크기 무제한이 됨. 
+              다양하게 변경하며 Test  
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  -->
+   
 </beans:beans>

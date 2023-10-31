@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import domain.BoardDTO;
 import domain.JoDTO;
 
 
@@ -18,7 +17,6 @@ public class JoDAO {
 	private static PreparedStatement pst;
 	private static ResultSet rs;
 	private static String sql;
-	
 	
 	//1. selectList
 	// => ver01 : 기본형

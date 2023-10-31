@@ -2,12 +2,14 @@ package mapperInterface;
 
 import java.util.List;
 
+import domain.BoardDTO;
 import domain.MemberDTO;
 
 public interface MemberMapper {
+
 	// ** Jo_List 추가
 	List<MemberDTO> joList(int jno);
-
+	
 	// ** selectList
 	List<MemberDTO> selectList();
 
@@ -22,4 +24,5 @@ public interface MemberMapper {
 
 	// ** delete
 	int delete(MemberDTO dto);
+	
 }
