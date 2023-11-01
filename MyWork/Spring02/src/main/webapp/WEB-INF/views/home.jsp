@@ -40,7 +40,7 @@
  &nbsp; <a href="board/boardList">bList</a>  &nbsp;
  &nbsp; <a href="jo/joList">jList</a>  &nbsp;
  &nbsp; <a href="bcrypt">BCrypt</a>  &nbsp;
- &nbsp; <a href="memberPasswordUpdate">PWupdate</a>  &nbsp;
+ &nbsp; <a href="member/pUpdateForm">PWupdate</a>  &nbsp;
 
 </body>
 </html>

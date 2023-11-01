@@ -40,9 +40,17 @@
 	<!-- 4. update 
 		=> password 수정과 나머지 컬럼 수정을 분리함 
 		=> image 추가 후 사용:  , uploadfile=#{uploadfile}  	-->
-<update id="update">
-	update member set name=#{name}, age=#{age}, jno=#{jno}, info=#{info}, point=#{point}, birthday=#{birthday}, rid=#{rid}, uploadfile=#{uploadfile}  where id=#{id}
-</update>
+   <update id="update">
+      update member set 
+      <if test="password!=null">
+         password=#{password}
+      </if>
+      <if test="password==null">
+         name=#{name}, age=#{age}, jno=#{jno}, info=#{info}, point=#{point}, 
+         birthday=#{birthday}, rid=#{rid}, uploadfile=#{uploadfile} 
+      </if>
+      where id=#{id}
+   </update>
 
 <!-- ====================================================================================== -->
 

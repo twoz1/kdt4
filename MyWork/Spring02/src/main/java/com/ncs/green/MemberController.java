@@ -165,6 +165,19 @@ public class MemberController {
 	// @Autowired
 	// OtherService2 service2;
 
+	// ** ID 중복확인
+	@GetMapping("/idDupCheck")
+	public String idDupCheck(MemberDTO dto, Model model) {
+		// 1) newID 확인
+		if(service.selectOne(dto) !=null) {
+			// => 존재 : 사용불가
+			model.addAttribute("idUse", "F");
+		}else {
+			// => 없으면 : 사용가능
+			model.addAttribute("idUse", "T");
+		}
+		return "member/idDupCheck";
+	}
 	
 	// ** File Download **********************************************
 	// => 전달받은 path 와 파일명으로 File 객체를 만들어 찾아서 response에 담아주면,
@@ -509,31 +522,46 @@ public class MemberController {
 			return uri;
 		} //memberUpdte
 
+		// ** PasswordUpdate
+		// => passwordUpdate_Form 출력
+		@GetMapping(value="/pUpdateForm")
+		public void pUpdateForm() {
+			// viewName 생략
+		} //pUpdateForm
 		
-		@GetMapping(value="/memberPasswordUpdate")
-		public void pwUpdateForm() {
-			
-		}
+		// => password 만 수정
+		@PostMapping(value="/pwupdate")
+		public String passwordUpdate(HttpServletRequest request, Model model, MemberDTO dto) {
+			// ** password Update
+			// => 로그인 확인: session 에서 id get 
+			// => passwordEncode (암호화) 처리 	
+			// => Service
+			// 	-> 성공: 재로그인 유도 -> session 무효화, member/loginForm 으로 
+			//	-> 실패: 재수정 유도 -> pUpdateForm 
 		
-		//**passWordUpdate
-		@PostMapping(value="/memberPasswordUpdate")
-		public String pwUpdate(HttpServletRequest request, 
-				  MemberDTO dto, Model model) {
-			
-			String password = dto.getPassword();
-			model.addAttribute("apple", dto);
-			String uri="member/memberList";
+			String id =(String)request.getSession().getAttribute("loginID");
+			// ** id 가 존재하지 않는 경우 -> 로그인유도, 메서드종료
+			if (id==null) {
+				model.addAttribute("message", "~~ 로그인 정보가 없으니 로그인 후 하세요 ~~");
+				return "member/loginForm";
+			}
+			// ** id 가 존재하는 경우 수정
+			dto.setId(id);
 			dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 			
-			if (dto!=null && passwordEncoder.matches(password, dto.getPassword())) {
-				model.addAttribute("message", "~~ 비밀번호 수정 성공 ~~");
+			String uri="member/loginForm";
+			if ( service.update(dto)>0 ) {
+				// password 수정성공, session 무효화, loginForm 으로
+				request.getSession().invalidate(); 
+				model.addAttribute("message", "~~ password 수정 성공, 재로그인 하세요 ~~");
 			}else {
-				model.addAttribute("message", "~~ 비밀번호 수정 실패 !! 다시 하세요 ~~");
-				uri="member/memberPasswordUpdate";
+				// password 수정실패
+				model.addAttribute("message", "~~ password 수정 실패 , 다시 하세요 ~~");
+				uri="member/pUpdateForm";
 			}
+			// 3) View 처리
 			return uri;
-			
-		}
+		} //passwordUpdate
 		
 	// ===============================================================
 
