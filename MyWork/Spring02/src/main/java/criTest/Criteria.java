@@ -10,7 +10,7 @@ import lombok.ToString;
 //** PageMaker : UI에 필요한 정보 완성
 
 //** Paging 을 하려면 ... **
-//=> 1Page에 출력할 Row 갯수 :  5개
+//=> 1Page에 출력할 Row 개수 :  5개
 //=> 현재 출력(요청) Page
 //=> 출력할 List (Rows) 
 //	-> start Row 순서번호 : 계산필요
