@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class SearchCriteria extends Criteria {
 	
-	private String searchType;
+	private String searchType="all";  //검색선택
 	private String keyword;
 	private String[] check;
 } //class
