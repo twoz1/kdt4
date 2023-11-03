@@ -5,7 +5,13 @@
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- Root Context: defines shared resources visible to all other web components -->
-
+	
+	<!--JUnit Test 
+     => SpringDAO Test Bean 설정 : MemberDAO, MemberDTO --> 
+     <bean class="model.MemberDAO" lazy-init="true"/>
+     <bean class="domain.MemberDTO" lazy-init="true"/>
+	
+	
 	<!-- ** Mybatis 설정 : interface 방식, root-context 에 설정 ********* 
 	     => DAO 에서의 sql 구문을 xml (Mapper) 로 처리 
 	     => DB_Connection, Mybatis 설정 

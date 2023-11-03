@@ -122,14 +122,26 @@
          <artifactId>jstl</artifactId>
          <version>1.2</version>
       </dependency>
+      
+      <!-- 4. jUnit Test -> version : 4.12 로 수정 
+          5. 아랫쪽 두번째 <plugin> 의  <configuration> 의 Java 버전 
+                                   <source>1.8</source>
+                                   <target>1.8</target>   -->
    
       <!-- Test -->
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>4.7</version>
+         <version>4.12</version>
          <scope>test</scope>
-      </dependency>      
+      </dependency>     
+      
+      <!--    => Test 추가 : Spring MVC Mybatis Test -->
+      <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-test</artifactId>
+         <version>${org.springframework-version}</version>
+      </dependency> 
       
       <!-- Mysql
            https://mvnrepository.com/artifact/mysql/mysql-connector-java -->

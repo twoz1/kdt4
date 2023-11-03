@@ -121,7 +121,7 @@ public class MemberDAO {
 	// ** insert
 	// => 입력 컬럼: name, age, jno, info
 	public int insert(MemberDTO dto) {
-		sql="insert into member values(?,?,?,?,?,?,?,?,?)";
+		sql="insert into member values(?,?,?,?,?,?,?,?,?,?)";
 		try {
 			pst=cn.prepareStatement(sql);
 			pst.setString(1, dto.getId());
@@ -133,7 +133,7 @@ public class MemberDAO {
 			pst.setDouble(7,  dto.getPoint());
 			pst.setString(8, dto.getBirthday());
 			pst.setString(9, dto.getRid());
-		
+			pst.setString(10, dto.getUploadfile());
 			return pst.executeUpdate(); // 처리갯수
 		} catch (Exception e) {
 			System.out.println("** insert Exception => "+e.toString());
