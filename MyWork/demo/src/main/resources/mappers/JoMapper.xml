@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapperInterface.JoMapper">
+
+
+
+<!-- selectList -->
+<select id="selectList" resultType="com.example.demo.domain.JoDTO">
+	select j.jno, jname, j.id, m.name cname, project, slogan from jo j LEFT OUTER JOIN member m ON j.id = m.id
+</select>
+
+<!-- ====================================================================================== -->
+
+<!-- selectOne 
+	=> seq 의 비교값을 할당 = (?를 처리해줘야함)	-->
+<select id="selectOne" resultType="com.example.demo.domain.JoDTO">
+	select * from jo where jno=#{jno}
+</select>
+
+<!-- ====================================================================================== -->
+
+
+<insert id="insert" >
+	insert into jo values(#{jno}, #{jname}, #{id}, #{project}, #{slogan})
+</insert>
+
+<!-- ====================================================================================== -->
+
+<!--  ** update -->
+<update id="update">
+	update jo set jname=#{jname}, id=#{id}, project=#{project}, slogan=#{slogan} where jno=#{jno}
+</update>
+
+<!-- ====================================================================================== -->
+
+<!-- ** delete 
+   => 원글삭제 : 답글들도 모두 삭제 ( 원글 seq (=root) 와 동일한 root 를 가진 Data 모두 삭제 root = #{seq})
+   => 답글삭제 : 해당 답글만 삭제  ( 해당 seq 만 삭제 seq = #{seq} )
+   => 원글(seq, root 동일) / 답글(seq, root 다름)  구분 필요  
+      그러므로 삭제요청시 root 값 필요 -->
+<delete id="delete">
+	delete from jo where jno=#{jno}
+</delete>
+
+<!-- ====================================================================================== -->
+
+</mapper>
