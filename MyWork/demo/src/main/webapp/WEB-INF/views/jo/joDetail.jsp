@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>** Jo Detail Spring_MVC2 **</title>
+	<title>** Jo Detail SpringBoot **</title>
 	<link rel="stylesheet" type="text/css" href="/Spring02/resources/myLib/myStyle.css">
 </head>
 <body>

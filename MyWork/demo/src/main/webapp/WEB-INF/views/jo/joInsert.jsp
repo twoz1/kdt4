@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Spring_MVC2 Jo_Insert</title>
+<title>SpringBoot Jo_Insert</title>
 </head>
 <body>
 <h2>Spring_MVC2 Jo_Insert</h2>

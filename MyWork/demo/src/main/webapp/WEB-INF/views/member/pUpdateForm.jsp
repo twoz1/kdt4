@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>** Spring Mybatis Password Update **</title>
+<title>** SpringBoot Password Update **</title>
 <link rel="stylesheet" type="text/css" href="/resources/myLib/myStyle.css" >
 <script>
 	function pCheck() {

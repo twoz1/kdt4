@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css"
 	href="/Spring02/resources/myLib/myStyle.css">
-<title>Spring_MVC2 Board_Insert</title>
+<title>SpringBoot Board_Insert</title>
 </head>
 <body>
 <h2>Spring_MVC2 Board_Insert</h2>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Spring_MVC2 Board_Insert</title>
+<title>SpringBoot Board_Insert</title>
 </head>
 <body>
 <h2>Spring_MVC2 Board_ReplyInsert</h2>

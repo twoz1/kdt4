@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 // => Boot 서버 kill
 //    netstat -a -n -o -p tcp
-//    taskkill /f /pid  10160
+//    taskkill /f /pid  14540
 
 //** @SpringBootApplication
 //=> 해당 클래스가 Springboot의 설정 클래스임을 명시하며
@@ -43,6 +43,13 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 //=> @ComponentScan(basePackages={"service"})
 // - 기본 Package 외의 Package 를 인식시켜 클래스를 Scan할 수 있도록함.  
+
+//** Mybatis interface 설정
+//=> @MapperScan : Mapper 인터페이스들이 들어있는 패키지들을 인식시켜줌
+//=> ~Mapper.xml 사용시
+// - application.properties 화일에 아래설정 추가
+//   mybatis.mapper-locations=classpath:/mappers/*Mapper.xml
+// - Spring_MVC 와는 다르게 ~Mapper.xml 을 인식시킨다.  
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @MapperScan(value= {"mapperInterface"})

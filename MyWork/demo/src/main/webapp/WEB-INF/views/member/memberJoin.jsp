@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Spring_MVC2 Student Join</title>
+<title>SpringBoot Student Join</title>
 <script src="/resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="/resources/myLib/inCheck.js"></script>
 <script> "use strict"

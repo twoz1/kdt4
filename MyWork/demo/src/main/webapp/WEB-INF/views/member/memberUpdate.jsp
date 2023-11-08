@@ -9,7 +9,7 @@
 <script src="/resources/myLib/jquery-3.2.1.min.js"></script>
 </head>
 <body>
-<h2>Spring_MVC2 MemberUpdate</h2>
+<h2>SpringBoot MemberUpdate</h2>
 
 <form action="mupdate" method="post" enctype="multipart/form-data">
 	<table>

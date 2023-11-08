@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>** JoList Spring_MVC2 **</title>
+	<title>** JoList SpringBoot **</title>
 	<link rel="stylesheet" type="text/css" href="/Spring02/resources/myLib/myStyle.css">
 </head>
 <body>
