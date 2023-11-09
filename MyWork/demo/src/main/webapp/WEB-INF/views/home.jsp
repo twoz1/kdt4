@@ -43,6 +43,6 @@
  &nbsp; <a href="jo/joList">jList</a>  &nbsp;
  &nbsp; <a href="bcrypt">BCrypt</a>  &nbsp;
  &nbsp; <a href="member/pUpdateForm">PWupdate</a>  &nbsp;
-
+ &nbsp; <a href="/axtestform">AjaxTest</a><br>
 </body>
 </html>

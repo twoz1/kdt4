@@ -22,6 +22,10 @@ public class HomeController {
 	    model.addAttribute("serverTime", formattedDate );
 	}//home
 	
+	@GetMapping("/axtestform")
+	public String axtestForm() {
+		return "/axTest/axTestForm";
+	}
 	
 	
 
