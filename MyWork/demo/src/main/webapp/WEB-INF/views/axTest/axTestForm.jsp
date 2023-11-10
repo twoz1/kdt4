@@ -5,13 +5,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>** AjaxTest Main Form **</title>
+<title>AjaxTest Main Form</title>
+<link rel="stylesheet" type="text/css" href="/resources/myLib/myStyle.css">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="/resources/myLib/axTest01.js"></script>
+<script src="/resources/myLib/axTest02.js"></script>
 </head>
 <body>
-<h2>** AjaxTest Main Form **</h2>
-
+<h2>AjaxTest Main Form</h2>
 <hr>
+
 <c:if test="${not empty sessionScope.loginID}">
    =>${sessionScope.loginName}님 안녕하세요 <br>
 </c:if>
@@ -19,10 +23,15 @@
    =>${requestScope.message} <br>
 </c:if>
 <hr>
-&nbsp;<span class ="testlink" onclick="rsLoginf()">rsLogin</span>
+
+&nbsp;<span class="textlink" onclick="rsLoginf()">rsLogin</span>&nbsp;
+&nbsp;<span class="textlink" onclick="rsJoinf()">rsJoin</span>&nbsp;
+&nbsp;<span>김이지 바보 왕바보</span>&nbsp;
 &nbsp;<a href="/home">[Home]</a>
 <hr>
+
 <div id="resultArea1"></div>
 <div id="resultArea2"></div>
+
 </body>
 </html>

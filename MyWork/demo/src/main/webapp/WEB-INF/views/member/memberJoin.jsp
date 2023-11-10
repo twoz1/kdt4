@@ -9,6 +9,7 @@
 <script src="/resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="/resources/myLib/inCheck.js"></script>
 <script> "use strict"
+
    // ID 중복확인
    // => UI 개선사항
    // => 중복확인 버튼 추가
@@ -18,15 +19,16 @@
    // => 중복확인 기능 : function idDupCheck()
    //    id입력값의 무결성점검 -> id 확인요청 -> 서버로 전송 -> id , selectOne 결과 -> response: 사용가능/불가능 
    // => 서버측 : 컨트롤러에 idDupCheck 요청을 처리하는 매핑메서드, view_Page(팝업창) 작성
-   function idDupClick() {
+   function idDupCheck() {
       // 1) 입력값의 무결성 확인
-      if( iCheck == false) iCheck = idCheck();
-      else {
-      // 2) 서버로 id 확인요청 -> 결과는 새창으로
-    	  let url = "idDupCheck?id="+document.getElementById('id').value;
-      	  window.open(url, '_blank','width=400,height=300,resizable=yes,scrollbars=yes,toolbar=no,menubar=yes');
-    	  
+      if( iCheck == false){
+           iCheck=idCheck();
+      }else {
+      // 2) 서버로 id 회인요청 -> 결과는 새창으로
+            let url = "idDupCheck?id=" + document.getElementById('id').value;
+            window.open(url, '_blank', 'width=400,height=300,resizable=yes,scrollbars=yes,toolbar=no,menubar=yes');
       }
+      
    }
 
    // ** 입력값의 무결성 점검
@@ -238,7 +240,7 @@
 </script>
 </head>
 <body>
-   <h2>Spring_MVC2 Student Join</h2>
+   <h2>SpringBoot Student Join</h2>
    <!--  ** FileUpLoad Form **
 => form 과 table Tag 사용시 주의사항 : form 내부에 table 사용해야함
    -> form 단위작업시 인식안됨
@@ -256,14 +258,14 @@
       multipart/form-data로 지정이 되어 있어야 서버에서 정상적으로 데이터를 처리할 수 있다.     
 -->
 
-   <form action="join" method="post" enctype="multipart/form-data">
+   <form action="join" method="post" enctype="multipart/form-data" id="myform">
       <table>
          <tr height="40">
             <th bgcolor="aqua">I D</th>
             <td><input type="text" name="id" id="id"
                placeholder="영어, 10글자 이내" size="20">
-               <button type="button" id="idDup" onclick="idDupClick()">ID중복확인</button>
-               <br> <span id="iMessage" class="eMessage"></span></td>
+               <button type="button" id="idDup" onclick="idDupCheck()">ID중복확인</button>
+               <br><span id="iMessage" class="eMessage"></span></td>
          </tr>
          <tr height="40">
             <th bgcolor="aqua">Password</th>
@@ -363,9 +365,11 @@
          </script>
          <tr height="40">
             <th></th>
-            <td><input type="submit" value="가입" id="submitTag"
-               onclick="return inCheck()" disabled> &nbsp;&nbsp;&nbsp; <input
-               type="reset" value="취소"></td>
+            <td>
+               <input type="submit" value="가입" id="submitTag"onclick="return inCheck()" disabled> &nbsp;&nbsp;&nbsp; 
+               <input type="reset" value="취소">
+               <span style="cursor:pointer;" class="textLink" onclick="rsJoin()">rsJoin</span>
+            </td>
          </tr>
       </table>
    </form>
