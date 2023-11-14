@@ -11,9 +11,8 @@
 <script src="/resources/myLib/jquery-3.2.1.min.js"></script>
 <script src="/resources/myLib/axTest01.js"></script>
 <script src="/resources/myLib/axTest02.js"></script>
-</head>
-<body>
-<h2>AjaxTest Main Form</h2>
+<script src="/resources/myLib/axTest03.js"></script>
+
 <hr>
 
 <c:if test="${not empty sessionScope.loginID}">
@@ -26,6 +25,7 @@
 
 &nbsp;<span class="textlink" onclick="rsLoginf()">rsLogin</span>&nbsp;
 &nbsp;<span class="textlink" onclick="rsJoinf()">rsJoin</span>&nbsp;
+&nbsp;<span style="cursor:pointer;" class="textlink" onclick="axiMList()">axiMList</span>&nbsp;
 &nbsp;<span>김이지 바보 왕바보</span>&nbsp;
 &nbsp;<a href="/home">[Home]</a>
 <hr>

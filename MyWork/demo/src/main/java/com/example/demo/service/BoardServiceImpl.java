@@ -34,6 +34,12 @@ public class BoardServiceImpl implements BoardService {
 	//   즉, 위 인터페이스의 구현체(클래스)는 개발자가 작성할 필요가 없음 
 	BoardMapper mapper;
 	
+	   // REST API, Axios Test
+	   @Override
+	   public List<BoardDTO> idBList(String id) {
+	      return mapper.idBList(id);
+	   }
+	
 	// ** Board_Cri_Paging
 	// => // 출력할 Data만 select
 	@Override

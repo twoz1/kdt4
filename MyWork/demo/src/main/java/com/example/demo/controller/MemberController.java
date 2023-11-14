@@ -307,5 +307,12 @@ public class MemberController {
 		return "member/idDupCheck";
 	}
 	
+	// ** Axios_MemberList
+	   @GetMapping("/axMemberList")
+	   public String axmemberList(Model model) {
+	      model.addAttribute("banana", service.selectList());
+	      log.info("** MemberList 성공 **");
+	      return "axTest/axMemberList";
+	   }
 
 }

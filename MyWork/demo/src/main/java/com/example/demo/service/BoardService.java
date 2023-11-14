@@ -7,7 +7,9 @@ import com.example.demo.domain.BoardDTO;
 import criTest.SearchCriteria;
 
 public interface BoardService {
-	
+	   // REST API, Axios Test
+	   List<BoardDTO> idBList(String id);
+	   
 	// ** Board_Cri_Paging
 	List<BoardDTO> bcriList(SearchCriteria cri); // 출력할 Data만 select
 	int criTotalCount(SearchCriteria cri); // 전체 rows 갯수

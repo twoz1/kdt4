@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.domain.BoardDTO;
 import com.example.demo.domain.JoDTO;
 import com.example.demo.domain.MemberDTO;
 import com.example.demo.domain.UserDTO;
+import com.example.demo.service.BoardService;
 import com.example.demo.service.JoService;
 import com.example.demo.service.MemberService;
 
@@ -124,6 +127,7 @@ public class RTestController {
    MemberService service;
    PasswordEncoder passwordEncoder;
    JoService jservice;
+   BoardService bservice;
 
    @GetMapping("/hello")
    // => 메뉴없이 직접 요청 http://localhost:8080/rest/hello/
@@ -428,5 +432,33 @@ public class RTestController {
       return result;
 
    }
-}
+   
+   @DeleteMapping("axidelete/{selectedId}")
+   public ResponseEntity<?> axidelete(@PathVariable("selectedId") String id, MemberDTO dto) {
+      dto.setId(id);
+      if (service.delete(dto) > 0) {
+         log.info("axidelete HttpStatus.OK =>" + HttpStatus.OK);
+         return new ResponseEntity<String>("삭제 성공", HttpStatus.OK);
+      } else {
+          log.info("axidelete HttpStatus.BAD_GATEWAY =>" + HttpStatus.BAD_GATEWAY);
+         return new ResponseEntity<String>("삭제 실패, Data_NotFound", HttpStatus.BAD_GATEWAY);
+      }
+   }//axidelete
+   
+   @GetMapping("/idblist/{id}")
+   public ResponseEntity<?> idblist(@PathVariable("id") String id) {
+      ResponseEntity<?> result = null;
+      List<BoardDTO> list = bservice.idBList(id);
+      // => 출력 Data 유/무 구별
+      if ( list !=null && list.size()>0 ) {
+         result = ResponseEntity.status(HttpStatus.OK).body(list);
+         log.info("** rsjoin HttpStatus.OK => "+HttpStatus.OK);
+      }else {
+         result = ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("~~ 출력할 자료가 없습니다. ~~");
+         log.info("** axidelete HttpStatus.BAD_GATEWAY => "+HttpStatus.BAD_GATEWAY); //502
+      }
+      return result;
+   } //idblist
+   
+}//class
 
