@@ -60,7 +60,8 @@ public class HomeController {
          return "redirect:home" ;
       }
 
-      @GetMapping("/gupdate")
+      @GetMapping("/gupdate") 
+
       public String gupdate() {
          
          GuestBookDTO dto = GuestBookDTO.builder()

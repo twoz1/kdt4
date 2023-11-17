@@ -88,7 +88,15 @@
          <version>2.8.5</version>
       </dependency>
       <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->      
-      
+      <!-- ** 확인 **
+      => demoJ01 플젝, package com.example.demo.config 에 위 설정화일 있어야하고,
+      => pom.xml에 아래 구문 있어야 password 인코딩 됩니다. -->
+      <!-- ** Spring Boot Security  -->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-security</artifactId>
+      </dependency>
+    
 		
 	</dependencies>
 
