@@ -2,10 +2,16 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.GuestBookDTO;
+import com.example.demo.domain.PageRequestDTO;
+import com.example.demo.domain.PageResultDTO;
 import com.example.demo.entity.GuestBook;
 import com.example.demo.repository.GuestBookRepository;
 
@@ -37,7 +43,24 @@ public class GuestBookServiceImpl implements GuestBookService {
     private final GuestBookRepository repository;
     // => JPA 처리위해 필요
     // => @RequiredArgsConstructor 를 통해 주입받음
-
+    
+    // JPA Paging & Sorting
+    @Override
+    public PageResultDTO<GuestBookDTO, GuestBook> gPageList(PageRequestDTO requestDTO) {
+       
+       Pageable pageable = requestDTO.getPageable(Sort.by("gno").descending());
+        // => Sort.by("gno").descending(): Sort 객체를 이용해서 정렬 조건 지정
+        
+        Page<GuestBook> result = repository.findAll(pageable);
+        // => pageable 의 조건을 반영하여 findAll
+        
+        Function<GuestBook, GuestBookDTO> fn = (entity -> entityToDto(entity));
+        // => Service 에 정의한 entityToDto 메서드를 이용해서 entity를 Dto로
+        
+        return new PageResultDTO<>(result, fn);
+       
+    }
+    
     @Override
     public Long register(GuestBookDTO dto) {
 

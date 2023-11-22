@@ -43,6 +43,7 @@
  &nbsp; <a href="/ginsert">GSave</a>&nbsp;
  &nbsp; <a href="/guestlist">GList</a>&nbsp;
  &nbsp; <a href="/gupdate">GUpdate</a>&nbsp;
+ &nbsp; <a href="/gpagelist">GPageList</a>&nbsp;
 
 </body>
 </html>
